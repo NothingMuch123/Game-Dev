@@ -65,6 +65,56 @@ Mesh* MeshBuilder::GenerateAxes(const std::string &meshName, float lengthX, floa
 /******************************************************************************/
 /*!
 \brief
+Generate the vertices of a crosshair;
+Then generate the VBO/IBO and store them in Mesh object
+\param meshName - name of mesh
+\param lengthX - x-axis should start at -lengthX / 2 and end at lengthX / 2
+\param lengthY - y-axis should start at -lengthY / 2 and end at lengthY / 2
+\param lengthZ - z-axis should start at -lengthZ / 2 and end at lengthZ / 2
+\return Pointer to mesh storing VBO/IBO of reference axes
+*/
+/******************************************************************************/
+Mesh* MeshBuilder::GenerateCrossHair(const std::string &meshName, Color color, float length)
+{
+	// Declare the variable to store a vertex and the buffer for storing vertices
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	// Vertex #1
+	v.pos.Set(-length, 0, 0);
+	v.color.Set(color.r, color.g, color.b);
+	vertex_buffer_data.push_back(v);
+	// Vertex #2
+	v.pos.Set(length, 0, 0);
+	v.color.Set(color.r, color.g, color.b);
+	vertex_buffer_data.push_back(v);
+	// Vertex #3
+	v.pos.Set(0, -length, 0);
+	v.color.Set(color.r, color.g, color.b);
+	vertex_buffer_data.push_back(v);
+	// Vertex #4
+	v.pos.Set(0, length, 0);
+	v.color.Set(color.r, color.g, color.b);
+	vertex_buffer_data.push_back(v);
+	std::vector<GLuint> index_buffer_data;
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(3);
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex),
+		&vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint),
+		&index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_LINES;
+	return mesh;
+}
+
+/******************************************************************************/
+/*!
+\brief
 Generate the vertices of a quad; Use random color for each vertex
 Then generate the VBO/IBO and store them in Mesh object
 

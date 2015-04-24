@@ -23,10 +23,13 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera3::Update(double dt)
 {
-	static const float CAMERA_SPEED = 200.f;
+	Vector3 positionYTarget = target;
+	positionYTarget.y = position.y;
+
+	static const float CAMERA_SPEED = 50.f;
 	if(Application::IsKeyPressed('A'))
 	{
-		Vector3 view = (target - position).Normalized();
+		Vector3 view = (positionYTarget - position).Normalized();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
@@ -35,7 +38,7 @@ void Camera3::Update(double dt)
 	}
 	if(Application::IsKeyPressed('D'))
 	{
-		Vector3 view = (target - position).Normalized();
+		Vector3 view = (positionYTarget - position).Normalized();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
@@ -44,13 +47,13 @@ void Camera3::Update(double dt)
 	}
 	if(Application::IsKeyPressed('W'))
 	{
-		Vector3 view = (target - position).Normalized();
+		Vector3 view = (positionYTarget - position).Normalized();
 		position += view * CAMERA_SPEED * (float)dt;
 		target += view * CAMERA_SPEED * (float)dt;
 	}
 	if(Application::IsKeyPressed('S'))
 	{
-		Vector3 view = (target - position).Normalized();
+		Vector3 view = (positionYTarget - position).Normalized();
 		position -= view * CAMERA_SPEED * (float)dt;
 		target -= view * CAMERA_SPEED * (float)dt;
 	}
@@ -106,6 +109,35 @@ void Camera3::Update(double dt)
 		view = rotation * view;
 		target = position + view;
 	}
+
+	//Update camera direction based on mouse movement
+	// Left-right rotate
+	{
+		Vector3 view = (target - position).Normalized();
+		float yaw = (float)(-CAMERA_SPEED * Application::camera_yaw * (float)dt);
+		Mtx44 rotation;
+		rotation.SetToRotation(yaw, 0,1,0);
+		view = rotation * view;
+		target = position + view;
+		Vector3 right = view.Cross(up);
+		right.y = 0;
+		right.Normalize();
+		up = right.Cross(view).Normalized();
+	}
+	// Up-down rotate
+	{
+		float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
+		Vector3 view = (target - position).Normalized();
+		Vector3 right = view.Cross(up);
+		right.y = 0;
+		right.Normalize();
+		up = right.Cross(view).Normalized();
+		Mtx44 rotation;
+		rotation.SetToRotation(pitch, right.x, right.y, right.z);
+		view = rotation * view;
+		target = position + view;
+	}
+
 	if(Application::IsKeyPressed('R'))
 	{
 		Reset();

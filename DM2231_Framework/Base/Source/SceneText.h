@@ -52,6 +52,7 @@ class SceneText : public Scene
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
+		GEO_CROSSHAIR,
 		GEO_LIGHTBALL,
 		GEO_SPHERE,
 		GEO_SPHERE2,
@@ -87,6 +88,7 @@ public:
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size = 1.0f, float x = 0.0f, float y = 0.0f);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
 private:

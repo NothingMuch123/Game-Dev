@@ -79,7 +79,7 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(800, 600, "Test Window", NULL, NULL);
+	m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2231_Framework", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -106,6 +106,7 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 void Application::Run()
@@ -117,6 +118,7 @@ void Application::Run()
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
+		GetMouseUpdate();
 		scene->Update(m_timer.getElapsedTime());
 		scene->Render();
 		//Swap buffers
@@ -137,3 +139,37 @@ void Application::Exit()
 	//Finalize and clean up GLFW
 	glfwTerminate();
 }
+
+bool Application::GetMouseUpdate()
+{
+	glfwGetCursorPos(m_window, &mouse_current_x, &mouse_current_y);
+
+	// Calculate the difference in positions
+	mouse_diff_x = mouse_current_x - mouse_last_x;
+	mouse_diff_y = mouse_current_y - mouse_last_y;
+
+	// Calculate the yaw and pitch
+	camera_yaw = (float) mouse_diff_x * 0.174555555555556f;	// 3.142f / 180.0f
+	camera_pitch = mouse_diff_y * 0.174555555555556f;		// 3.142f / 180.0f
+
+	// Do a wraparound if the mouse cursor has gone out of the deadzone
+	if ((mouse_current_x < m_window_deadzone) || (mouse_current_x > m_window_width - m_window_deadzone))
+	{
+		mouse_current_x = m_window_width >> 1;
+		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
+	}
+	if ((mouse_current_y < m_window_deadzone) || (mouse_current_y > m_window_height - m_window_deadzone))
+	{
+		mouse_current_y = m_window_height >> 1;
+		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
+	}
+
+	// Store the current position as the last position
+	mouse_last_x = mouse_current_x;
+	mouse_last_y = mouse_current_y;
+
+	return false;
+}
+
+double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0, Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0, Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;
+double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
