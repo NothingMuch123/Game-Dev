@@ -26,7 +26,7 @@ void Camera3::Update(double dt)
 	Vector3 positionYTarget = target;
 	positionYTarget.y = position.y;
 
-	static const float CAMERA_SPEED = 50.f;
+	static const float CAMERA_SPEED = 100.f;
 	if(Application::IsKeyPressed('A'))
 	{
 		Vector3 view = (positionYTarget - position).Normalized();
