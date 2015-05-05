@@ -559,3 +559,57 @@ Mesh* MeshBuilder::GenerateSkyPlane(const std::string &meshName, Color color, in
 
 	return mesh;
 }
+
+Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector<unsigned char> &heightMap)
+{
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	Vertex v; // Temp vertex
+
+	const float SCALE_FACTOR = 256.f;
+
+	if (!LoadHeightMap(file_path.c_str(), heightMap))
+	{
+		return NULL;
+	}
+
+	unsigned terrainSize = (unsigned)sqrt((double)heightMap.size());
+
+	for (unsigned z = 0; z < terrainSize; ++z)
+	{
+		for (unsigned x = 0; x < terrainSize; ++x)
+		{
+			float scaledHeight = (float)heightMap[z * terrainSize + x] / SCALE_FACTOR;
+			v.pos.Set(static_cast<float>(x) / terrainSize - 0.5f, scaledHeight, static_cast<float>(z) / terrainSize - 0.5f);
+			v.color.Set(scaledHeight, scaledHeight, scaledHeight);
+			v.texCoord.Set((float)x / terrainSize * 8, 1.f - (float)z / terrainSize * 8);
+			vertex_buffer_data.push_back(v);
+		}
+	}
+
+	for(unsigned z = 0; z < terrainSize - 1; ++z) 
+ 	{ 
+ 	 	for(unsigned x = 0; x < terrainSize - 1; ++x) 
+ 	 	{ 
+ 	 	 	index_buffer_data.push_back(terrainSize * z + x + 0);  			//Tri 1
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 0);
+			index_buffer_data.push_back(terrainSize * z + x + 1); 
+ 
+ 	 	 	index_buffer_data.push_back(terrainSize * (z + 1) + x + 1); 	//Tri 2
+			index_buffer_data.push_back(terrainSize * z + x + 1);
+			index_buffer_data.push_back(terrainSize * (z + 1) + x + 0); 
+ 	 	} 
+ 	} 
+
+
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+
+	return mesh;
+}

@@ -2,6 +2,7 @@
 #define CAMERA_3_H
 
 #include "Camera.h"
+#include "LoadHmap.h"
 
 class Camera3 : public Camera
 {
@@ -17,7 +18,7 @@ public:
 	Camera3();
 	~Camera3();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
-	virtual void Update(double dt);
+	virtual void Update(double dt, bool *keypressed, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);
 	virtual void Reset();
 };
 

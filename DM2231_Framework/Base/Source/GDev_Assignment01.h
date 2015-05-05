@@ -82,7 +82,7 @@ public:
 	~GDev_Assignment01();
 
 	virtual void Init();
-	virtual void Update(double dt);
+	virtual void Update(double dt, bool *keypressed);
 	virtual void Render();
 	virtual void Exit();
 

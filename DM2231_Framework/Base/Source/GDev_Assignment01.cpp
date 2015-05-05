@@ -176,7 +176,7 @@ void GDev_Assignment01::Init()
 	bLightEnabled = true;
 }
 
-void GDev_Assignment01::Update(double dt)
+void GDev_Assignment01::Update(double dt, bool *keypressed)
 {
 	if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
@@ -226,7 +226,7 @@ void GDev_Assignment01::Update(double dt)
 
 	rotateAngle += (float)(10 * dt);
 
-	camera.Update(dt);
+	camera.Update(dt, keypressed);
 
 	fps = (float)(1.f / dt);
 

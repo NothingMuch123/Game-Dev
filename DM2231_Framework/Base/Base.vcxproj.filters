@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Practical Scenes">
-      <UniqueIdentifier>{349868e4-cff2-48fd-b710-7ef881b613de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Practical Scenes">
-      <UniqueIdentifier>{0e739871-419f-4d6d-9287-809692215ac3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Camera">
       <UniqueIdentifier>{09b58164-76d5-44fa-a1d3-952cf934d7f1}</UniqueIdentifier>
     </Filter>
@@ -31,6 +25,24 @@
     <Filter Include="Source Files\GDev_Assignment01">
       <UniqueIdentifier>{1bf2a0a3-c726-430d-bbd7-5512bf791d10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\CG Practical">
+      <UniqueIdentifier>{349868e4-cff2-48fd-b710-7ef881b613de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CG Practical">
+      <UniqueIdentifier>{0e739871-419f-4d6d-9287-809692215ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ACG Practical">
+      <UniqueIdentifier>{03b66744-5390-4e2e-8842-a16da8f3d3f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ACG Practical">
+      <UniqueIdentifier>{eedd4931-87ad-4d76-a949-87752f129679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh related">
+      <UniqueIdentifier>{30a609d6-9063-4d04-b38f-f4e33c32ec4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Mesh related">
+      <UniqueIdentifier>{ac4d6580-cbfe-4fb0-83ca-b3fcbe72a634}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -42,53 +54,11 @@
     <ClCompile Include="Source\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MeshBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LoadTGA.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LoadOBJ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Obj.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneTexture.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene1.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene2.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene3.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene4.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene5.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneLight.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneLight2.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneSkybox.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneText.cpp">
-      <Filter>Source Files\Practical Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character.cpp">
       <Filter>Source Files</Filter>
@@ -102,13 +72,25 @@
     <ClCompile Include="Source\Camera2.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GDev_Assignment01.cpp">
-      <Filter>Source Files\GDev_Assignment01</Filter>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>Source Files\Mesh related</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Projectile.cpp">
+    <ClCompile Include="Source\MeshBuilder.cpp">
+      <Filter>Source Files\Mesh related</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>Source Files\Mesh related</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadOBJ.cpp">
+      <Filter>Source Files\Mesh related</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTerrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneSkyPlane.cpp">
+    <ClCompile Include="Source\Projectile.cpp">
+      <Filter>Source Files\GDev_Assignment01</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadHmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,13 +107,7 @@
     <ClInclude Include="Source\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Vertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MeshBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Light.h">
@@ -140,47 +116,8 @@
     <ClInclude Include="Source\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LoadTGA.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LoadOBJ.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Obj.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene1.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneTexture.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene2.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene3.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene4.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene5.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneLight.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneLight2.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneSkybox.h">
-      <Filter>Header Files\Practical Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneText.h">
-      <Filter>Header Files\Practical Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character.h">
       <Filter>Header Files</Filter>
@@ -197,10 +134,31 @@
     <ClInclude Include="Source\GDev_Assignment01.h">
       <Filter>Header Files\GDev Assignment01</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Projectile.h">
+    <ClInclude Include="Source\SceneSkyPlane.h">
+      <Filter>Header Files\ACG Practical</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>Header Files\Mesh related</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTGA.h">
+      <Filter>Header Files\Mesh related</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>Header Files\Mesh related</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>Header Files\Mesh related</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Header Files\Mesh related</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneTerrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneSkyPlane.h">
+    <ClInclude Include="Source\Projectile.h">
+      <Filter>Header Files\GDev Assignment01</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadHmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

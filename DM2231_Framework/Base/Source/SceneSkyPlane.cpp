@@ -178,7 +178,7 @@ void SceneSkyPlane::Init()
 	bLightEnabled = true;
 }
 
-void SceneSkyPlane::Update(double dt)
+void SceneSkyPlane::Update(double dt, bool *keypressed)
 {
 	if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
@@ -228,7 +228,7 @@ void SceneSkyPlane::Update(double dt)
 
 	rotateAngle += (float)(10 * dt);
 
-	camera.Update(dt);
+	camera.Update(dt, keypressed);
 
 	fps = (float)(1.f / dt);
 
@@ -448,24 +448,12 @@ void SceneSkyPlane::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * lights[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-	
-	RenderMesh(meshList[GEO_AXES], false);
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
 
 	//RenderSkybox();
 	RenderSkyPlane();
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -100);//-SKYBOXSIZE / 2 + 2.f);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(100,100,1);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
+	RenderObject();
+	RenderTextInWorld();
+	Render2D();
 
 	// perspective;
 	////perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -480,36 +468,6 @@ void SceneSkyPlane::Render()
 	////RenderMesh(meshList[GEO_QUAD], false);
 	//RenderText(meshList[GEO_TEXT], "HelloWorld", Color(0, 1, 0));
 	//modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(-20, 0, -20);
-	RenderMesh(meshList[GEO_OBJECT], false);
-	modelStack.PopMatrix();
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 0, -20);
-	RenderMesh(meshList[GEO_OBJECT], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	modelStack.PopMatrix();
-
-	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
-	
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
-
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
-
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 1, 1, 1);
 }
 
 void SceneSkyPlane::Exit()
@@ -569,4 +527,60 @@ void SceneSkyPlane::RenderSkyPlane()
 	modelStack.Translate(500, 1800, -500);
 	RenderMesh(meshList[GEO_SKYPLANE], false);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(0, 0, -100);//-SKYBOXSIZE / 2 + 2.f);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(100,100,1);
+	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	RenderMesh(meshList[GEO_BOTTOM], false);
+	modelStack.PopMatrix();
+}
+
+void SceneSkyPlane::RenderTextInWorld()
+{
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 10, 10);
+	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
+	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
+	modelStack.PopMatrix();
+}
+
+void SceneSkyPlane::RenderObject()
+{
+	RenderMesh(meshList[GEO_AXES], false);
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-20, 0, -20);
+	RenderMesh(meshList[GEO_OBJECT], false);
+	modelStack.PopMatrix();
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(20, 0, -20);
+	RenderMesh(meshList[GEO_OBJECT], true);
+	modelStack.PopMatrix();
+}
+
+void SceneSkyPlane::Render2D()
+{
+	//On screen text
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "FPS: " << fps;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
+	
+	std::ostringstream ss1;
+	ss1.precision(4);
+	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
+
+	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 1, 1, 1);
 }

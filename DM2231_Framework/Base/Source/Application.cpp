@@ -23,10 +23,11 @@
 #include "SceneSkybox.h"
 #include "SceneText.h"
 #include "SceneSkyPlane.h"
+#include "SceneTerrain.h"
 #include "GDev_Assignment01.h"
 
 GLFWwindow* m_window;
-const unsigned char FPS = 60; // FPS of this game
+const unsigned char FPS = 120; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 //Define an error callback
@@ -108,20 +109,45 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
+
+	// Hide cursor
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+	// Variables
+	m_dElapsedTime = m_dAccumulatedTime_ThreadOne = m_dAccumulatedTime_ThreadTwo = 0.0;
+
+	for (int i = 0; i < NUM_KEYPRESS; ++i)
+	{
+		keypressed[i] = false;
+	}
 }
 
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new SceneSkyPlane();
+	Scene *scene = new SceneTerrain();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
-		GetMouseUpdate();
-		scene->Update(m_timer.getElapsedTime());
+		// Get elapsed time
+		m_dElapsedTime = m_timer.getElapsedTime();
+		m_dAccumulatedTime_ThreadOne += m_dElapsedTime;
+		m_dAccumulatedTime_ThreadTwo += m_dElapsedTime;
+		// Player's update
+		if (m_dAccumulatedTime_ThreadOne > 0.01)
+		{
+			GetMouseUpdate();
+			Controller();
+			m_dAccumulatedTime_ThreadOne = 0.0;
+		}
+		// Scene update
+		if (m_dAccumulatedTime_ThreadTwo > 0.01)
+		{
+			scene->Update(m_dElapsedTime, keypressed);
+			m_dAccumulatedTime_ThreadTwo = 0.0;
+		}
 		scene->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
@@ -171,6 +197,14 @@ bool Application::GetMouseUpdate()
 	mouse_last_y = mouse_current_y;
 
 	return false;
+}
+
+void Application::Controller()
+{
+	keypressed[K_W] = IsKeyPressed('W');
+	keypressed[K_A] = IsKeyPressed('A');
+	keypressed[K_S] = IsKeyPressed('S');
+	keypressed[K_D] = IsKeyPressed('D');
 }
 
 double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0, Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0, Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;

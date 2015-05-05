@@ -226,7 +226,7 @@ void SceneText::Update(double dt)
 
 	rotateAngle += (float)(10 * dt);
 
-	camera.Update(dt);
+	camera.Update(dt, keypressed);
 
 	fps = (float)(1.f / dt);
 }

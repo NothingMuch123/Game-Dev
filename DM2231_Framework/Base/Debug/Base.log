@@ -1,5 +1,9 @@
-﻿Build started 28/4/2015 2:18:41 PM.
+﻿Build started 5/5/2015 3:29:19 PM.
+     1>Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Base\Base.vcxproj" on node 2 (clean target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\Base.lastbuildstate".
+     1>Done Building Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Base\Base.vcxproj" (clean target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.00
+Time Elapsed 00:00:00.12
