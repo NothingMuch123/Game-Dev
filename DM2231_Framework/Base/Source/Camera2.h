@@ -19,6 +19,9 @@ public:
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
 	virtual void Reset();
+
+	virtual void MoveForward_Backward(double dt, bool dir, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize) = 0; // 0 - Forward, 1 - Backwards
+	virtual void MoveLeft_Right(double dt, bool dir, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize) = 0;		// 0 - Left, 1 - Right
 };
 
 #endif

@@ -1,7 +1,7 @@
 /******************************************************************************/
 /*!
 \file	Obj.h
-\author Team 8
+\author Koh Fang Shu
 \par	
 \brief
 Header file for Obj Class
@@ -25,10 +25,28 @@ class CObj
 public:
 	CObj(void);
 	CObj(int _ID, Vector3 _translate, Vector3 _rotate, Vector3 _scale, Vector3 _size);
-	Vector3 getTranslate(), getRotate(), getScale(), getMaxBound(), getMinBound(), getSize();
-	int getID();
-	bool getRender();
-	void setRender(bool _render);
+	void Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, bool render = true);
+
+	void SetID(int ID);
+	int GetID();
+	
+	void SetTranslate(Vector3 translate);
+	Vector3 GetTranslate();
+
+	void SetRotate(Vector3 rotate);
+	Vector3 GetRotate();
+
+	void SetScale(Vector3 scale);
+	Vector3 GetScale();
+
+	void SetSize(Vector3 size);
+	Vector3 GetSize();
+
+	void SetRender(bool render);
+	bool GetRender();
+
+	Vector3 GetMaxBound();
+	Vector3 GetMinBound();
 
 	virtual void calcBound();	// AABB bound calculation
 	virtual ~CObj(void);

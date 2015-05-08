@@ -8,10 +8,12 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "LoadHmap.h"
+#include "Projectile.h"
 #include <vector>
 
 class SceneTerrain : public Scene
 {
+public:
 	enum UNIFORM_TYPE
 	{
 		U_MVP = 0,
@@ -82,14 +84,25 @@ class SceneTerrain : public Scene
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
-public:
+
+	enum WEAPON_ACTION
+	{
+		WA_NIL = 0,
+		WA_FIRE,
+		WA_RELOAD,
+		WA_CHANGEWEAPON,
+		WA_TOTAL,
+	};
+
 	SceneTerrain();
 	~SceneTerrain();
 
 	virtual void Init();
-	virtual void Update(double dt, bool *keypressed);
+	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	virtual void UpdateCameraStatus(unsigned char key);
+	virtual void UpdateWeaponStatus(unsigned char key);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
@@ -110,8 +123,6 @@ private:
 
 	Camera3 camera;
 
-	float rotateAngle;
-
 	MS modelStack;
 	MS viewStack;
 	MS projectionStack;
@@ -125,6 +136,9 @@ private:
 	// Terrain
 	std::vector<unsigned char> m_heightMap;
 	Vector3 terrainSize;
+
+	// Vector of bullet;
+	std::vector<CProjectile*> projectileList;
 };
 
 #endif

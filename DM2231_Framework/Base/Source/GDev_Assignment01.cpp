@@ -35,7 +35,7 @@ void GDev_Assignment01::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Text.fragmentshader" );
+	m_programID = LoadShaders( "Shader//comg.vertexshader", "Shader//comg.fragmentshader" );
 	
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -128,8 +128,6 @@ void GDev_Assignment01::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
@@ -164,7 +162,17 @@ void GDev_Assignment01::Init()
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("Skyplane", Color(1,1,1), 128, 200.f, 2000.f, 1.f, 1.f);
+	meshList[GEO_SKYPLANE]->textureID = LoadTGA("Image//top.tga");
+	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//heightmap.raw", m_heightMap);
+	meshList[GEO_TERRAIN]->textureID = LoadTGA("Image//moss1.tga");
+	meshList[GEO_SEA] = MeshBuilder::GenerateQuad("Sea", Color(1,1,1), 1);
+	meshList[GEO_SEA]->textureID = LoadTGA("Image//sea.tga");
 	
+	terrainSize.Set(4000,350,4000);
+
+	camera.Init(Vector3(0, 10 + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 10/terrainSize.z), 10), Vector3(0, 10 + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 10/terrainSize.z), 0), Vector3(0, 1, 0));
+
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -226,7 +234,7 @@ void GDev_Assignment01::Update(double dt, bool *keypressed)
 
 	rotateAngle += (float)(10 * dt);
 
-	camera.Update(dt, keypressed);
+	camera.Update(dt, m_heightMap, terrainSize);
 
 	fps = (float)(1.f / dt);
 
@@ -446,15 +454,13 @@ void GDev_Assignment01::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * lights[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-	
-	RenderMesh(meshList[GEO_AXES], false);
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
 
-	RenderSkybox();
+	//RenderSkybox();
+	RenderSkyPlane();
+	RenderTerrain();
+	RenderObject();
+	RenderTextInWorld();
+	Render2D();
 
 	// perspective;
 	////perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -469,36 +475,6 @@ void GDev_Assignment01::Render()
 	////RenderMesh(meshList[GEO_QUAD], false);
 	//RenderText(meshList[GEO_TEXT], "HelloWorld", Color(0, 1, 0));
 	//modelStack.PopMatrix();
-	modelStack.PushMatrix();
-	modelStack.Translate(-20, 0, -20);
-	RenderMesh(meshList[GEO_OBJECT], false);
-	modelStack.PopMatrix();
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 0, -20);
-	RenderMesh(meshList[GEO_OBJECT], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	modelStack.PopMatrix();
-
-	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
-	
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
-
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
-
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 1, 1, 1);
 }
 
 void GDev_Assignment01::Exit()
@@ -550,4 +526,87 @@ void GDev_Assignment01::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size,
 			modelStack.PopMatrix();
 		viewStack.PopMatrix();
 	projectionStack.PopMatrix();
+}
+
+void GDev_Assignment01::RenderSkyPlane()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(500, 1800, -500);
+	RenderMesh(meshList[GEO_SKYPLANE], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Translate(0, 0, -100);//-SKYBOXSIZE / 2 + 2.f);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(100,100,1);
+	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
+	RenderMesh(meshList[GEO_BOTTOM], false);
+	modelStack.PopMatrix();
+}
+
+void GDev_Assignment01::RenderTextInWorld()
+{
+	modelStack.PushMatrix();
+	modelStack.Scale(10, 10, 10);
+	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
+	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
+	modelStack.PopMatrix();
+}
+
+void GDev_Assignment01::RenderObject()
+{
+	float offset = 0.f;
+
+	RenderMesh(meshList[GEO_AXES], false);
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, offset + terrainSize.y * ReadHeightMap(m_heightMap, 0.f/terrainSize.x, 0.f/terrainSize.z), 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(terrainSize.x, terrainSize.z, 1);
+	RenderMesh(meshList[GEO_SEA], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-50, offset + terrainSize.y * ReadHeightMap(m_heightMap, -50.f/terrainSize.x, -50.f/terrainSize.z), -50);
+	RenderMesh(meshList[GEO_OBJECT], false);
+	modelStack.PopMatrix();
+	
+	modelStack.PushMatrix();
+	modelStack.Translate(100, offset + terrainSize.y * ReadHeightMap(m_heightMap, 100.f/4000, 100.f/4000), 100);
+	RenderMesh(meshList[GEO_OBJECT], true);
+	modelStack.PopMatrix();
+}
+
+void GDev_Assignment01::Render2D()
+{
+	//On screen text
+	std::ostringstream ss, y;
+	ss.precision(5);
+	ss << "FPS: " << fps;
+	y << "Y: " << camera.position.y;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], y.str(), Color(0, 1, 0), 3, 0, 9);
+	
+	std::ostringstream ss1;
+	ss1.precision(4);
+	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
+
+	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 1, 1, 1);
+}
+
+void GDev_Assignment01::RenderTerrain()
+{
+	modelStack.PushMatrix();
+	modelStack.Scale(terrainSize.x, terrainSize.y, terrainSize.z);
+	RenderMesh(meshList[GEO_TERRAIN], false);
+	modelStack.PopMatrix();
 }

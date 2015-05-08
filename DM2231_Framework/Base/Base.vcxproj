@@ -34,7 +34,6 @@
     <ClInclude Include="Source\Camera2.h" />
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Character.h" />
-    <ClInclude Include="Source\GDev_Assignment01.h" />
     <ClInclude Include="Source\Geometry.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />

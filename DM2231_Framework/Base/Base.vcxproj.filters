@@ -131,9 +131,6 @@
     <ClInclude Include="Source\Camera2.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GDev_Assignment01.h">
-      <Filter>Header Files\GDev Assignment01</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneSkyPlane.h">
       <Filter>Header Files\ACG Practical</Filter>
     </ClInclude>

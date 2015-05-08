@@ -11,24 +11,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-#include "Scene1.h"
-#include "Scene2.h"
-#include "Scene3.h"
-#include "Scene4.h"
-#include "Scene5.h"
-#include "SceneLight.h"
-#include "SceneLight2.h"
-#include "SceneTexture.h"
-#include "SceneSkybox.h"
-#include "SceneText.h"
-#include "SceneSkyPlane.h"
-#include "SceneTerrain.h"
-#include "GDev_Assignment01.h"
-
 GLFWwindow* m_window;
 const unsigned char FPS = 120; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
+
+double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0, Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0, Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;
+double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -115,17 +103,12 @@ void Application::Init()
 
 	// Variables
 	m_dElapsedTime = m_dAccumulatedTime_ThreadOne = m_dAccumulatedTime_ThreadTwo = 0.0;
-
-	for (int i = 0; i < NUM_KEYPRESS; ++i)
-	{
-		keypressed[i] = false;
-	}
 }
 
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new SceneTerrain();
+	scene = new SceneTerrain();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -139,13 +122,13 @@ void Application::Run()
 		if (m_dAccumulatedTime_ThreadOne > 0.01)
 		{
 			GetMouseUpdate();
-			Controller();
+			GetKeyBoardUpdate();
 			m_dAccumulatedTime_ThreadOne = 0.0;
 		}
 		// Scene update
 		if (m_dAccumulatedTime_ThreadTwo > 0.01)
 		{
-			scene->Update(m_dElapsedTime, keypressed);
+			scene->Update(m_dElapsedTime);
 			m_dAccumulatedTime_ThreadTwo = 0.0;
 		}
 		scene->Render();
@@ -196,16 +179,56 @@ bool Application::GetMouseUpdate()
 	mouse_last_x = mouse_current_x;
 	mouse_last_y = mouse_current_y;
 
+	if (mouse_diff_x > 0)
+	{
+		scene->UpdateCameraStatus('l');
+	}
+	if (mouse_diff_x < 0)
+	{
+		scene->UpdateCameraStatus('j');
+	}
+	if (mouse_diff_y > 0)
+	{
+		scene->UpdateCameraStatus('i');
+	}
+	if (mouse_diff_y < 0)
+	{
+		scene->UpdateCameraStatus('k');
+	}
+
+	if(glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	{
+		scene->UpdateWeaponStatus(SceneTerrain::WA_FIRE);
+	}
+
 	return false;
 }
 
-void Application::Controller()
+bool Application::GetKeyBoardUpdate()
 {
-	keypressed[K_W] = IsKeyPressed('W');
-	keypressed[K_A] = IsKeyPressed('A');
-	keypressed[K_S] = IsKeyPressed('S');
-	keypressed[K_D] = IsKeyPressed('D');
+	if (IsKeyPressed('W'))
+	{
+		scene->UpdateCameraStatus('w');
+	}
+	if (IsKeyPressed('S'))
+	{
+		scene->UpdateCameraStatus('s');
+	}
+	if (IsKeyPressed('A'))
+	{
+		scene->UpdateCameraStatus('a');
+	}
+	if (IsKeyPressed('D'))
+	{
+		scene->UpdateCameraStatus('d');
+	}
+	if (IsKeyPressed('Q'))
+	{
+		scene->UpdateCameraStatus('q');
+	}
+	if (IsKeyPressed('E'))
+	{
+		scene->UpdateCameraStatus('e');
+	}
+	return true;
 }
-
-double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0, Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0, Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;
-double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;

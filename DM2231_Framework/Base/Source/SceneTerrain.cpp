@@ -178,13 +178,17 @@ void SceneTerrain::Init()
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
-	
-	rotateAngle = 0;
 
 	bLightEnabled = true;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		CProjectile *p = new CProjectile;
+		projectileList.push_back(p);
+	}
 }
 
-void SceneTerrain::Update(double dt, bool *keypressed)
+void SceneTerrain::Update(double dt)
 {
 	if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
@@ -232,9 +236,12 @@ void SceneTerrain::Update(double dt, bool *keypressed)
 	if(Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
-	rotateAngle += (float)(10 * dt);
-
-	camera.Update(dt, keypressed, m_heightMap, terrainSize);
+	for (int i = 0; i < projectileList.size(); ++i)
+	{
+		CProjectile *p = projectileList[i];
+		p->Update(dt);
+	}
+	camera.Update(dt, m_heightMap, terrainSize);
 
 	fps = (float)(1.f / dt);
 
@@ -581,6 +588,19 @@ void SceneTerrain::RenderObject()
 	modelStack.Translate(100, offset + terrainSize.y * ReadHeightMap(m_heightMap, 100.f/4000, 100.f/4000), 100);
 	RenderMesh(meshList[GEO_OBJECT], true);
 	modelStack.PopMatrix();
+
+	for (int i = 0; i < projectileList.size(); ++i)
+	{
+		CProjectile *p = projectileList[i];
+		if (p->GetStatus())
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(p->GetTranslate().x, p->GetTranslate().y, p->GetTranslate().z);
+			modelStack.Scale(p->GetScale().x, p->GetScale().y, p->GetScale().z);
+			RenderMesh(meshList[p->GetID()], false);
+			modelStack.PopMatrix();
+		}
+	}
 }
 
 void SceneTerrain::Render2D()
@@ -609,4 +629,25 @@ void SceneTerrain::RenderTerrain()
 	modelStack.Scale(terrainSize.x, terrainSize.y, terrainSize.z);
 	RenderMesh(meshList[GEO_TERRAIN], false);
 	modelStack.PopMatrix();
+}
+
+void SceneTerrain::UpdateCameraStatus(unsigned char key)
+{
+	camera.UpdateStatus(key);
+}
+
+void SceneTerrain::UpdateWeaponStatus(unsigned char key)
+{
+	if (key == WA_FIRE)
+	{
+		for (int i = 0; i < projectileList.size(); ++i)
+		{
+			CProjectile *p = projectileList[i];
+			if (!p->GetStatus())
+			{
+				p->Init(GEO_SPHERE, camera.target, Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 500, 2, true, (camera.target - camera.position).Normalized());
+				break;
+			}
+		}
+	}
 }

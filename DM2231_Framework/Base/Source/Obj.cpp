@@ -30,6 +30,11 @@ CObj::~CObj(void)
 {
 }
 
+void CObj::SetTranslate(Vector3 translate)
+{
+	this->translate = translate;
+}
+
 /******************************************************************************/
 /*!
 \brief
@@ -38,9 +43,14 @@ return translate values
 translate values
 */
 /******************************************************************************/
-Vector3 CObj::getTranslate()
+Vector3 CObj::GetTranslate()
 {
 	return translate;
+}
+
+void CObj::SetRotate(Vector3 rotate)
+{
+	this->rotate = rotate;
 }
 
 /******************************************************************************/
@@ -51,9 +61,14 @@ return rotate values
 rotate values
 */
 /******************************************************************************/
-Vector3 CObj::getRotate()
+Vector3 CObj::GetRotate()
 {
 	return rotate;
+}
+
+void CObj::SetScale(Vector3 scale)
+{
+	this->scale = scale;
 }
 
 /******************************************************************************/
@@ -64,9 +79,14 @@ return scale values
 scale values
 */
 /******************************************************************************/
-Vector3 CObj::getScale()
+Vector3 CObj::GetScale()
 {
 	return scale;
+}
+
+void CObj::SetSize(Vector3 size)
+{
+	this->size = size;
 }
 
 /******************************************************************************/
@@ -77,7 +97,7 @@ return maxBound values
 maxBound values
 */
 /******************************************************************************/
-Vector3 CObj::getMaxBound()
+Vector3 CObj::GetMaxBound()
 {
 	return maxBound;
 }
@@ -90,7 +110,7 @@ return minBound values
 minBound values
 */
 /******************************************************************************/
-Vector3 CObj::getMinBound()
+Vector3 CObj::GetMinBound()
 {
 	return minBound;
 }
@@ -103,9 +123,14 @@ return size values
 size values
 */
 /******************************************************************************/
-Vector3 CObj::getSize()
+Vector3 CObj::GetSize()
 {
 	return size;
+}
+
+void CObj::SetID(int ID)
+{
+	this->ID = ID;
 }
 
 /******************************************************************************/
@@ -116,7 +141,7 @@ return ID
 ID similar to SP2::GEOMETRY_TYPE
 */
 /******************************************************************************/
-int CObj::getID()
+int CObj::GetID()
 {
 	return ID;
 }
@@ -142,7 +167,7 @@ return render state
 render state
 */
 /******************************************************************************/
-bool CObj::getRender()
+bool CObj::GetRender()
 {
 	return render;
 }
@@ -153,7 +178,17 @@ bool CObj::getRender()
 set render state
 */
 /******************************************************************************/
-void CObj::setRender(bool _render)
+void CObj::SetRender(bool render)
 {
-	render = _render;
+	this->render = render;
+}
+
+void CObj::Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, bool render)
+{
+	SetID(ID);
+	SetTranslate(translate);
+	SetRotate(rotate);
+	SetScale(scale);
+	SetSize(size);
+	SetRender(render);
 }

@@ -1,5 +1,5 @@
-#ifndef SCENE_TEXT_H
-#define SCENE_TEXT_H
+#ifndef SCENE_TERRAIN_H
+#define SCENE_TERRAIN_H
 
 #include "Scene.h"
 #include "Mtx44.h"
@@ -7,6 +7,8 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
+#include "LoadHmap.h"
+#include <vector>
 
 class GDev_Assignment01 : public Scene
 {
@@ -53,6 +55,9 @@ class GDev_Assignment01 : public Scene
 	{
 		GEO_AXES,
 		GEO_CROSSHAIR,
+		GEO_SKYPLANE,
+		GEO_TERRAIN,
+		GEO_SEA,
 		GEO_LIGHTBALL,
 		GEO_SPHERE,
 		GEO_SPHERE2,
@@ -90,7 +95,13 @@ public:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size = 1.0f, float x = 0.0f, float y = 0.0f);
 	void RenderMesh(Mesh *mesh, bool enableLight);
+	void RenderSkyPlane();
+	void RenderTerrain();
 	void RenderSkybox();
+	void RenderTextInWorld();
+	void RenderObject();
+	void Render2D();
+
 private:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -110,6 +121,10 @@ private:
 	bool bLightEnabled;
 
 	float fps;
+
+	// Terrain
+	std::vector<unsigned char> m_heightMap;
+	Vector3 terrainSize;
 };
 
 #endif
