@@ -159,4 +159,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\MultiTexture.fragmentshader" />
+  </ItemGroup>
 </Project>

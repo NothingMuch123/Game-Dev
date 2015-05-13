@@ -35,7 +35,7 @@ void SceneTerrain::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	m_programID = LoadShaders( "Shader//comg.vertexshader", "Shader//comg.fragmentshader" );
+	m_programID = LoadShaders( "Shader//comg.vertexshader", "Shader//MultiTexture.fragmentshader" );
 	
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -72,8 +72,10 @@ void SceneTerrain::Init()
 	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
 	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");
 	// Get a handle for our "colorTexture" uniform
-	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
-	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
+	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled[0]");
+	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture[0]");
+	m_parameters[U_COLOR_TEXTURE_ENABLED1] = glGetUniformLocation(m_programID, "colorTextureEnabled[1]");
+	m_parameters[U_COLOR_TEXTURE1] = glGetUniformLocation(m_programID, "colorTexture[1]");
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
@@ -135,12 +137,12 @@ void SceneTerrain::Init()
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("Crosshair", Color(0,1,0), 5);
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
+	meshList[GEO_OBJECT]->textureID[0] = LoadTGA("Image//chair.tga");
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 10.f);
@@ -151,23 +153,24 @@ void SceneTerrain::Init()
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 	
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+	meshList[GEO_LEFT]->textureID[0] = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
+	meshList[GEO_RIGHT]->textureID[0] = LoadTGA("Image//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
+	meshList[GEO_TOP]->textureID[0] = LoadTGA("Image//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
+	meshList[GEO_BOTTOM]->textureID[0] = LoadTGA("Image//bottom.tga");
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
+	meshList[GEO_FRONT]->textureID[0] = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+	meshList[GEO_BACK]->textureID[0] = LoadTGA("Image//back.tga");
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("Skyplane", Color(1,1,1), 128, 200.f, 2000.f, 1.f, 1.f);
-	meshList[GEO_SKYPLANE]->textureID = LoadTGA("Image//top.tga");
+	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//top.tga");
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//heightmap.raw", m_heightMap);
-	meshList[GEO_TERRAIN]->textureID = LoadTGA("Image//moss1.tga");
+	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//moss1.tga");
+	meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//brick.tga");
 	meshList[GEO_SEA] = MeshBuilder::GenerateQuad("Sea", Color(1,1,1), 1);
-	meshList[GEO_SEA]->textureID = LoadTGA("Image//sea.tga");
+	meshList[GEO_SEA]->textureID[0] = LoadTGA("Image//sea.tga");
 	
 	terrainSize.Set(4000,350,4000);
 
@@ -186,6 +189,7 @@ void SceneTerrain::Init()
 		CProjectile *p = new CProjectile;
 		projectileList.push_back(p);
 	}
+	FireRateCounter = 0;
 }
 
 void SceneTerrain::Update(double dt)
@@ -241,6 +245,7 @@ void SceneTerrain::Update(double dt)
 		CProjectile *p = projectileList[i];
 		p->Update(dt);
 	}
+	FireRateCounter += dt;
 	camera.Update(dt, m_heightMap, terrainSize);
 
 	fps = (float)(1.f / dt);
@@ -253,7 +258,7 @@ static const float SKYBOXSIZE = 1000.f;
 
 void SceneTerrain::RenderText(Mesh* mesh, std::string text, Color color)
 {
-	if(!mesh || mesh->textureID <= 0)
+	if(!mesh || mesh->textureID[0] <= 0)
 		return;
 	
 	glDisable(GL_DEPTH_TEST);
@@ -262,7 +267,7 @@ void SceneTerrain::RenderText(Mesh* mesh, std::string text, Color color)
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for(unsigned i = 0; i < text.length(); ++i)
 	{
@@ -280,7 +285,7 @@ void SceneTerrain::RenderText(Mesh* mesh, std::string text, Color color)
 
 void SceneTerrain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
-	if(!mesh || mesh->textureID <= 0)
+	if(!mesh || mesh->textureID[0] <= 0)
 		return;
 	
 	glDisable(GL_DEPTH_TEST);
@@ -299,7 +304,7 @@ void SceneTerrain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID[0]);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
 	for(unsigned i = 0; i < text.length(); ++i)
 	{
@@ -342,21 +347,27 @@ void SceneTerrain::RenderMesh(Mesh *mesh, bool enableLight)
 	{	
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
-	if(mesh->textureID > 0)
+	for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
 	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	}
-	else
-	{
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+		if(mesh->textureID[i] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + (i * 2)], 1);
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
+			glUniform1i(m_parameters[U_COLOR_TEXTURE + (i * 2)], i);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + (i * 2)], 0);
+		}
 	}
 	mesh->Render();
-	if(mesh->textureID > 0)
+	for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		if(mesh->textureID[i] > 0)
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 	}
 }
 
@@ -513,21 +524,28 @@ void SceneTerrain::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, floa
 
 				MVP = projectionStack.Top() * viewStack.Top();
 				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-				if (mesh->textureID > 0)
+				
+				for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
 				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-					glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-				}
-				else
-				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+					if(mesh->textureID[i] > 0)
+					{
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + (i * 2)], 1);
+						glActiveTexture(GL_TEXTURE0 + i);
+						glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
+						glUniform1i(m_parameters[U_COLOR_TEXTURE + (i * 2)], i);
+					}
+					else
+					{
+						glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + (i * 2)], 0);
+					}
 				}
 				mesh->Render();
-				if(mesh->textureID > 0)
+				for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
 				{
-					glBindTexture(GL_TEXTURE_2D, 0);
+					if(mesh->textureID[i] > 0)
+					{
+						glBindTexture(GL_TEXTURE_2D, 0);
+					}
 				}
 
 			modelStack.PopMatrix();
@@ -638,7 +656,7 @@ void SceneTerrain::UpdateCameraStatus(unsigned char key)
 
 void SceneTerrain::UpdateWeaponStatus(unsigned char key)
 {
-	if (key == WA_FIRE)
+	if (key == WA_FIRE && FireRateCounter > 0.1)
 	{
 		for (int i = 0; i < projectileList.size(); ++i)
 		{
@@ -646,6 +664,7 @@ void SceneTerrain::UpdateWeaponStatus(unsigned char key)
 			if (!p->GetStatus())
 			{
 				p->Init(GEO_SPHERE, camera.target, Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 500, 2, true, (camera.target - camera.position).Normalized());
+				FireRateCounter = 0;
 				break;
 			}
 		}

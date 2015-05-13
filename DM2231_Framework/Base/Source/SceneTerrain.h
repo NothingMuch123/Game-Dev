@@ -49,6 +49,8 @@ public:
 		U_LIGHT1_EXPONENT,
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
+		U_COLOR_TEXTURE_ENABLED1,
+		U_COLOR_TEXTURE1,
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -139,6 +141,7 @@ private:
 
 	// Vector of bullet;
 	std::vector<CProjectile*> projectileList;
+	float FireRateCounter;
 };
 
 #endif
