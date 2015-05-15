@@ -7,9 +7,14 @@
 class Camera3 : public Camera
 {
 public:
-	//Vector3 position;
-	//Vector3 target;
-	//Vector3 up;
+	static float TERRAIN_OFFSET;
+	static float CAMERA_SPEED;
+	enum CAM_TYPE
+	{
+		LAND_CAM,
+		AIR_CAM,
+		NUM_CAM_TYPE,
+	};
 
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
@@ -22,18 +27,40 @@ public:
 	virtual void Reset();
 	virtual void UpdateStatus(unsigned char key);
 
+	virtual void SetCameraType(CAM_TYPE type);
+	virtual CAM_TYPE GetCameraType();
+
 	virtual void MoveForward_Backward(double dt, bool dir, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);	// 0 - Forward	| 1 - Backwards
 	virtual void MoveLeft_Right(double dt, bool dir, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);		// 0 - Left		| 1 - Right
 	virtual void MoveUp_Down(double dt, bool dir, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);			// 0 - Up		| 1 - Down
 
-	// Mouse
-	virtual void TurnUp(double dt);
-	virtual void TurnDown(double dt);
-	virtual void TurnLeft(double dt);
-	virtual void TurnRight(double dt);
+	// Basic methods
+	virtual void LookUp(const double dt);
+	virtual void LookDown(const double dt);
+	virtual void TurnLeft(const double dt);
+	virtual void TurnRight(const double dt);
+	virtual void SpinClockwise(const double dt);
+	virtual void SpinCounterClockwise(const double dt);
+
+	// Applied methods
+	virtual void Pitch(const double dt);
+	virtual void Yaw(const double dt);
+	virtual void Roll(const double dt);
+	virtual void Walk(const double dt, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);
+	virtual void Strafe(const double dt, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);
+	virtual void Jump(const double dt);
+
+	virtual void UpdateJump(const double dt, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);
 
 private:
 	bool myKeys[255];
+	CAM_TYPE type;
+
+	// Jump
+	bool m_bJumping;
+	float GRAVITY;
+	float JumpVel;
+	float JUMPMAXSPEED, JUMPACCEL;
 };
 
 #endif

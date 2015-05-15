@@ -70,7 +70,8 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2231_Framework", NULL, NULL);
+	m_window = glfwCreateWindow(1920, 1080, "DM2231_Framework", glfwGetPrimaryMonitor(), NULL);
+	//m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2231_Framework", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -179,23 +180,6 @@ bool Application::GetMouseUpdate()
 	mouse_last_x = mouse_current_x;
 	mouse_last_y = mouse_current_y;
 
-	if (mouse_diff_x > 0)
-	{
-		scene->UpdateCameraStatus('l');
-	}
-	if (mouse_diff_x < 0)
-	{
-		scene->UpdateCameraStatus('j');
-	}
-	if (mouse_diff_y > 0)
-	{
-		scene->UpdateCameraStatus('i');
-	}
-	if (mouse_diff_y < 0)
-	{
-		scene->UpdateCameraStatus('k');
-	}
-
 	if(glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		scene->UpdateWeaponStatus(SceneTerrain::WA_FIRE);
@@ -229,6 +213,18 @@ bool Application::GetKeyBoardUpdate()
 	if (IsKeyPressed('E'))
 	{
 		scene->UpdateCameraStatus('e');
+	}
+	if (IsKeyPressed('Z'))
+	{
+		scene->UpdateCameraStatus('z');
+	}
+	if (IsKeyPressed('C'))
+	{
+		scene->UpdateCameraStatus('c');
+	}
+	if (IsKeyPressed(VK_SPACE))
+	{
+		scene->UpdateCameraStatus(' ');
 	}
 	return true;
 }

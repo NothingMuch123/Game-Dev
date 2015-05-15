@@ -174,7 +174,7 @@ void SceneTerrain::Init()
 	
 	terrainSize.Set(4000,350,4000);
 
-	camera.Init(Vector3(0, 10 + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 10/terrainSize.z), 10), Vector3(0, 10 + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 10/terrainSize.z), 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 10/terrainSize.z), 10), Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 0/terrainSize.z), 0), Vector3(0, 1, 0));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -253,8 +253,6 @@ void SceneTerrain::Update(double dt)
 	// Check for projectile from players
 	//glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT);
 }
-
-static const float SKYBOXSIZE = 1000.f;
 
 void SceneTerrain::RenderText(Mesh* mesh, std::string text, Color color)
 {
@@ -373,7 +371,7 @@ void SceneTerrain::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneTerrain::RenderSkybox()
 {
-	//left
+	/*//left
 	modelStack.PushMatrix();
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
@@ -415,7 +413,7 @@ void SceneTerrain::RenderSkybox()
 	modelStack.Rotate(-90, 0, 0, 1);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 }
 
 void SceneTerrain::Render()
@@ -559,22 +557,12 @@ void SceneTerrain::RenderSkyPlane()
 	modelStack.Translate(500, 1800, -500);
 	RenderMesh(meshList[GEO_SKYPLANE], false);
 	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -100);//-SKYBOXSIZE / 2 + 2.f);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(100,100,1);
-	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
 }
 
 void SceneTerrain::RenderTextInWorld()
 {
 	modelStack.PushMatrix();
 	modelStack.Scale(10, 10, 10);
-	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
 	RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
 	modelStack.PopMatrix();
 }
@@ -629,12 +617,18 @@ void SceneTerrain::Render2D()
 	ss << "FPS: " << fps;
 	y << "Y: " << camera.position.y;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
-	RenderTextOnScreen(meshList[GEO_TEXT], y.str(), Color(0, 1, 0), 3, 0, 9);
+	//RenderTextOnScreen(meshList[GEO_TEXT], y.str(), Color(0, 1, 0), 3, 0, 9);
 	
 	std::ostringstream ss1;
 	ss1.precision(4);
 	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+
+	std::ostringstream sPos, sTarget;
+	sPos << "Pos: " << camera.position;
+	RenderTextOnScreen(meshList[GEO_TEXT], sPos.str(), Color(0, 1, 0), 3, 0, 12);
+	sTarget << "Target: " << camera.target;
+	RenderTextOnScreen(meshList[GEO_TEXT], sTarget.str(), Color(0, 1, 0), 3, 0, 9);
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 
