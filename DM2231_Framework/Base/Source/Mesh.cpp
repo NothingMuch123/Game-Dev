@@ -1,4 +1,3 @@
-
 #include "Mesh.h"
 #include "GL\glew.h"
 #include "Vertex.h"
@@ -9,9 +8,10 @@ Mesh::Mesh(const std::string &meshName)
 {
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &indexBuffer);
-	for (int i = 0; i < MAX_TEXTURES; ++i)
+	
+	for (unsigned i = 0; i < MAX_TEXTURES; ++i)
 	{
-		textureID[i] = NULL;
+		textureID[i] = 0;
 	}
 }
 
@@ -19,9 +19,9 @@ Mesh::~Mesh()
 {
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &indexBuffer);
-	for (int i = 0; i < MAX_TEXTURES; ++i)
+	for (unsigned i = 0; i < MAX_TEXTURES; ++i)
 	{
-		if(textureID[i] > 0)
+		if (textureID[i] > 0)
 		{
 			glDeleteTextures(1, &textureID[i]);
 		}
@@ -39,10 +39,10 @@ void Mesh::Render()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color)));
 	//if(textureID > 0)
-	{
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color) + sizeof(Vector3)));
-	}
+	//{
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color) + sizeof(Vector3)));
+	//}
 
 	
 	//glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -60,9 +60,9 @@ void Mesh::Render()
 	glDisableVertexAttribArray(2);
 
 	//if(textureID > 0)
-	{
+	//{
 		glDisableVertexAttribArray(3);
-	}
+	//}
 }
 
 void Mesh::Render(unsigned offset, unsigned count)
@@ -76,10 +76,10 @@ void Mesh::Render(unsigned offset, unsigned count)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color)));
 	//if(textureID > 0)
-	{
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color) + sizeof(Vector3)));
-	}
+	//{
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position) + sizeof(Color) + sizeof(Vector3)));
+	//}
 
 	//glDrawArrays(GL_TRIANGLES, offset, count);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -96,7 +96,7 @@ void Mesh::Render(unsigned offset, unsigned count)
 	glDisableVertexAttribArray(2);
 
 	//if(textureID > 0)
-	{
+	//{
 		glDisableVertexAttribArray(3);
-	}
+	//}
 }

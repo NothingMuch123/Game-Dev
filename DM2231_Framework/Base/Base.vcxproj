@@ -22,10 +22,13 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\Minimap.cpp" />
     <ClCompile Include="Source\Obj.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
+    <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneTerrain.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -42,17 +45,17 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\Minimap.h" />
     <ClInclude Include="Source\Obj.h" />
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneBase.h" />
     <ClInclude Include="Source\SceneSkyPlane.h" />
     <ClInclude Include="Source\SceneTerrain.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\MultiTexture.fragmentshader" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B172635-4E2B-46F1-A403-08F4194D00F5}</ProjectGuid>

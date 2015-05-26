@@ -18,6 +18,7 @@ Overloaded constructor
 /******************************************************************************/
 CObj::CObj(int _ID, Vector3 _translate, Vector3 _rotate, Vector3 _scale, Vector3 _size) : ID(_ID), translate(_translate), rotate(_rotate), scale(_scale), size(_size), render(true)
 {
+	calcBound();
 }
 
 /******************************************************************************/

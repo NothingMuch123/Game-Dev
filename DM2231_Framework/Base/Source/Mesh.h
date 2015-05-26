@@ -7,8 +7,6 @@
 class Mesh
 {
 public:
-	static const unsigned MAX_TEXTURES = 2;
-
 	enum DRAW_MODE
 	{
 		DRAW_TRIANGLES, //default mode
@@ -18,9 +16,10 @@ public:
 	};
 	Mesh(const std::string &meshName);
 	~Mesh();
-	void Render();
+	virtual void Render();
 	void Render(unsigned offset, unsigned count);
 
+	static const unsigned MAX_TEXTURES = 2;
 	const std::string name;
 	DRAW_MODE mode;
 	unsigned vertexBuffer;
