@@ -13,7 +13,6 @@ SceneBase::SceneBase(void)
 {
 }
 
-
 SceneBase::~SceneBase(void)
 {
 }
@@ -37,7 +36,7 @@ void SceneBase::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	m_programID = LoadShaders( "Shader//comg.vertexshader", "Shader//MultiTexture.fragmentshader" );
+	m_programID = LoadShaders( "Shader//fog.vertexshader", "Shader//fog.fragmentshader" );
 	
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -81,6 +80,14 @@ void SceneBase::Init()
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
+	
+	// Fog
+	m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fog.color");
+	m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fog.start");
+	m_parameters[U_FOG_END] = glGetUniformLocation(m_programID, "fog.end");
+	m_parameters[U_FOG_DENSITY] = glGetUniformLocation(m_programID, "fog.density");
+	m_parameters[U_FOG_TYPE] = glGetUniformLocation(m_programID, "fog.type");
+	m_parameters[U_FOG_ENABLE] = glGetUniformLocation(m_programID, "fog.enabled");
 	
 	// Use our shader
 	glUseProgram(m_programID);
@@ -131,6 +138,15 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], lights[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
+
+	// Fog
+	Color fogColor(0.5f, 0.5f, 0.5f);
+	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+	glUniform1f(m_parameters[U_FOG_START], 10);
+	glUniform1f(m_parameters[U_FOG_END], 1000);
+	glUniform1f(m_parameters[U_FOG_DENSITY], 0.005f);
+	glUniform1f(m_parameters[U_FOG_TYPE], 0);
+	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -401,11 +417,15 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 	
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
 	if(enableLight && bLightEnabled)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-		modelView = viewStack.Top() * modelStack.Top();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+		/*modelView = viewStack.Top() * modelStack.Top();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);*/
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
 		

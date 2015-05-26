@@ -54,7 +54,7 @@ void SceneTerrain::Init()
 	obj = new CObj(GEO_OBJECT, Vector3(100, terrainSize.y * ReadHeightMap(m_heightMap, 100.f/4000, 100.f/4000), 100), Vector3(0,0,0), Vector3(1,1,1), Vector3(1,1,1));
 	objList.push_back(obj);
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		CProjectile *p = new CProjectile;
 		projectileList.push_back(p);
@@ -67,7 +67,7 @@ void SceneTerrain::Update(double dt)
 	// Update SceneBase
 	SceneBase::Update(dt);
 
-	rotateAngle -= Application::camera_yaw;
+	rotateAngle -= Application::camera_yaw * Camera3::CAMERA_SPEED * dt;
 
 	// Sprite animation update
 	SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_SPRITE_ANIMATION]);
@@ -85,6 +85,11 @@ void SceneTerrain::Update(double dt)
 	camera.Update(dt, m_heightMap, terrainSize);
 
 	fps = (float)(1.f / dt);
+
+	if (Application::IsKeyPressed('R'))
+	{
+		Reset();
+	}
 }
 
 void SceneTerrain::Render()
@@ -108,7 +113,7 @@ void SceneTerrain::Exit()
 
 void SceneTerrain::Reset()
 {
-
+	SceneBase::Reset();
 }
 
 void SceneTerrain::UpdateCameraStatus(unsigned char key)
@@ -268,14 +273,14 @@ void SceneTerrain::Render2D()
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 2, 0, 0);
 	
-	SetHUD(false);
-	
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 1, 0, 0);
 	
 	// Render minimap
-	RenderMeshIn2D(m_cMinimap->GetAvatar(), false, 20.f, 50, -45, rotateAngle);
 	RenderMeshIn2D(m_cMinimap->GetBorder(), false, 20.f, 50, -45);
 	RenderMeshIn2D(m_cMinimap->GetBackground(), false, 20.f, 50, -45);
+	RenderMeshIn2D(m_cMinimap->GetAvatar(), false, 20.f, 50, -45, rotateAngle);
+
+	SetHUD(false);
 }
 
 void SceneTerrain::RenderTerrain()
@@ -295,10 +300,12 @@ void SceneTerrain::SetHUD(const bool m_bHUDmode) // Remember to call this in pai
 		ortho.SetToOrtho(0, 80, 0, 60, -10, 10);
 		projectionStack.PushMatrix();
 		projectionStack.LoadMatrix(ortho);
+		glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 	}
 	else
 	{
 		projectionStack.PopMatrix();
 		glEnable(GL_DEPTH_TEST);
+		glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	}
 }
