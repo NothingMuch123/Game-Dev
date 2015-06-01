@@ -2,8 +2,10 @@
 #include "Application.h"
 #include "Mtx44.h"
 
-float Camera3::TERRAIN_OFFSET = 20.f;
+float Camera3::TERRAIN_OFFSET = 30.f;
 float Camera3::CAMERA_SPEED = 100.f;
+float Camera3::CROUCH_SPEED = 50.f;
+float Camera3::CROUCH_OFFSET = 10.f;
 
 Camera3::Camera3()
 {
@@ -19,11 +21,12 @@ Camera3::~Camera3()
 
 void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
+	this->sprint = false;
 	this->m_bJumping = false;
 	this->JumpVel = 0;
 	this->JUMPMAXSPEED = 200.f;
 	this->JUMPACCEL = 100.f;
-	this->GRAVITY = -95.f;
+	this->GRAVITY = -150.f;
 	this->type = LAND_CAM;
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
@@ -36,6 +39,28 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera3::Update(double dt, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize)
 {
+	if (myKeys[1])	// Sprint
+	{
+		sprint = true;
+		CAMERA_SPEED = 200.f;
+		myKeys[1] = false;
+	}
+	else
+	{
+		sprint = false;
+		CAMERA_SPEED = 100.f;
+	}
+	if (myKeys[2])	// Crouch
+	{
+		crouch = true;
+		Crouch(dt, heightMap, terrainSize);
+		myKeys[2] = false;
+	}
+	else
+	{
+		crouch = false;
+		Crouch(-dt, heightMap, terrainSize);
+	}
 	if(myKeys['a'])
 	{
 		Strafe(dt, heightMap, terrainSize);
@@ -146,9 +171,10 @@ void Camera3::Update(double dt, std::vector<unsigned char> &heightMap, const Vec
 		target = position + view;
 	}*/
 
-	if(Application::IsKeyPressed('R'))
+	if(myKeys['t'])
 	{
 		Reset();
+		myKeys['t'] = false;
 	}
 }
 
@@ -188,7 +214,14 @@ void Camera3::MoveForward_Backward(double dt, bool dir, std::vector<unsigned cha
 	{
 		// Terrain y-axis
 		float yDifference = target.y - position.y;
-		position.y = TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z);
+		if (crouch)
+		{
+			position.y = (TERRAIN_OFFSET - CROUCH_OFFSET) + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z);
+		}
+		else
+		{
+			position.y = TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z);
+		}
 		target.y = position.y + yDifference;
 	}
 }
@@ -216,7 +249,14 @@ void Camera3::MoveLeft_Right(double dt, bool dir, std::vector<unsigned char> &he
 	{
 		// Terrain y-axis
 		float yDifference = target.y - position.y;
-		position.y = TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z);
+		if (crouch)
+		{
+			position.y = (TERRAIN_OFFSET - CROUCH_OFFSET) + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z);
+		}
+		else
+		{
+			position.y = TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z);
+		}
 		target.y = position.y + yDifference;
 	}
 }
@@ -310,6 +350,45 @@ void Camera3::SpinCounterClockwise(const double dt)
 	Vector3 view = target - position;
 	rotate.SetToRotation(dt * CAMERA_SPEED, view.x, view.y, view.z);
 	up = rotate * up;
+}
+
+void Camera3::Crouch(const double dt, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize)
+{
+	if (dt > 0)
+	{
+		CAMERA_SPEED = 50.f;
+		float crouchY = ((TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z)) - CROUCH_OFFSET);
+		if (position.y > crouchY)
+		{
+			position.y -= CROUCH_SPEED * dt;
+			target.y -= CROUCH_SPEED * dt;
+			if (position.y < crouchY)
+			{
+				float yDifference = target.y - position.y;
+				position.y = crouchY;
+				target.y = crouchY + yDifference;
+			}
+		}
+	}
+	else if (dt < 0)
+	{
+		if (!sprint)
+		{
+			CAMERA_SPEED = 100.f;
+		}
+		float normalY = (TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(heightMap, position.x/terrainSize.x, position.z/terrainSize.z));
+		if (position.y < normalY)
+		{
+			position.y += CROUCH_SPEED * -dt;
+			target.y += CROUCH_SPEED * -dt;
+			if (position.y > normalY)
+			{
+				float yDifference = target.y - position.y;
+				position.y = normalY;
+				target.y = normalY + yDifference;
+			}
+		}
+	}
 }
 
 void Camera3::Pitch(const double dt)

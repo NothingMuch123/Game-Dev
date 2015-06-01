@@ -109,7 +109,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	scene = new SceneTerrain();
+	scene = new GDev_Assignment01();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -189,7 +189,11 @@ bool Application::GetMouseUpdate()
 
 	if(glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
-		scene->UpdateWeaponStatus(SceneTerrain::WA_FIRE);
+		scene->UpdateWeaponStatus(GDev_Assignment01::WA_FIRE);
+	}
+	if(glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+	{
+		scene->UpdateWeaponStatus(GDev_Assignment01::WA_SCOPE);
 	}
 
 	return false;
@@ -197,41 +201,57 @@ bool Application::GetMouseUpdate()
 
 bool Application::GetKeyBoardUpdate()
 {
-	if (IsKeyPressed('W'))
+	if (IsKeyPressed('W'))					// Walk forward
 	{
 		scene->UpdateCameraStatus('w');
 	}
-	if (IsKeyPressed('S'))
+	if (IsKeyPressed('S'))					// Walk backward
 	{
 		scene->UpdateCameraStatus('s');
 	}
-	if (IsKeyPressed('A'))
+	if (IsKeyPressed('A'))					// Strafe left
 	{
 		scene->UpdateCameraStatus('a');
 	}
-	if (IsKeyPressed('D'))
+	if (IsKeyPressed('D'))					// Strafe right
 	{
 		scene->UpdateCameraStatus('d');
 	}
-	if (IsKeyPressed('Q'))
+	if (IsKeyPressed('Q'))					// Fly up
 	{
 		scene->UpdateCameraStatus('q');
 	}
-	if (IsKeyPressed('E'))
+	if (IsKeyPressed('E'))					// Fly down
 	{
 		scene->UpdateCameraStatus('e');
 	}
-	if (IsKeyPressed('Z'))
+	if (IsKeyPressed('Z'))					// Swap previous weapon
 	{
-		scene->UpdateCameraStatus('z');
+		scene->UpdateWeaponStatus(GDev_Assignment01::WA_CHANGEWEAPON_PREV);
 	}
-	if (IsKeyPressed('C'))
+	if (IsKeyPressed('C'))					// Swap next weapon
 	{
-		scene->UpdateCameraStatus('c');
+		scene->UpdateWeaponStatus(GDev_Assignment01::WA_CHANGEWEAPON_NEXT);
 	}
-	if (IsKeyPressed(VK_SPACE))
+	if (IsKeyPressed(VK_SPACE))				// Character jump
 	{
 		scene->UpdateCameraStatus(' ');
+	}
+	if (IsKeyPressed('R'))					// Reload weapon
+	{
+		scene->UpdateWeaponStatus(GDev_Assignment01::WA_RELOAD);
+	}
+	if (IsKeyPressed(VK_SHIFT))				// Character sprint
+	{
+		scene->UpdateCameraStatus(1);
+	}
+	if (IsKeyPressed(VK_CONTROL))			// Character crouch
+	{
+		scene->UpdateCameraStatus(2);
+	}
+	if (IsKeyPressed('T'))					// Reset scene
+	{
+		scene->UpdateCameraStatus('t');
 	}
 	return true;
 }

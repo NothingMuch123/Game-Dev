@@ -19,6 +19,7 @@ SceneBase::~SceneBase(void)
 
 void SceneBase::Init()
 {
+	srand(time(NULL));
 	// Black background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	// Enable depth test
@@ -140,20 +141,22 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
 	// Fog
+	fogEnabled = false;
 	Color fogColor(0.5f, 0.5f, 0.5f);
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	glUniform1f(m_parameters[U_FOG_START], 10);
 	glUniform1f(m_parameters[U_FOG_END], 1000);
 	glUniform1f(m_parameters[U_FOG_DENSITY], 0.005f);
 	glUniform1f(m_parameters[U_FOG_TYPE], 0);
-	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
+	glUniform1f(m_parameters[U_FOG_ENABLE], fogEnabled);
 
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("Crosshair", Color(0,1,0), 5);
+	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("Crosshair", Color(1,1,1), 1);
+	meshList[GEO_CROSSHAIR]->textureID[0] = LoadTGA("Image//crosshair.tga");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 
@@ -167,7 +170,8 @@ void SceneBase::Init()
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 2.f);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Cube", Color (1,0,0), 1);
 
 	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", 1, 1, 1);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
@@ -195,16 +199,41 @@ void SceneBase::Init()
 	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//rock.tga");
 	meshList[GEO_TERRAIN]->textureID[1] = LoadTGA("Image//sand.tga");
 
-	meshList[GEO_TENT] = MeshBuilder::GenerateOBJ("Tent", "OBJ//tent.obj");
-	meshList[GEO_TENT]->textureID[0] = LoadTGA("Image//tent.tga");
-
 	meshList[GEO_SEA] = MeshBuilder::GenerateQuad("Sea", Color(1,1,1), 1);
 	meshList[GEO_SEA]->textureID[0] = LoadTGA("Image//sea.tga");
 
+	// Weapons
+	meshList[GEO_ROCKET_LAUNCHER] = MeshBuilder::GenerateQuad("Rocket launcher", Color(1,1,1), 1);
+	meshList[GEO_ROCKET_LAUNCHER]->textureID[0] = LoadTGA("Image//rocket_launcher.tga");
+
+	meshList[GEO_PISTOL] = MeshBuilder::GenerateQuad("Pistol", Color(1,1,1), 1);
+	meshList[GEO_PISTOL]->textureID[0] = LoadTGA("Image//pistol.tga");
+
+	meshList[GEO_SNIPER] = MeshBuilder::GenerateQuad("Sniper", Color(1,1,1), 1);
+	meshList[GEO_SNIPER]->textureID[0] = LoadTGA("Image//sniper.tga");
+	
+	meshList[GEO_SCOPE] = MeshBuilder::GenerateQuad("Sniper scope", Color(1,1,1), 1);
+	meshList[GEO_SCOPE]->textureID[0] = LoadTGA("Image//scope.tga");
+
+	meshList[GEO_PISTOL_BULLET] = MeshBuilder::GenerateQuad("pistol bullet", Color(1,1,1), 1);
+	meshList[GEO_PISTOL_BULLET]->textureID[0] = LoadTGA("Image//pistol_bullet.tga");
+
+	meshList[GEO_ROCKET_BULLET] = MeshBuilder::GenerateQuad("pistol bullet", Color(1,1,1), 1);
+	meshList[GEO_ROCKET_BULLET]->textureID[0] = LoadTGA("Image//rocket_bullet.tga");
+
+	meshList[GEO_SNIPER_BULLET] = MeshBuilder::GenerateQuad("pistol bullet", Color(1,1,1), 1);
+	meshList[GEO_SNIPER_BULLET]->textureID[0] = LoadTGA("Image//sniper_bullet.tga");
+
+	meshList[GEO_PLATFORM] = MeshBuilder::GenerateOBJ("Platform", "OBJ//platform.obj");
+	meshList[GEO_PLATFORM]->textureID[0] = LoadTGA("Image//platform.tga");
+
+	meshList[GEO_TARGET] = MeshBuilder::GenerateOBJ("Platform", "OBJ//target.obj");
+	meshList[GEO_TARGET]->textureID[0] = LoadTGA("Image//target.tga");
+
 	terrainSize.Set(4000,350,4000);
 
-	camera.Init(Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 10/terrainSize.z), 10), 
-				Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 10/terrainSize.z), 0), 
+	camera.Init(Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 400/terrainSize.z), 400), 
+				Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 395/terrainSize.z), 395), 
 				Vector3(0, 1, 0));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
@@ -214,7 +243,6 @@ void SceneBase::Init()
 	projectionStack.LoadMatrix(perspective);
 
 	bLightEnabled = true;
-	rotateAngle = 0.f;
 }
 
 void SceneBase::Update(double dt)
@@ -265,7 +293,7 @@ void SceneBase::Update(double dt)
 	if(Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
-	if (Application::IsKeyPressed('R'))
+	if (Application::IsKeyPressed('T'))
 	{
 		Reset();
 	}
@@ -341,7 +369,6 @@ void SceneBase::Exit()
 
 void SceneBase::Reset()
 {
-	rotateAngle = 0.f;
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)

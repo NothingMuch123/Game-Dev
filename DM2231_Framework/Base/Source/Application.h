@@ -3,6 +3,7 @@
 
 #include "timer.h"
 #include "SceneTerrain.h"
+#include "GDev_Assignment01.h"
 
 class Application
 {

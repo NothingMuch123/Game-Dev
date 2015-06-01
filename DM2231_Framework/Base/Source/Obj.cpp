@@ -16,7 +16,7 @@ CObj::CObj(void) : ID(-1), translate(0, 0, 0), rotate(0, 0, 0), scale(1, 1, 1), 
 Overloaded constructor
 */
 /******************************************************************************/
-CObj::CObj(int _ID, Vector3 _translate, Vector3 _rotate, Vector3 _scale, Vector3 _size) : ID(_ID), translate(_translate), rotate(_rotate), scale(_scale), size(_size), render(true)
+CObj::CObj(int _ID, Vector3 _translate, Vector3 _rotate, Vector3 _scale, Vector3 _size, bool render) : ID(_ID), translate(_translate), rotate(_rotate), scale(_scale), size(_size), render(render)
 {
 	calcBound();
 }
@@ -155,9 +155,9 @@ Calculates bound based on translate, size and scale
 /******************************************************************************/
 void CObj::calcBound()
 {
-	float offset = 3;
-	maxBound.Set(translate.x + ((size.x * scale.x) / 2) + offset, translate.y + (size.y * scale.y) + offset, translate.z + ((size.z * scale.z) / 2) + offset);
-	minBound.Set(translate.x - ((size.x * scale.x) / 2) - offset, translate.y - (size.y * scale.y) - offset , translate.z - ((size.z * scale.z) / 2) - offset);
+	float offset = 0;
+	maxBound.Set(translate.x + ((size.x * scale.x) / 2) + offset, translate.y + ((size.y * scale.y) / 2) + offset, translate.z + ((size.z * scale.z) / 2) + offset);
+	minBound.Set(translate.x - ((size.x * scale.x) / 2) - offset, translate.y - ((size.y * scale.y) / 2) - offset , translate.z - ((size.z * scale.z) / 2) - offset);
 }
 
 /******************************************************************************/
@@ -192,4 +192,5 @@ void CObj::Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector
 	SetScale(scale);
 	SetSize(size);
 	SetRender(render);
+	calcBound();
 }

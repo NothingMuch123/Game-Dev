@@ -42,6 +42,8 @@ private:
 	// Vector of bullet;
 	std::vector<CProjectile*> projectileList;
 	float FireRateCounter;
+
+	float rotateAngle;
 };
 
 #endif

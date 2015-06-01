@@ -9,6 +9,8 @@ class Camera3 : public Camera
 public:
 	static float TERRAIN_OFFSET;
 	static float CAMERA_SPEED;
+	static float CROUCH_SPEED;
+	static float CROUCH_OFFSET;
 	enum CAM_TYPE
 	{
 		LAND_CAM,
@@ -41,6 +43,7 @@ public:
 	virtual void TurnRight(const double dt);
 	virtual void SpinClockwise(const double dt);
 	virtual void SpinCounterClockwise(const double dt);
+	virtual void Crouch(const double dt, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize);
 
 	// Applied methods
 	virtual void Pitch(const double dt);
@@ -61,6 +64,10 @@ private:
 	float GRAVITY;
 	float JumpVel;
 	float JUMPMAXSPEED, JUMPACCEL;
+
+	// Sprint
+	bool sprint;
+	bool crouch;
 };
 
 #endif

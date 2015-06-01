@@ -45,9 +45,6 @@ void SceneTerrain::Init()
 	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("Minimap Avatar", Color(1,1,1), 1.f));
 
 	// Create obj
-	obj = new CObj(GEO_TENT, Vector3(300, 2 + terrainSize.y * ReadHeightMap(m_heightMap, 300/terrainSize.x, 100/terrainSize.z), 100), Vector3(0,0,0), Vector3(10, 10, 10), Vector3(1,1,1));
-	objList.push_back(obj);
-
 	obj = new CObj(GEO_OBJECT, Vector3(-50, terrainSize.y * ReadHeightMap(m_heightMap, -50.f/terrainSize.x, -50.f/terrainSize.z), -50), Vector3(0,0,0), Vector3(1,1,1), Vector3(1,1,1));
 	objList.push_back(obj);
 
@@ -60,6 +57,7 @@ void SceneTerrain::Init()
 		projectileList.push_back(p);
 	}
 	FireRateCounter = 0;
+	rotateAngle = 0;
 }
 
 void SceneTerrain::Update(double dt)

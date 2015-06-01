@@ -69,7 +69,6 @@ public:
 		GEO_CROSSHAIR,
 		GEO_SKYPLANE,
 		GEO_TERRAIN,
-		GEO_TENT,
 		GEO_SEA,
 		GEO_SPRITE_ANIMATION,
 		GEO_LIGHTBALL,
@@ -86,6 +85,22 @@ public:
 		GEO_BACK,
 		GEO_OBJECT,
 		GEO_TEXT,
+
+		GEO_PLATFORM,
+		GEO_TARGET,
+
+		// Weapons
+		GEO_ROCKET_LAUNCHER,
+		GEO_PISTOL,
+		GEO_SNIPER,
+		GEO_SCOPE,
+		GEO_KNIFE,
+
+		// Ammo
+		GEO_PISTOL_BULLET,
+		GEO_ROCKET_BULLET,
+		GEO_SNIPER_BULLET,
+
 		NUM_GEOMETRY,
 	};
 
@@ -118,6 +133,7 @@ protected:
 	Light lights[2];
 
 	bool bLightEnabled;
+	bool fogEnabled;
 
 	float fps;
 
@@ -128,9 +144,6 @@ protected:
 	// Terrain
 	std::vector<unsigned char> m_heightMap;
 	Vector3 terrainSize;
-
-	// Minimap
-	float rotateAngle;
 };
 
 #endif

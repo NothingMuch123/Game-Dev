@@ -19,12 +19,6 @@
     <Filter Include="Source Files\Camera">
       <UniqueIdentifier>{7ef54351-b2a5-48c6-9fb2-863cc75b953b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\GDev Assignment01">
-      <UniqueIdentifier>{d151f447-1520-423f-8e10-acfb58d2c2ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GDev_Assignment01">
-      <UniqueIdentifier>{1bf2a0a3-c726-430d-bbd7-5512bf791d10}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\CG Practical">
       <UniqueIdentifier>{349868e4-cff2-48fd-b710-7ef881b613de}</UniqueIdentifier>
     </Filter>
@@ -87,9 +81,6 @@
     <ClCompile Include="Source\SceneTerrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Projectile.cpp">
-      <Filter>Source Files\GDev_Assignment01</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LoadHmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -100,6 +91,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Weapon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GDev_Assignment01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Target.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,9 +164,6 @@
     <ClInclude Include="Source\SceneTerrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Projectile.h">
-      <Filter>Header Files\GDev Assignment01</Filter>
-    </ClInclude>
     <ClInclude Include="Source\LoadHmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -174,6 +174,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GDev_Assignment01.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Projectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Target.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
