@@ -164,10 +164,10 @@ void SceneBase::Init()
 	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 
-	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID[0] = LoadTGA("Image//chair.tga");
+	//meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
+	//meshList[GEO_OBJECT]->textureID[0] = LoadTGA("Image//chair.tga");
 
-	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
+	//meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
@@ -193,7 +193,7 @@ void SceneBase::Init()
 	meshList[GEO_BACK]->textureID[0] = LoadTGA("Image//back.tga");
 
 	meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("Skyplane", Color(1,1,1), 128, 200.f, 2000.f, 1.f, 1.f);
-	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//sky.tga");
+	meshList[GEO_SKYPLANE]->textureID[0] = LoadTGA("Image//sky2.tga");
 
 	meshList[GEO_TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//desert.raw", m_heightMap);
 	meshList[GEO_TERRAIN]->textureID[0] = LoadTGA("Image//rock.tga");
@@ -211,6 +211,9 @@ void SceneBase::Init()
 
 	meshList[GEO_SNIPER] = MeshBuilder::GenerateQuad("Sniper", Color(1,1,1), 1);
 	meshList[GEO_SNIPER]->textureID[0] = LoadTGA("Image//sniper.tga");
+
+	meshList[GEO_SMG] = MeshBuilder::GenerateQuad("SMG", Color(1,1,1), 1);
+	meshList[GEO_SMG]->textureID[0] = LoadTGA("Image//smg.tga");
 	
 	meshList[GEO_SCOPE] = MeshBuilder::GenerateQuad("Sniper scope", Color(1,1,1), 1);
 	meshList[GEO_SCOPE]->textureID[0] = LoadTGA("Image//scope.tga");
@@ -224,11 +227,29 @@ void SceneBase::Init()
 	meshList[GEO_SNIPER_BULLET] = MeshBuilder::GenerateQuad("pistol bullet", Color(1,1,1), 1);
 	meshList[GEO_SNIPER_BULLET]->textureID[0] = LoadTGA("Image//sniper_bullet.tga");
 
+	meshList[GEO_SMG_BULLET] = MeshBuilder::GenerateQuad("smg bullet", Color(1,1,1), 1);
+	meshList[GEO_SMG_BULLET]->textureID[0] = LoadTGA("Image//smg_bullet.tga");
+
+	meshList[GEO_AMMO_CRATE] = MeshBuilder::GenerateOBJ("Ammo crate", "OBJ//ammo_crate.obj");
+	meshList[GEO_AMMO_CRATE]->textureID[0] = LoadTGA("Image//ammo_crate.tga");
+
 	meshList[GEO_PLATFORM] = MeshBuilder::GenerateOBJ("Platform", "OBJ//platform.obj");
 	meshList[GEO_PLATFORM]->textureID[0] = LoadTGA("Image//platform.tga");
 
 	meshList[GEO_TARGET] = MeshBuilder::GenerateOBJ("Platform", "OBJ//target.obj");
 	meshList[GEO_TARGET]->textureID[0] = LoadTGA("Image//target.tga");
+
+	meshList[GEO_MINIMAP_AMMOCRATE] = MeshBuilder::GenerateQuad("Ammo crate icon on minimap", Color(1,1,1), 1);
+	meshList[GEO_MINIMAP_AMMOCRATE]->textureID[0] = LoadTGA("Image//ammo.tga");
+
+	meshList[GEO_MINIMAP_TARGET] = MeshBuilder::GenerateQuad("Target icon on minimap", Color(1,1,1), 1);
+	meshList[GEO_MINIMAP_TARGET]->textureID[0] = LoadTGA("Image//minimap_target.tga");
+
+	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("Health", Color(1,1,1), 1);
+	meshList[GEO_HEALTH]->textureID[0] = LoadTGA("Image//health.tga");
+
+	meshList[GEO_UI_BORDER] = MeshBuilder::GenerateQuad("UI Border", Color(1,1,1), 1);
+	meshList[GEO_UI_BORDER]->textureID[0] = LoadTGA("Image//ui_border.tga");
 
 	terrainSize.Set(4000,350,4000);
 
@@ -236,9 +257,11 @@ void SceneBase::Init()
 				Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 395/terrainSize.z), 395), 
 				Vector3(0, 1, 0));
 
+	fov = 45.f;
+
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
-	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	perspective.SetToPerspective(fov, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 
@@ -303,7 +326,7 @@ void SceneBase::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Mtx44 perspective;
-	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	perspective.SetToPerspective(fov, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 	

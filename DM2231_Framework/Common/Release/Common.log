@@ -1,5 +1,23 @@
-﻿Build started 26/5/2015 1:23:39 PM.
+﻿Build started 4/6/2015 3:17:11 PM.
+     1>Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Common\Common.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\Common.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _VARIADIC_MAX=10 /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Vector2.cpp
+         Vector2.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release\Common.lib" /NOLOGO /LTCG Release\MathUtility.obj
+         Release\MatrixStack.obj
+         Release\Mtx44.obj
+         Release\timer.obj
+         Release\Vector2.obj
+         Release\Vector3.obj
+         Common.vcxproj -> C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release\Common.lib
+       FinalizeBuildStatus:
+         Deleting file "Release\Common.unsuccessfulbuild".
+         Touching "Release\Common.lastbuildstate".
+     1>Done Building Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Common\Common.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.00
+Time Elapsed 00:00:01.31

@@ -6,6 +6,7 @@
 #include "SceneBase.h"
 #include "Character.h"
 #include "Target.h"
+#include "AmmoCrate.h"
 
 class GDev_Assignment01 : public SceneBase
 {
@@ -34,37 +35,40 @@ public:
 	virtual void Exit();
 	virtual void Reset();
 	virtual void UpdateCameraStatus(unsigned char key);
-	virtual void UpdateWeaponStatus(unsigned char key);
+	virtual void UpdateWeaponStatus(unsigned char key, double dt = 0.0);
 
 	void SetHUD(const bool m_bHUDmode);
 	void RenderSkyPlane();
 	void RenderTerrain();
-	void RenderSkybox();
 	void RenderTextInWorld();
 	void RenderObject();
 	void Render2D();
 	void RenderProjectile(CProjectile *p);
 	void RenderWeapon(CWeapon *weapon);
 	void RenderAmmo(CWeapon *weapon);
+	void RenderEntity(Mesh *mesh, bool enableLight, Vector2 minimapPos, Vector2 objectPos, float rotate);
 
 	void SpawnTarget();
 
 	CProjectile *FetchProj();
-	CTarget *FetchTarget();
 
 private:
 	CMinimap *m_cMinimap; // Handle to the minimap
 
 	std::vector<CProjectile*> projectileList;
 	std::vector<CTarget*> targetList;
-	float FireRateCounter, ReloadCounter, ChangeWeaponTimer, ScopeTimer, SpawnTargetTimer; // Timers
+	std::vector<CAmmoCrate*> ammocrateList;
+	float FireRateCounter, ReloadTimer, ChangeWeaponTimer, ScopeTimer, SpawnTargetTimer; // Timers
 	bool reloading, scope;
 	int score;
+	double recoil;
+	bool reloadTranslation;
 
 	// Character
 	CCharacter *currentChar;
 
-	float rotateAngle_yaw;
+	// Sound
+	irrklang::ISoundEngine *sound;
 };
 
 #endif

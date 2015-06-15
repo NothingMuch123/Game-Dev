@@ -17,7 +17,7 @@ public:
 	void Run();
 	void Exit();
 	static bool IsKeyPressed(unsigned short key);
-	bool GetMouseUpdate();
+	bool GetMouseUpdate(double dt);
 	bool GetKeyBoardUpdate();
 
 	static double mouse_last_x, mouse_last_y, mouse_current_x, mouse_current_y, mouse_diff_x, mouse_diff_y;
@@ -38,7 +38,7 @@ private:
 	double m_dAccumulatedTime_ThreadTwo;
 
 	//Scene
-	Scene *scene;
+	GDev_Assignment01 *scene;
 };
 
 #endif

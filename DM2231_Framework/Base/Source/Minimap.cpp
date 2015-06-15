@@ -2,10 +2,24 @@
 
 CMinimap::CMinimap() : m_cMinimap_Background(NULL), m_cMinimap_Border(NULL), m_cMinimap_Avatar(NULL), angle(0), x(0), y(0), size_x(0), size_y(0)
 {
+	for (int i = 0; i < 10; ++i)
+	{
+		CEntity *entity = new CEntity();
+		entityList.push_back(entity);
+	}
 }
 
 CMinimap::~CMinimap()
 {
+	for (std::vector<CEntity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+	{
+		CEntity *entity = (CEntity*)*it;
+		if (entity)
+		{
+			delete entity;
+		}
+	}
+	entityList.clear();
 }
 
 // Set the background mesh to this class
@@ -110,4 +124,31 @@ int CMinimap::GetSize_x(void)
 int CMinimap::GetSize_y(void) 
 {
  	return size_y; 
+}
+
+void CMinimap::InactiveEntityList()
+{
+	for (std::vector<CEntity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+	{
+		CEntity *entity = (CEntity*)*it;
+		entity->SetActive(false);
+	}
+}
+
+void CMinimap::SetEntity(int ID, Vector2 position)
+{
+	for (std::vector<CEntity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+	{
+		CEntity *entity = (CEntity*)*it;
+		if (!entity->GetActive())
+		{
+			entity->Init(ID, position);
+			break;
+		}
+	}
+}
+
+std::vector<CEntity*> &CMinimap::GetEntityList()
+{
+	return entityList;
 }

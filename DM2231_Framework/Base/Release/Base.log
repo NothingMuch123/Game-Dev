@@ -1,5 +1,66 @@
-﻿Build started 26/5/2015 1:23:39 PM.
+﻿Build started 9/6/2015 1:08:44 PM.
+     1>Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Base\Base.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\Base.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\/Common/Source" /I"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\/glew/include" /I"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\/glfw/include" /I"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\/irrklang/include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _VARIADIC_MAX=10 /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\GDev_Assignment01.cpp
+         GDev_Assignment01.cpp
+     1>c:\users\envy 15.envy\documents\school work\semester 3\game dev & acg (git)\dm2231_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\GDev_Assignment01.cpp(108): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\GDev_Assignment01.cpp(128): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(131): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(135): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(140): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(141): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(170): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(312): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>Source\GDev_Assignment01.cpp(381): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(395): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(497): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(497): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(498): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(499): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(681): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\GDev_Assignment01.cpp(688): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(688): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\GDev_Assignment01.cpp(688): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>Source\GDev_Assignment01.cpp(688): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release" /LIBPATH:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\/glfw/lib-msvc100" /LIBPATH:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\/glew/lib" /LIBPATH:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\/irrklang/lib" Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib irrKlang.lib irrKlang.exp kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\Base.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release\Base.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release\Base.lib" /MACHINE:X86 Release\AmmoCrate.obj
+         Release\Application.obj
+         Release\Camera.obj
+         Release\Camera2.obj
+         Release\Camera3.obj
+         Release\Character.obj
+         Release\Entity.obj
+         Release\GDev_Assignment01.obj
+         Release\LoadHmap.obj
+         Release\LoadOBJ.obj
+         Release\LoadTGA.obj
+         Release\main.obj
+         Release\Mesh.obj
+         Release\MeshBuilder.obj
+         Release\Minimap.obj
+         Release\Obj.obj
+         Release\Projectile.obj
+         Release\SceneBase.obj
+         Release\SceneTerrain.obj
+         Release\shader.obj
+         Release\SpriteAnimation.obj
+         Release\Target.obj
+         Release\Utility.obj
+         Release\Weapon.obj
+         Generating code
+     1>c:\users\envy 15.envy\documents\school work\semester 3\game dev & acg (git)\dm2231_framework\base\source\weapon.cpp(132): warning C4715: 'CWeapon::Fire' : not all control paths return a value
+         Finished generating code
+         Base.vcxproj -> C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release\Base.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Release\Base.exe;#1" /manifest Release\Base.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\Base.unsuccessfulbuild".
+         Touching "Release\Base.lastbuildstate".
+     1>Done Building Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\DM2231_Framework\Base\Base.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.00
+Time Elapsed 00:00:03.24

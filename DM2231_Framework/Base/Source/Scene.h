@@ -11,8 +11,6 @@ public:
 	virtual void Update(double dt) = 0;
 	virtual void Render() = 0;
 	virtual void Exit() = 0;
-	virtual void UpdateCameraStatus(unsigned char key) = 0;
-	virtual void UpdateWeaponStatus(unsigned char key) = 0;
 };
 
 #endif

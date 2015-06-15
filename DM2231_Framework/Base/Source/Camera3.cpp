@@ -24,9 +24,9 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->sprint = false;
 	this->m_bJumping = false;
 	this->JumpVel = 0;
-	this->JUMPMAXSPEED = 200.f;
-	this->JUMPACCEL = 100.f;
-	this->GRAVITY = -150.f;
+	this->JUMPMAXSPEED = 30.f;
+	this->JUMPACCEL = 50.f;
+	this->GRAVITY = -20.f;
 	this->type = LAND_CAM;
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
@@ -35,10 +35,14 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+	this->total_pitch = this->total_yaw = 0;
 }
 
 void Camera3::Update(double dt, std::vector<unsigned char> &heightMap, const Vector3 &terrainSize)
 {
+	total_yaw -= Application::camera_yaw * CAMERA_SPEED * dt;
+	total_pitch -= Application::camera_pitch * CAMERA_SPEED * dt;
+
 	if (myKeys[1])	// Sprint
 	{
 		sprint = true;
@@ -183,6 +187,7 @@ void Camera3::Reset()
 	position = defaultPosition;
 	target = defaultTarget;
 	up = defaultUp;
+	this->total_pitch = this->total_yaw = 0;
 }
 
 void Camera3::SetCameraType(CAM_TYPE type)

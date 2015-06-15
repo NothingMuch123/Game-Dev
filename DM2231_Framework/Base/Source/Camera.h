@@ -10,6 +10,7 @@ public:
 	Vector3 position;
 	Vector3 target;
 	Vector3 up;
+	float total_yaw, total_pitch;
 
 	Camera();
 	~Camera();

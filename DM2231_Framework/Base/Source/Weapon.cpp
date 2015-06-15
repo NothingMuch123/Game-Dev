@@ -1,11 +1,11 @@
 #include "Weapon.h"
-
+#include "Application.h"
 
 CWeapon::CWeapon(void)
 {
 }
 
-CWeapon::CWeapon(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, float firerate, float damage, float reloadSpeed, int activeAmmo, int extraAmmo, int clipSize, int maxAmmo, bool render) : CObj(ID, translate, rotate, scale, size, render), firerate(firerate), damage(damage), reloadSpeed(reloadSpeed), activeAmmo(activeAmmo), extraAmmo(extraAmmo), clipSize(clipSize), maxAmmo(maxAmmo)
+CWeapon::CWeapon(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, float firerate, float damage, float reloadSpeed, int activeAmmo, int extraAmmo, int clipSize, int maxAmmo, bool render) : CObj(ID, translate, rotate, scale, size, render), firerate(firerate), damage(damage), reloadSpeed(reloadSpeed), activeAmmo(activeAmmo), extraAmmo(extraAmmo), clipSize(clipSize), maxAmmo(maxAmmo), defaultTranslateY(translate.y)
 {
 }
 
@@ -83,7 +83,7 @@ int CWeapon::GetMaxAmmo()
 	return maxAmmo;
 }
 
-bool CWeapon::Fire(CProjectile *p, Camera3 *shooterCamera)
+bool CWeapon::Fire(CProjectile *p, Camera3 *shooterCamera, const double dt, double &recoil, irrklang::ISoundEngine *sound)
 {
 	if (this->activeAmmo <= 0) // No active ammo
 	{
@@ -91,27 +91,41 @@ bool CWeapon::Fire(CProjectile *p, Camera3 *shooterCamera)
 	}
 	else
 	{
+		Vector3 dir = (shooterCamera->target - shooterCamera->position).Normalized();
 		if (this->GetID() == W_PISTOL)
 		{
-			p->Init(CProjectile::PROJ_BULLET, shooterCamera->target, Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 500, 2, true, (shooterCamera->target - shooterCamera->position).Normalized());
+			p->Init(CProjectile::PROJ_BULLET, shooterCamera->position, Vector3(shooterCamera->total_pitch, shooterCamera->total_yaw, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 1200, 3, true, dir);
 			--(this->activeAmmo);
+			Application::camera_pitch -= 10 * dt;
+			recoil += 10 * dt;
+			sound->play2D("Sound//pistol_shoot.wav");
 			return true;
 		}
 		else if (this->GetID() == W_ROCKET_LAUNCHER)
 		{
-			Vector3 dir = (shooterCamera->target - shooterCamera->position).Normalized();
-			p->Init(CProjectile::PROJ_ROCKET, shooterCamera->target, Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 500, 2, true, dir);
+			p->Init(CProjectile::PROJ_ROCKET, shooterCamera->position, Vector3(shooterCamera->total_pitch, shooterCamera->total_yaw, 0), Vector3(4, 4, 4), Vector3(1, 1, 1), 1000, 10, true, dir);
 			--(this->activeAmmo);
+			Application::camera_pitch -= 100 * dt;
+			recoil += 100 * dt;
+			sound->play2D("Sound//rocket_launcher_shoot.wav");
 			return true;
 		}
 		else if (this->GetID() == W_SNIPER)
 		{
-			p->Init(CProjectile::PROJ_BULLET, shooterCamera->target, Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 500, 2, true, (shooterCamera->target - shooterCamera->position).Normalized());
+			p->Init(CProjectile::PROJ_BULLET, shooterCamera->position, Vector3(shooterCamera->total_pitch, shooterCamera->total_yaw, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 1500, 5, true, dir);
 			--(this->activeAmmo);
+			Application::camera_pitch -= 50 * dt;
+			recoil += 50 * dt;
+			sound->play2D("Sound//sniper_shoot.wav");
 			return true;
 		}
-		else if (this->GetID() == W_MELEE)
+		else if (this->GetID() == W_SMG)
 		{
+			p->Init(CProjectile::PROJ_BULLET, shooterCamera->position, Vector3(shooterCamera->total_pitch, shooterCamera->total_yaw, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), 1500, 5, true, dir);
+			--(this->activeAmmo);
+			Application::camera_pitch -= 5 * dt;
+			recoil += 5 * dt;
+			sound->play2D("Sound//smg_shoot.wav");
 			return true;
 		}
 	}
@@ -150,4 +164,19 @@ bool CWeapon::Reload()
 	{
 		return false;
 	}
+}
+
+void CWeapon::SetDefaultTranslateY(float defaultTranslateY)
+{
+	this->defaultTranslateY = defaultTranslateY;
+}
+
+float CWeapon::GetDefaultTranslateY()
+{
+	return defaultTranslateY;
+}
+
+void CWeapon::Reset()
+{
+	translate.y = defaultTranslateY;
 }

@@ -2,6 +2,7 @@
 #define SCENEBASE_H
 
 #include "Scene.h"
+#include "irrKlang.h"
 #include "Mtx44.h"
 #include "Camera3.h"
 #include "Mesh.h"
@@ -93,13 +94,20 @@ public:
 		GEO_ROCKET_LAUNCHER,
 		GEO_PISTOL,
 		GEO_SNIPER,
+		GEO_SMG,
 		GEO_SCOPE,
-		GEO_KNIFE,
 
 		// Ammo
 		GEO_PISTOL_BULLET,
 		GEO_ROCKET_BULLET,
 		GEO_SNIPER_BULLET,
+		GEO_SMG_BULLET,
+		GEO_AMMO_CRATE,
+
+		GEO_MINIMAP_AMMOCRATE, // Ammo crate icon for minimap
+		GEO_MINIMAP_TARGET,
+		GEO_HEALTH,
+		GEO_UI_BORDER,
 
 		NUM_GEOMETRY,
 	};
@@ -136,6 +144,7 @@ protected:
 	bool fogEnabled;
 
 	float fps;
+	float fov;
 
 	// Object
 	std::vector<CObj*> objList;

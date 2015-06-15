@@ -70,7 +70,7 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	//m_window = glfwCreateWindow(1920, 1080, "DM2231_Framework", glfwGetPrimaryMonitor(), NULL);
+	//m_window = glfwCreateWindow(1920, 1080, "DM2231_Framework", NULL/*glfwGetPrimaryMonitor()*/, NULL);
 	m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2231_Framework", NULL, NULL);
 
 	//If the window couldn't be created
@@ -122,7 +122,7 @@ void Application::Run()
 		// Player's update
 		if (m_dAccumulatedTime_ThreadOne > 0.01)
 		{
-			GetMouseUpdate();
+			GetMouseUpdate(m_dElapsedTime);
 			GetKeyBoardUpdate();
 			m_dAccumulatedTime_ThreadOne = 0.0;
 		}
@@ -152,7 +152,7 @@ void Application::Exit()
 	glfwTerminate();
 }
 
-bool Application::GetMouseUpdate()
+bool Application::GetMouseUpdate(double dt)
 {
 	glfwGetCursorPos(m_window, &mouse_current_x, &mouse_current_y);
 
@@ -189,7 +189,7 @@ bool Application::GetMouseUpdate()
 
 	if(glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
-		scene->UpdateWeaponStatus(GDev_Assignment01::WA_FIRE);
+		scene->UpdateWeaponStatus(GDev_Assignment01::WA_FIRE, dt);
 	}
 	if(glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{

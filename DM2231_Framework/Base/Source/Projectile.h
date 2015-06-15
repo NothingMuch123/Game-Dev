@@ -15,7 +15,7 @@ public:
 
 	CProjectile(void);
 	virtual ~CProjectile(void);
-	void Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, const float speed, const float lifetime, const bool status, Vector3 direction, bool render = true);
+	virtual void Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, const float speed, const float lifetime, const bool status, Vector3 direction, bool render = true);
 	void InitNULL();
 	void Update(const double dt);
 

@@ -4,13 +4,14 @@
 #include "Obj.h"
 #include "Projectile.h"
 #include "Camera3.h"
+#include "irrKlang.h"
 
 class CWeapon : public CObj
 {
 public:
 	enum WEAPON_TYPE
 	{
-		W_MELEE = 0,
+		W_SMG = 0,
 		W_PISTOL,
 		W_ROCKET_LAUNCHER,
 		W_SNIPER,
@@ -42,12 +43,18 @@ public:
 	void SetMaxAmmo(int maxAmmo);
 	int GetMaxAmmo();
 
-	bool Fire(CProjectile *p, Camera3 *shooterCamera);
+	bool Fire(CProjectile *p, Camera3 *shooterCamera, const double dt, double &recoil, irrklang::ISoundEngine *sound);
 	bool Reload();
+
+	void SetDefaultTranslateY(float defaultTranslateY);
+	float GetDefaultTranslateY();
+
+	void Reset();
 
 protected:
 	float firerate, damage, reloadSpeed;
 	int activeAmmo, extraAmmo, clipSize, maxAmmo;
+	float defaultTranslateY;
 };
 
 #endif

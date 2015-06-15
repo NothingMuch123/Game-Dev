@@ -2,6 +2,8 @@
 #define MINIMAP_H
 
 #include "Mesh.h"
+#include "Entity.h"
+#include <vector>
 
 class CMinimap
 {
@@ -41,6 +43,10 @@ public:
  	// Get size of minimap (for calculation of avatar in minimap)
 	int GetSize_y(void); 
 
+	void InactiveEntityList();
+	void SetEntity(int ID, Vector2 position);
+	std::vector<CEntity*> &GetEntityList();
+
  private: 
  	// Rotation from First Angle
 	 int angle; 
@@ -48,7 +54,8 @@ public:
 	 int x, y; 
  	// Minimap size
 	 int size_x, size_y; 
-
+	 // Entity list
+	 std::vector<CEntity*> entityList;
 };
 
 #endif

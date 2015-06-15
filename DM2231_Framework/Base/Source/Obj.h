@@ -25,7 +25,7 @@ class CObj
 public:
 	CObj(void);
 	CObj(int _ID, Vector3 _translate, Vector3 _rotate, Vector3 _scale, Vector3 _size, bool render = true);
-	void Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, bool render = true);
+	virtual void Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, bool render = true);
 
 	void SetID(int ID);
 	int GetID();

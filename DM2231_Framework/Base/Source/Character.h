@@ -32,6 +32,7 @@ public:
 	std::vector<CWeapon*> &GetWeaponList();
 
 	void Reset();
+	virtual void calcBound();
 
 protected:
 	int health, currentWeapon;

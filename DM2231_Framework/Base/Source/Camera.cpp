@@ -16,6 +16,7 @@ void Camera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->position = pos;
 	this->target = target;
 	this->up = up;
+	this->total_pitch = this->total_yaw = 0;
 }
 
 void Camera::Reset()
@@ -23,6 +24,7 @@ void Camera::Reset()
 	position.Set(1, 0, 0);
 	target.Set(0, 0, 0);
 	up.Set(0, 1, 0);
+	this->total_pitch = this->total_yaw = 0;
 }
 
 void Camera::Update(double dt)

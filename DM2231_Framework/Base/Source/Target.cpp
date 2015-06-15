@@ -79,7 +79,7 @@ void CTarget::Update(const double dt)
 void CTarget::calcBound()
 {
 	maxBound.Set(translate.x + ((scale.x * size.x) / 2), translate.y + (scale.y * size.y), translate.z + ((scale.z * size.z) / 2));
-	minBound.Set(translate.x - ((scale.x * size.x) / 2), translate.y, translate.z - (scale.z * size.x));
+	minBound.Set(translate.x - ((scale.x * size.x) / 2), translate.y, translate.z - (scale.z * size.z));
 }
 
 void CTarget::SetActive(bool active)

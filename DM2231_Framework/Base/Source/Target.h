@@ -16,7 +16,7 @@ public:
 	CTarget(void);
 	virtual ~CTarget(void);
 
-	void Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, bool active = true, float lifetime = 0.f, bool render = true);
+	virtual void Init(int ID, Vector3 translate, Vector3 rotate, Vector3 scale, Vector3 size, bool active = true, float lifetime = 0.f, bool render = true);
 	void Update(const double dt);
 	virtual void calcBound();
 
