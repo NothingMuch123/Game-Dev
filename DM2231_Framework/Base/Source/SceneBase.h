@@ -109,6 +109,9 @@ public:
 		GEO_HEALTH,
 		GEO_UI_BORDER,
 
+		// Particle
+		GEO_RAIN_PARTICLE,
+
 		NUM_GEOMETRY,
 	};
 

@@ -251,6 +251,8 @@ void SceneBase::Init()
 	meshList[GEO_UI_BORDER] = MeshBuilder::GenerateQuad("UI Border", Color(1,1,1), 1);
 	meshList[GEO_UI_BORDER]->textureID[0] = LoadTGA("Image//ui_border.tga");
 
+	meshList[GEO_RAIN_PARTICLE] = MeshBuilder::GenerateSphere("Rain particle", Color(0, 0, 1), 18, 36, 0.5);
+
 	terrainSize.Set(4000,350,4000);
 
 	camera.Init(Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 400/terrainSize.z), 400), 

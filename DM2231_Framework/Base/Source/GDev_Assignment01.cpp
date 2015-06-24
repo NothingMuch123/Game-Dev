@@ -11,6 +11,7 @@
 float GDev_Assignment01::MAX_CHANGE_WEAPON_TIMER = 0.5f;
 float GDev_Assignment01::MAX_SCOPE_TIMER = 0.5f;
 float GDev_Assignment01::MAX_SPAWN_TARGET_TIMER = 1.f;
+float GDev_Assignment01::MAX_SPAWN_RAIN_TIMER = 0.0f;
 
 GDev_Assignment01::GDev_Assignment01() : m_cMinimap(NULL), projectileList(NULL), targetList(NULL)
 {
@@ -43,6 +44,9 @@ void GDev_Assignment01::Init()
 	m_cMinimap->GetBorder()->textureID[0] = LoadTGA("Image//minimap_border.tga");
 	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("Minimap Avatar", Color(1,1,1), 1.f));
 
+	// Init character
+	currentChar = new CCharacter(CCharacter::CHAR_PLAYER, Vector3(0,0,0), Vector3(0,0,0), Vector3(15,Camera3::TERRAIN_OFFSET,15), Vector3(1,1,1), 100, CWeapon::W_SMG, "Player", camera, true);
+
 	// Create obj
 	obj = new CObj(GEO_PLATFORM, Vector3(0, terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 0/terrainSize.z), 0), Vector3(0, 0, 0), Vector3(80,20,80), Vector3(1,1,1));
 	objList.push_back(obj);
@@ -69,13 +73,18 @@ void GDev_Assignment01::Init()
 		targetList.push_back(target);
 	}
 
-	// Init character
-	currentChar = new CCharacter(CCharacter::CHAR_PLAYER, Vector3(0,0,0), Vector3(0,0,0), Vector3(15,Camera3::TERRAIN_OFFSET,15), Vector3(1,1,1), 100, CWeapon::W_SMG, "Player", camera, true);
+	// Create particle list
+	for (int i = 0; i < 1000; ++i)
+	{
+		CParticle *particle = new CParticle();
+		particleList.push_back(particle);
+	}
 
 	FireRateCounter = currentChar->GetWeaponList()[currentChar->GetCurrentWeapon()]->GetFirerate();
 	ChangeWeaponTimer = MAX_CHANGE_WEAPON_TIMER;
 	ScopeTimer = MAX_SCOPE_TIMER;
 	SpawnTargetTimer = MAX_SPAWN_TARGET_TIMER;
+	SpawnRainTimer = MAX_SPAWN_RAIN_TIMER;
 	ReloadTimer = 0;
 	reloading = reloadTranslation = scope = false;
 	score = 0;
@@ -104,6 +113,27 @@ void GDev_Assignment01::Update(double dt)
 	currentChar->calcBound();
 	camera = currentChar->GetCamera();
 
+	// Spawn particle
+	if (SpawnRainTimer < MAX_SPAWN_RAIN_TIMER)
+	{
+		SpawnRainTimer += dt;
+	}
+	if (SpawnRainTimer >= MAX_SPAWN_RAIN_TIMER)
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			SpawnRain();
+		}
+		SpawnRainTimer = 0;
+	}
+
+	// Update particle
+	for (std::vector<CParticle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		CParticle *particle = (CParticle*)*it;
+		particle->Update(dt, terrainSize.y * ReadHeightMap(m_heightMap, particle->GetTranslate().x/terrainSize.x, particle->GetTranslate().z/terrainSize.z));
+	}
+
 	// Update projectile
 	for (int i = 0; i < projectileList.size(); ++i)
 	{
@@ -117,6 +147,8 @@ void GDev_Assignment01::Update(double dt)
 	{
 		CAmmoCrate *ammocrate = (CAmmoCrate*)*it;
 		ammocrate->Update(dt);
+
+		// Check collision of ammocrate with player
 		Vector3 pos = ammocrate->GetTranslate();
 		pos.y = currentChar->GetCamera().position.y;
 		if (ammocrate->GetActive() && (pos - currentChar->GetCamera().position).Length() <= ((m_cMinimap->GetSize_x() - 5) * radius))
@@ -147,7 +179,7 @@ void GDev_Assignment01::Update(double dt)
 			ReloadTimer = 0;
 			reloading = false;
 		}
-		else																								// Reload animation
+		else	// Reload animation
 		{
 			if (weapon->GetTranslate().y <= weapon->GetDefaultTranslateY() - (weapon->GetScale().y/2))
 			{
@@ -291,6 +323,16 @@ void GDev_Assignment01::Exit()
 		}
 	}
 	targetList.clear();
+
+	for (std::vector<CParticle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		CParticle *p = (CParticle*)*it;
+		if (p)
+		{
+			delete p;
+		}
+	}
+	particleList.clear();
 
 	if (currentChar)
 	{
@@ -487,6 +529,23 @@ void GDev_Assignment01::RenderObject()
 			modelStack.PopMatrix();
 		}
 	}
+
+	// Render particle list
+	for (std::vector<CParticle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		CParticle *particle = (CParticle*)*it;
+		if (particle->GetActive() && particle->GetRender())
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(particle->GetTranslate().x, particle->GetTranslate().y, particle->GetTranslate().z);
+			modelStack.Rotate(particle->GetRotate().x, 1, 0, 0);
+			modelStack.Rotate(particle->GetRotate().y, 0, 1, 0);
+			modelStack.Rotate(particle->GetRotate().z, 0, 0, 1);
+			modelStack.Scale(particle->GetScale().x, particle->GetScale().y, particle->GetScale().z);
+			RenderMesh(meshList[particle->GetID()], false);
+			modelStack.PopMatrix();
+		}
+	}
 }
 
 void GDev_Assignment01::Render2D()
@@ -598,6 +657,26 @@ CProjectile *GDev_Assignment01::FetchProj()
 	return p;
 }
 
+CParticle *GDev_Assignment01::FetchParticle()
+{
+	for (std::vector<CParticle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		CParticle *p = (CParticle*)*it;
+		if (!p->GetActive())
+		{
+			return p;
+		}
+	}
+	/*for (int i = 0; i < 10; ++i)
+	{
+		CParticle *p = new CParticle;
+		particleList.push_back(p);
+	}
+	CParticle *p = particleList.back();
+	return p;*/
+	return NULL;
+}
+
 void GDev_Assignment01::RenderProjectile(CProjectile *p)
 {
 	modelStack.PushMatrix();
@@ -688,6 +767,16 @@ void GDev_Assignment01::SpawnTarget()
 			target->Init((rand() % (CTarget::NUM_TARGET - 1)) + 1, Vector3(x, 5 + terrainSize.y * ReadHeightMap(m_heightMap, x/terrainSize.x, z/terrainSize.z), z), Vector3(-90, 0, 0), Vector3(8,8,8), Vector3(2.6,5,1.5), true, (rand() % 7) + 3);
 			break;
 		}
+	}
+}
+
+void GDev_Assignment01::SpawnRain()
+{
+	static const float distOffset = 300.f;
+	CParticle *p = FetchParticle();
+	if (p != NULL)
+	{
+		p->Init(GEO_RAIN_PARTICLE, Vector3(Math::RandFloatMinMax(currentChar->GetCamera().position.x - distOffset, currentChar->GetCamera().position.x + distOffset), 300, Math::RandFloatMinMax(currentChar->GetCamera().position.z - distOffset, currentChar->GetCamera().position.z + distOffset)), Vector3(0,0,0), Vector3(1,1,1), Vector3(1,1,1), Vector3(0, Math::RandFloatMinMax(-100, -200), 0), true, true);
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "Character.h"
 #include "Target.h"
 #include "AmmoCrate.h"
+#include "Particle.h"
 
 class GDev_Assignment01 : public SceneBase
 {
@@ -14,6 +15,7 @@ public:
 	static float MAX_CHANGE_WEAPON_TIMER;
 	static float MAX_SCOPE_TIMER;
 	static float MAX_SPAWN_TARGET_TIMER;
+	static float MAX_SPAWN_RAIN_TIMER;
 
 	enum WEAPON_ACTION
 	{
@@ -49,8 +51,10 @@ public:
 	void RenderEntity(Mesh *mesh, bool enableLight, Vector2 minimapPos, Vector2 objectPos, float rotate);
 
 	void SpawnTarget();
+	void SpawnRain();
 
 	CProjectile *FetchProj();
+	CParticle *FetchParticle();
 
 private:
 	CMinimap *m_cMinimap; // Handle to the minimap
@@ -58,7 +62,8 @@ private:
 	std::vector<CProjectile*> projectileList;
 	std::vector<CTarget*> targetList;
 	std::vector<CAmmoCrate*> ammocrateList;
-	float FireRateCounter, ReloadTimer, ChangeWeaponTimer, ScopeTimer, SpawnTargetTimer; // Timers
+	std::vector<CParticle*> particleList;
+	float FireRateCounter, ReloadTimer, ChangeWeaponTimer, ScopeTimer, SpawnTargetTimer, SpawnRainTimer; // Timers
 	bool reloading, scope;
 	int score;
 	double recoil;
