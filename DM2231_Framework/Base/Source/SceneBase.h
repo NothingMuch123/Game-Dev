@@ -112,6 +112,9 @@ public:
 		// Particle
 		GEO_RAIN_PARTICLE,
 
+		// Billboards
+		GEO_TREE,
+
 		NUM_GEOMETRY,
 	};
 

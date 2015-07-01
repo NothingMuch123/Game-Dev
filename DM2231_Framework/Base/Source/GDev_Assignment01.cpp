@@ -80,6 +80,11 @@ void GDev_Assignment01::Init()
 		particleList.push_back(particle);
 	}
 
+	// Create trees (billboard)
+	float offset = 0;
+	obj = new CObj(GEO_TREE, Vector3(450, offset + 25 + terrainSize.y * ReadHeightMap(m_heightMap, 450/terrainSize.x, 450/terrainSize.z), 450), Vector3(0,180,0), Vector3(50,50,50), Vector3(1,1,1), true);
+	billboardList.push_back(obj);
+
 	FireRateCounter = currentChar->GetWeaponList()[currentChar->GetCurrentWeapon()]->GetFirerate();
 	ChangeWeaponTimer = MAX_CHANGE_WEAPON_TIMER;
 	ScopeTimer = MAX_SCOPE_TIMER;
@@ -334,6 +339,16 @@ void GDev_Assignment01::Exit()
 	}
 	particleList.clear();
 
+	for (std::vector<CObj*>::iterator it = billboardList.begin(); it != billboardList.end(); ++it)
+	{
+		obj = (CObj*)*it;
+		if (obj)
+		{
+			delete obj;
+		}
+	}
+	billboardList.clear();
+
 	if (currentChar)
 	{
 		delete currentChar;
@@ -467,11 +482,21 @@ void GDev_Assignment01::RenderObject()
 {
 	RenderMesh(meshList[GEO_AXES], false);
 	
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
+	RenderObjList();
+	RenderTargetList();
+	RenderProjectileList();
+	RenderAmmocrateList();
+	RenderParticleList();
+	RenderBillboardList();
+}
+
+void GDev_Assignment01::RenderObjList()
+{
 	// Render obj list
 	for (std::vector<CObj*>::iterator it = objList.begin(); it != objList.end(); ++it)
 	{
@@ -485,7 +510,10 @@ void GDev_Assignment01::RenderObject()
 		RenderMesh(meshList[obj->GetID()], false);
 		modelStack.PopMatrix();
 	}
+}
 
+void GDev_Assignment01::RenderTargetList()
+{
 	// Render target list
 	for (std::vector<CTarget*>::iterator it = targetList.begin(); it != targetList.end(); ++it)
 	{
@@ -502,7 +530,10 @@ void GDev_Assignment01::RenderObject()
 			modelStack.PopMatrix();
 		}
 	}
+}
 
+void GDev_Assignment01::RenderProjectileList()
+{
 	// Render projectileList
 	for (std::vector<CProjectile*>::iterator it = projectileList.begin(); it != projectileList.end(); ++it)
 	{
@@ -512,7 +543,10 @@ void GDev_Assignment01::RenderObject()
 			RenderProjectile(p);
 		}
 	}
+}
 
+void GDev_Assignment01::RenderAmmocrateList()
+{
 	// Render ammocrate list
 	for (std::vector<CAmmoCrate*>::iterator it = ammocrateList.begin(); it != ammocrateList.end(); ++it)
 	{
@@ -529,7 +563,10 @@ void GDev_Assignment01::RenderObject()
 			modelStack.PopMatrix();
 		}
 	}
+}
 
+void GDev_Assignment01::RenderParticleList()
+{
 	// Render particle list
 	for (std::vector<CParticle*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
 	{
@@ -545,6 +582,25 @@ void GDev_Assignment01::RenderObject()
 			RenderMesh(meshList[particle->GetID()], false);
 			modelStack.PopMatrix();
 		}
+	}
+}
+
+void GDev_Assignment01::RenderBillboardList()
+{
+	for (std::vector<CObj*>::iterator it = billboardList.begin(); it != billboardList.end(); ++it)
+	{
+		obj = (CObj*)*it;
+
+		Vector3 dir = (obj->GetTranslate() - currentChar->GetCamera().position).Normalized();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(obj->GetTranslate().x, obj->GetTranslate().y, obj->GetTranslate().z);
+		modelStack.Rotate(obj->GetRotate().x, 1, 0, 0);
+		modelStack.Rotate(obj->GetRotate().y + Math::RadianToDegree(atan2(dir.x, dir.z)), 0, 1, 0);
+		modelStack.Rotate(obj->GetRotate().z, 0, 0, 1);
+		modelStack.Scale(obj->GetScale().x, obj->GetScale().y, obj->GetScale().z);
+		RenderMesh(meshList[obj->GetID()], false);
+		modelStack.PopMatrix();
 	}
 }
 

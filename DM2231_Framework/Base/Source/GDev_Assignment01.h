@@ -50,6 +50,14 @@ public:
 	void RenderAmmo(CWeapon *weapon);
 	void RenderEntity(Mesh *mesh, bool enableLight, Vector2 minimapPos, Vector2 objectPos, float rotate);
 
+	// Render list
+	void RenderObjList();
+	void RenderTargetList();
+	void RenderProjectileList();
+	void RenderAmmocrateList();
+	void RenderParticleList();
+	void RenderBillboardList();
+
 	void SpawnTarget();
 	void SpawnRain();
 
@@ -63,6 +71,7 @@ private:
 	std::vector<CTarget*> targetList;
 	std::vector<CAmmoCrate*> ammocrateList;
 	std::vector<CParticle*> particleList;
+	std::vector<CObj*> billboardList;
 	float FireRateCounter, ReloadTimer, ChangeWeaponTimer, ScopeTimer, SpawnTargetTimer, SpawnRainTimer; // Timers
 	bool reloading, scope;
 	int score;

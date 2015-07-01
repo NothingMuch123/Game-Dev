@@ -253,6 +253,9 @@ void SceneBase::Init()
 
 	meshList[GEO_RAIN_PARTICLE] = MeshBuilder::GenerateSphere("Rain particle", Color(0, 0, 1), 18, 36, 0.5);
 
+	meshList[GEO_TREE] = MeshBuilder::GenerateQuad("Tree", Color(1,1,1), 1);
+	meshList[GEO_TREE]->textureID[0] = LoadTGA("Image//tree.tga");
+
 	terrainSize.Set(4000,350,4000);
 
 	camera.Init(Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 400/terrainSize.z), 400), 
@@ -388,6 +391,7 @@ void SceneBase::Exit()
 		if(meshList[i])
 			delete meshList[i];
 	}
+
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 }
