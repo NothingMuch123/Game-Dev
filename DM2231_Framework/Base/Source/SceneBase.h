@@ -11,6 +11,7 @@
 #include <vector>
 #include "LoadHmap.h"
 #include "Obj.h"
+#include "DepthFBO.h"
 
 class SceneBase : public Scene
 {
@@ -62,6 +63,12 @@ public:
 		U_FOG_DENSITY,
 		U_FOG_TYPE,
 		U_FOG_ENABLE,
+
+		// Shadow
+		U_LIGHT_DEPTH_MVP_GPASS,
+		U_LIGHT_DEPTH_MVP,
+		U_SHADOW_MAP,
+
 		U_TOTAL,
 	};
 	enum GEOMETRY_TYPE
@@ -115,7 +122,16 @@ public:
 		// Billboards
 		GEO_TREE,
 
+		// Shadow
+		GEO_LIGHT_DEPTH_QUAD,
+
 		NUM_GEOMETRY,
+	};
+
+	enum RENDER_PASS
+	{
+		RENDER_PASS_PRE,
+		RENDER_PASS_MAIN,
 	};
 
 	SceneBase(void);
@@ -159,6 +175,13 @@ protected:
 	// Terrain
 	std::vector<unsigned char> m_heightMap;
 	Vector3 terrainSize;
+
+	// Shadow
+	unsigned m_gPassShaderID;
+	DepthFBO m_lightDepthFBO;
+	Mtx44 m_lightDepthProj;
+	Mtx44 m_lightDepthView;
+	RENDER_PASS m_renderPass;
 };
 
 #endif

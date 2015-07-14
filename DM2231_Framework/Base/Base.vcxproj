@@ -17,6 +17,7 @@
     <ClCompile Include="Source\Camera2.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\Character.cpp" />
+    <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Entity.cpp" />
     <ClCompile Include="Source\GDev_Assignment01.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
+    <ClCompile Include="Source\SceneShadow.cpp" />
     <ClCompile Include="Source\SceneTerrain.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
@@ -44,6 +46,7 @@
     <ClInclude Include="Source\Camera2.h" />
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Character.h" />
+    <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\GDev_Assignment01.h" />
     <ClInclude Include="Source\Geometry.h" />
@@ -60,6 +63,7 @@
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
+    <ClInclude Include="Source\SceneShadow.h" />
     <ClInclude Include="Source\SceneSkyPlane.h" />
     <ClInclude Include="Source\SceneTerrain.h" />
     <ClInclude Include="Source\shader.hpp" />

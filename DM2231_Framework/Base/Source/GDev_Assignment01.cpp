@@ -587,6 +587,12 @@ void GDev_Assignment01::RenderParticleList()
 
 void GDev_Assignment01::RenderBillboardList()
 {
+	bool fogToggled = false;
+	if (fogEnabled)
+	{
+		fogToggled = true;
+		glUniform1f(m_parameters[U_FOG_ENABLE], !fogEnabled);
+	}
 	for (std::vector<CObj*>::iterator it = billboardList.begin(); it != billboardList.end(); ++it)
 	{
 		obj = (CObj*)*it;
@@ -601,6 +607,10 @@ void GDev_Assignment01::RenderBillboardList()
 		modelStack.Scale(obj->GetScale().x, obj->GetScale().y, obj->GetScale().z);
 		RenderMesh(meshList[obj->GetID()], false);
 		modelStack.PopMatrix();
+	}
+	if (fogToggled)
+	{
+		glUniform1f(m_parameters[U_FOG_ENABLE], !fogEnabled);
 	}
 }
 

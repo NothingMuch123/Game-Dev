@@ -37,6 +37,7 @@ void SceneBase::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
+	//m_gPassShaderID = LoadShaders( "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader" );
 	m_programID = LoadShaders( "Shader//fog.vertexshader", "Shader//fog.fragmentshader" );
 	
 	// Get a handle for our uniform
@@ -89,12 +90,17 @@ void SceneBase::Init()
 	m_parameters[U_FOG_DENSITY] = glGetUniformLocation(m_programID, "fog.density");
 	m_parameters[U_FOG_TYPE] = glGetUniformLocation(m_programID, "fog.type");
 	m_parameters[U_FOG_ENABLE] = glGetUniformLocation(m_programID, "fog.enabled");
+
+	// Shadow
+	m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
+	m_parameters[U_LIGHT_DEPTH_MVP] = glGetUniformLocation(m_programID, "lightDepthMVP");
+	m_parameters[U_SHADOW_MAP] = glGetUniformLocation(m_programID, "shadowMap");
 	
 	// Use our shader
 	glUseProgram(m_programID);
 
 	lights[0].type = Light::LIGHT_DIRECTIONAL;
-	lights[0].position.Set(0, 20, 0);
+	lights[0].position.Set(0, 0, 2);
 	lights[0].color.Set(1, 1, 1);
 	lights[0].power = 1;
 	lights[0].kC = 1.f;
@@ -141,7 +147,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
 
 	// Fog
-	fogEnabled = false;
+	fogEnabled = true;
 	Color fogColor(0.5f, 0.5f, 0.5f);
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	glUniform1f(m_parameters[U_FOG_START], 10);
@@ -158,7 +164,7 @@ void SceneBase::Init()
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("Crosshair", Color(1,1,1), 1);
 	meshList[GEO_CROSSHAIR]->textureID[0] = LoadTGA("Image//crosshair.tga");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
+	//meshList[GEO_QUAD]->textureID[0] = LoadTGA("Image//calibri.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID[0] = LoadTGA("Image//calibri.tga");
@@ -256,11 +262,18 @@ void SceneBase::Init()
 	meshList[GEO_TREE] = MeshBuilder::GenerateQuad("Tree", Color(1,1,1), 1);
 	meshList[GEO_TREE]->textureID[0] = LoadTGA("Image//tree.tga");
 
+	/*m_lightDepthFBO.Init(1024, 1024);
+	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1,1,1), 1.f);
+	meshList[GEO_LIGHT_DEPTH_QUAD]->textureID[0] = m_lightDepthFBO.GetTexture();*/
+
 	terrainSize.Set(4000,350,4000);
 
 	camera.Init(Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 400/terrainSize.z), 400), 
 				Vector3(0, Camera3::TERRAIN_OFFSET + terrainSize.y * ReadHeightMap(m_heightMap, 0/terrainSize.x, 395/terrainSize.z), 395), 
 				Vector3(0, 1, 0));
+	/*camera.Init(Vector3(0, 0, 2), 
+				Vector3(0, 0, 0), 
+				Vector3(0, 1, 0));*/
 
 	fov = 45.f;
 
@@ -480,8 +493,6 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 	if(enableLight && bLightEnabled)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-		/*modelView = viewStack.Top() * modelStack.Top();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);*/
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
 		
@@ -517,6 +528,63 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
+	/*Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	if (m_renderPass == RENDER_PASS_PRE)
+	{
+		Mtx44 lightDepthMVP = m_lightDepthProj * m_lightDepthView * modelStack.Top();
+
+		glUniformMatrix4fv(m_parameters[U_LIGHT_DEPTH_MVP_GPASS], 1, GL_FALSE, &lightDepthMVP.a[0]);
+		mesh->Render();
+		return;
+	}
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	if (enableLight && bLightEnabled)
+	{
+		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
+		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
+
+		Mtx44 lightDepthMVP = m_lightDepthProj * m_lightDepthView * modelStack.Top();
+		glUniformMatrix4fv(m_parameters[U_LIGHT_DEPTH_MVP], 1, GL_FALSE, &lightDepthMVP.a[0]);
+		
+		//load material
+		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
+		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
+		glUniform3fv(m_parameters[U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
+		glUniform1f(m_parameters[U_MATERIAL_SHININESS], mesh->material.kShininess);
+	}
+	else
+	{	
+		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	}
+	for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
+	{
+		if(mesh->textureID[i] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + (i * 2)], 1);
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, mesh->textureID[i]);
+			glUniform1i(m_parameters[U_COLOR_TEXTURE + (i * 2)], i);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + (i * 2)], 0);
+		}
+	}
+	mesh->Render();
+	/*for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
+	{
+		if(mesh->textureID[i] > 0)
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+	}*/
 }
 
 void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x, float y, float rotate)

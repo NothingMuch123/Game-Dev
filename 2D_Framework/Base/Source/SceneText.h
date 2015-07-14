@@ -80,9 +80,18 @@ class SceneText : public Scene
 		GEO_GRASS_LIGHTGREEN,
 		GEO_BACKGROUND,
 		GEO_TILEGROUND,
+		GEO_TILETREE,
+		GEO_TILESTRUCTURE,
 		GEO_TILEHERO,
 		GEO_OBJECT,
 		GEO_TEXT,
+
+		// Hero animation frames
+		GEO_TILEHERO_FRAME0,
+		GEO_TILEHERO_FRAME1,
+		GEO_TILEHERO_FRAME2,
+		GEO_TILEHERO_FRAME3,
+
 		NUM_GEOMETRY,
 	};
 
@@ -126,6 +135,7 @@ public:
 	{
 		TILE_NONE,
 		TILE_GROUND,
+		TILE_TREE,
 		TILE_HERO,
 		NUM_TILE,
 	};
@@ -161,6 +171,23 @@ private:
 	Vector2 HeroPosition;
 	bool hero_inMidAir_Up, hero_inMidAir_Down;
 	int jumpspeed;
+	bool heroAnimationInvert;
+	int heroAnimationCounter;
+
+	// Constrain position of hero within the border
+	void ConstrainHero(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff);
+
+	// Codes for scolling
+	Vector2 mapOffset;
+	Vector2 tileOffset;
+	Vector2 mapFineOffset;
+
+	// Codes for parallax scrolling
+	CMap *m_cRearMap;
+	void RenderRearTileMap();
+	Vector2 rearWallOffset;
+	Vector2 rearWallTileOffset;
+	Vector2 rearWallFineOffset;
 };
 
 #endif

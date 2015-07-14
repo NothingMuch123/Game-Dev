@@ -41,6 +41,7 @@ float barryCentric(Vector3 p1, Vector3 p2, Vector3 p3, Vector2 pos)
 
 float ReadHeightMap(std::vector<unsigned char> &heightMap, float x, float z)
 {
+	//return 0;
 	if(x < -0.5f || x > 0.5f || z < -0.5f || z > 0.5f)
 		return 0;
 	if(heightMap.size() == 0)
