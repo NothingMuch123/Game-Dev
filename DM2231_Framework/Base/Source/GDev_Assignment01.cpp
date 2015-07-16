@@ -82,7 +82,7 @@ void GDev_Assignment01::Init()
 
 	// Create trees (billboard)
 	float offset = 0;
-	obj = new CObj(GEO_TREE, Vector3(450, offset + 25 + terrainSize.y * ReadHeightMap(m_heightMap, 450/terrainSize.x, 450/terrainSize.z), 450), Vector3(0,180,0), Vector3(50,50,50), Vector3(1,1,1), true);
+	obj = new CObj(GEO_TREE, Vector3(450, offset + 10 + terrainSize.y * ReadHeightMap(m_heightMap, 450/terrainSize.x, 450/terrainSize.z), 450), Vector3(0,180,0), Vector3(20,20,20), Vector3(1,1,1), true);
 	billboardList.push_back(obj);
 
 	FireRateCounter = currentChar->GetWeaponList()[currentChar->GetCurrentWeapon()]->GetFirerate();
@@ -117,6 +117,7 @@ void GDev_Assignment01::Update(double dt)
 	currentChar->GetCamera().Update(dt, m_heightMap, terrainSize);
 	currentChar->calcBound();
 	camera = currentChar->GetCamera();
+	lights[0].position.Set(currentChar->GetCamera().position.x, currentChar->GetCamera().position.y, currentChar->GetCamera().position.z);
 
 	// Spawn particle
 	if (SpawnRainTimer < MAX_SPAWN_RAIN_TIMER)
@@ -283,15 +284,8 @@ void GDev_Assignment01::Update(double dt)
 
 void GDev_Assignment01::Render()
 {
-	// Render SceneBase
-	SceneBase::Render();
-
-	//RenderSkybox();
-	RenderSkyPlane();
-	RenderTerrain();
-	RenderObject();
-	RenderTextInWorld();
-	Render2D();
+	RenderPassGPass();
+	RenderPassMain();
 }
 
 void GDev_Assignment01::Exit()
@@ -507,7 +501,7 @@ void GDev_Assignment01::RenderObjList()
 		modelStack.Rotate(obj->GetRotate().y, 0, 1, 0);
 		modelStack.Rotate(obj->GetRotate().z, 0, 0, 1);
 		modelStack.Scale(obj->GetScale().x, obj->GetScale().y, obj->GetScale().z);
-		RenderMesh(meshList[obj->GetID()], false);
+		RenderMesh(meshList[obj->GetID()], bLightEnabled);
 		modelStack.PopMatrix();
 	}
 }
@@ -526,7 +520,7 @@ void GDev_Assignment01::RenderTargetList()
 			modelStack.Rotate(target->GetRotate().y, 0, 1, 0);
 			modelStack.Rotate(target->GetRotate().z, 0, 0, 1);
 			modelStack.Scale(target->GetScale().x, target->GetScale().y, target->GetScale().z);
-			RenderMesh(meshList[GEO_TARGET], false);
+			RenderMesh(meshList[GEO_TARGET], bLightEnabled);
 			modelStack.PopMatrix();
 		}
 	}
@@ -559,7 +553,7 @@ void GDev_Assignment01::RenderAmmocrateList()
 			modelStack.Rotate(ammocrate->GetRotate().y, 0, 1, 0);
 			modelStack.Rotate(ammocrate->GetRotate().z, 0, 0, 1);
 			modelStack.Scale(ammocrate->GetScale().x, ammocrate->GetScale().y, ammocrate->GetScale().z);
-			RenderMesh(meshList[ammocrate->GetID()], false);
+			RenderMesh(meshList[ammocrate->GetID()], bLightEnabled);
 			modelStack.PopMatrix();
 		}
 	}
@@ -579,7 +573,7 @@ void GDev_Assignment01::RenderParticleList()
 			modelStack.Rotate(particle->GetRotate().y, 0, 1, 0);
 			modelStack.Rotate(particle->GetRotate().z, 0, 0, 1);
 			modelStack.Scale(particle->GetScale().x, particle->GetScale().y, particle->GetScale().z);
-			RenderMesh(meshList[particle->GetID()], false);
+			RenderMesh(meshList[particle->GetID()], bLightEnabled);
 			modelStack.PopMatrix();
 		}
 	}
@@ -678,7 +672,7 @@ void GDev_Assignment01::RenderTerrain()
 {
 	modelStack.PushMatrix();
 	modelStack.Scale(terrainSize.x, terrainSize.y, terrainSize.z);
-	RenderMesh(meshList[GEO_TERRAIN], false);
+	RenderMesh(meshList[GEO_TERRAIN], bLightEnabled);
 	modelStack.PopMatrix();
 }
 
@@ -755,10 +749,10 @@ void GDev_Assignment01::RenderProjectile(CProjectile *p)
 	switch(p->GetID())
 	{
 	case CProjectile::PROJ_BULLET:
-		RenderMesh(meshList[GEO_SPHERE], false);
+		RenderMesh(meshList[GEO_SPHERE], bLightEnabled);
 		break;
 	case CProjectile::PROJ_ROCKET:
-		RenderMesh(meshList[GEO_CUBE], false);
+		RenderMesh(meshList[GEO_CUBE], bLightEnabled);
 		break;
 	}
 	modelStack.PopMatrix();
@@ -892,4 +886,68 @@ void GDev_Assignment01::RenderEntity(Mesh *mesh, bool enableLight, Vector2 minim
 			modelStack.PopMatrix();
 		viewStack.PopMatrix();
 	projectionStack.PopMatrix();
+}
+
+void GDev_Assignment01::RenderPassGPass()
+{
+	m_renderPass = RENDER_PASS_PRE;
+	
+	m_lightDepthFBO.BindForWriting();
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glUseProgram(m_gPassShaderID);
+
+	// These matrices should change when light position or direction changes
+	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
+	{
+		m_lightDepthProj.SetToOrtho(-10, 10, -10, 10, -10, 20);
+	}
+	else
+	{
+		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+	}
+	m_lightDepthView.SetToLookAt(lights[0].position.x, lights[0].position.y, lights[0].position.z, 0,0,0,0,1,0);
+
+	RenderWorld();
+}
+
+void GDev_Assignment01::RenderPassMain()
+{
+	m_renderPass = RENDER_PASS_MAIN;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, Application::m_window_width, Application::m_window_height);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glUseProgram(m_programID);
+
+	// Pass light depth texture
+	m_lightDepthFBO.BindForReading(GL_TEXTURE8);
+	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
+	//glActiveTexture(GL_TEXTURE0);
+
+	// Render SceneBase
+	SceneBase::Render();
+
+	RenderWorld();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	modelStack.PopMatrix();
+}
+
+void GDev_Assignment01::RenderWorld()
+{
+	//RenderSkybox();
+	RenderSkyPlane();
+	RenderTerrain();
+	RenderObject();
+	RenderTextInWorld();
+	Render2D();
 }

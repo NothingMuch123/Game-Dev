@@ -37,7 +37,7 @@ void SceneBase::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	//m_gPassShaderID = LoadShaders( "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader" );
+	m_gPassShaderID = LoadShaders( "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader" );
 	m_programID = LoadShaders( "Shader//fog.vertexshader", "Shader//fog.fragmentshader" );
 	
 	// Get a handle for our uniform
@@ -100,28 +100,28 @@ void SceneBase::Init()
 	glUseProgram(m_programID);
 
 	lights[0].type = Light::LIGHT_DIRECTIONAL;
-	lights[0].position.Set(0, 0, 2);
+	lights[0].position.Set(0, 150, 0);
 	lights[0].color.Set(1, 1, 1);
 	lights[0].power = 1;
-	lights[0].kC = 1.f;
+	lights[0].kC = 10.f;
 	lights[0].kL = 0.01f;
 	lights[0].kQ = 0.001f;
 	lights[0].cosCutoff = cos(Math::DegreeToRadian(45));
 	lights[0].cosInner = cos(Math::DegreeToRadian(30));
 	lights[0].exponent = 3.f;
-	lights[0].spotDirection.Set(0.f, 1.f, 0.f);
+	lights[0].spotDirection.Set(1.f, 1.f, 1.f);
 
 	lights[1].type = Light::LIGHT_DIRECTIONAL;
-	lights[1].position.Set(1, 1, 0);
-	lights[1].color.Set(1, 1, 0.5f);
+	lights[1].position.Set(0, 300, 0);
+	lights[1].color.Set(1, 1, 1);
 	lights[1].power = 0.4f;
-	//lights[1].kC = 1.f;
-	//lights[1].kL = 0.01f;
-	//lights[1].kQ = 0.001f;
-	//lights[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	//lights[1].cosInner = cos(Math::DegreeToRadian(30));
-	//lights[1].exponent = 3.f;
-	//lights[1].spotDirection.Set(0.f, 1.f, 0.f);
+	lights[1].kC = 1.f;
+	lights[1].kL = 0.01f;
+	lights[1].kQ = 0.001f;
+	lights[1].cosCutoff = cos(Math::DegreeToRadian(45));
+	lights[1].cosInner = cos(Math::DegreeToRadian(30));
+	lights[1].exponent = 3.f;
+	lights[1].spotDirection.Set(-1.f, -1.f, -1.f);
 	
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
@@ -260,11 +260,11 @@ void SceneBase::Init()
 	meshList[GEO_RAIN_PARTICLE] = MeshBuilder::GenerateSphere("Rain particle", Color(0, 0, 1), 18, 36, 0.5);
 
 	meshList[GEO_TREE] = MeshBuilder::GenerateQuad("Tree", Color(1,1,1), 1);
-	meshList[GEO_TREE]->textureID[0] = LoadTGA("Image//tree.tga");
+	meshList[GEO_TREE]->textureID[0] = LoadTGA("Image//dead_bush.tga");
 
-	/*m_lightDepthFBO.Init(1024, 1024);
+	m_lightDepthFBO.Init(1024, 1024);
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1,1,1), 1.f);
-	meshList[GEO_LIGHT_DEPTH_QUAD]->textureID[0] = m_lightDepthFBO.GetTexture();*/
+	meshList[GEO_LIGHT_DEPTH_QUAD]->textureID[0] = m_lightDepthFBO.GetTexture();
 
 	terrainSize.Set(4000,350,4000);
 
@@ -283,7 +283,7 @@ void SceneBase::Init()
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
 
-	bLightEnabled = true;
+	bLightEnabled = false;
 }
 
 void SceneBase::Update(double dt)
@@ -322,17 +322,17 @@ void SceneBase::Update(double dt)
 	}
 
 	if(Application::IsKeyPressed('I'))
-		lights[0].position.z -= (float)(10.f * dt);
+		lights[0].position.z -= (float)(100.f * dt);
 	if(Application::IsKeyPressed('K'))
-		lights[0].position.z += (float)(10.f * dt);
+		lights[0].position.z += (float)(100.f * dt);
 	if(Application::IsKeyPressed('J'))
-		lights[0].position.x -= (float)(10.f * dt);
+		lights[0].position.x -= (float)(100.f * dt);
 	if(Application::IsKeyPressed('L'))
-		lights[0].position.x += (float)(10.f * dt);
+		lights[0].position.x += (float)(100.f * dt);
 	if(Application::IsKeyPressed('O'))
-		lights[0].position.y -= (float)(10.f * dt);
+		lights[0].position.y -= (float)(100.f * dt);
 	if(Application::IsKeyPressed('P'))
-		lights[0].position.y += (float)(10.f * dt);
+		lights[0].position.y += (float)(100.f * dt);
 
 	if (Application::IsKeyPressed('T'))
 	{
@@ -482,7 +482,7 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 
 void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 {
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
+	/*Mtx44 MVP, modelView, modelView_inverse_transpose;
 	
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
@@ -527,8 +527,8 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
-	}
-	/*Mtx44 MVP, modelView, modelView_inverse_transpose;
+	}*/
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
 	if (m_renderPass == RENDER_PASS_PRE)
 	{

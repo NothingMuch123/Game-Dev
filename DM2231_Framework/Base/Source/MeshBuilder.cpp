@@ -583,6 +583,7 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 			v.pos.Set(static_cast<float>(x) / terrainSize - 0.5f, scaledHeight, static_cast<float>(z) / terrainSize - 0.5f);
 			v.color.Set(scaledHeight, scaledHeight, scaledHeight);
 			v.texCoord.Set((float)x / terrainSize * 8, 1.f - (float)z / terrainSize * 8);
+			v.normal.Set(0,1,0);
 			vertex_buffer_data.push_back(v);
 		}
 	}

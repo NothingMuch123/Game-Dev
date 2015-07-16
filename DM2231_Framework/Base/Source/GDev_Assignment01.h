@@ -64,6 +64,11 @@ public:
 	CProjectile *FetchProj();
 	CParticle *FetchParticle();
 
+	// Shadow
+	void RenderPassGPass();
+	void RenderPassMain();
+	void RenderWorld();
+
 private:
 	CMinimap *m_cMinimap; // Handle to the minimap
 
