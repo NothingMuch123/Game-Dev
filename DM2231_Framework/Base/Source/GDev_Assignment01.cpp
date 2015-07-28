@@ -117,7 +117,7 @@ void GDev_Assignment01::Update(double dt)
 	currentChar->GetCamera().Update(dt, m_heightMap, terrainSize);
 	currentChar->calcBound();
 	camera = currentChar->GetCamera();
-	lights[0].position.Set(currentChar->GetCamera().position.x, currentChar->GetCamera().position.y, currentChar->GetCamera().position.z);
+	//lights[0].position.Set(currentChar->GetCamera().position.x, currentChar->GetCamera().position.y, currentChar->GetCamera().position.z);
 
 	// Spawn particle
 	if (SpawnRainTimer < MAX_SPAWN_RAIN_TIMER)
@@ -474,7 +474,7 @@ void GDev_Assignment01::RenderTextInWorld()
 
 void GDev_Assignment01::RenderObject()
 {
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 	
 	/*modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
@@ -903,15 +903,19 @@ void GDev_Assignment01::RenderPassGPass()
 	// These matrices should change when light position or direction changes
 	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
 	{
-		m_lightDepthProj.SetToOrtho(-10, 10, -10, 10, -10, 20);
+		m_lightDepthProj.SetToOrtho(-2000, 2000, -2000, 2000, -2000, 2000);
 	}
 	else
 	{
 		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 	}
-	m_lightDepthView.SetToLookAt(lights[0].position.x, lights[0].position.y, lights[0].position.z, 0,0,0,0,1,0);
+	m_lightDepthView.SetToLookAt(lights[0].position.x, lights[0].position.y, lights[0].position.z, 0,0,0,0,1,1);
 
-	RenderWorld();
+	//RenderWorld();
+	RenderTerrain();
+	RenderObject();
+	RenderTextInWorld();
+	Render2D();
 }
 
 void GDev_Assignment01::RenderPassMain()

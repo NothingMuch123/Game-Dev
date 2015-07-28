@@ -901,7 +901,6 @@ void SceneShadow::RenderEntity(Mesh *mesh, bool enableLight, Vector2 minimapPos,
 void SceneShadow::RenderWorld()
 {
 	modelStack.PushMatrix();
-	//modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(10, 10, 1);
 	RenderMesh(meshList[GEO_QUAD], true);
 	modelStack.PopMatrix();

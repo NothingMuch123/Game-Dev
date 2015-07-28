@@ -4,11 +4,22 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "Vector2.h"
+
 using namespace std;
 
 class CMap
 {
 public:
+	enum TILE_TYPE
+	{
+		TILE_NONE,
+		TILE_GROUND,
+		TILE_TREE,
+		TILE_HERO,
+		NUM_TILE,
+	};
+
 	CMap(void);
 	~CMap(void);
 
@@ -26,6 +37,15 @@ public:
 	int GetMap_Width();
 	int GetMap_Height();
 
+	void SetMapOffset(Vector2 mapOffset);
+	Vector2 GetMapOffset();
+
+	void SetTileOffset(Vector2 tileOffset);
+	Vector2 GetTileOffset();
+
+	void SetMapFineOffset(Vector2 mapFineOffset);
+	Vector2 GetMapFineOffset();
+
 	vector<vector<int> > theScreenMap;
 
 private:
@@ -37,6 +57,10 @@ private:
 
 	int theMap_Height, theMap_Width; // Map's width and height
 	int theNumOfTiles_MapHeight, theNumOfTiles_MapWidth; //Number of tiles in the map's width and height
+
+	Vector2 mapOffset;
+	Vector2 tileOffset;
+	Vector2 mapFineOffset;
 
 	bool LoadFile(const string mapName);
 };

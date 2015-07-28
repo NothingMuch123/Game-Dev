@@ -38,7 +38,7 @@ void SceneBase::Init()
 	glBindVertexArray(m_vertexArrayID);
 
 	m_gPassShaderID = LoadShaders( "Shader//GPass.vertexshader", "Shader//GPass.fragmentshader" );
-	m_programID = LoadShaders( "Shader//fog.vertexshader", "Shader//fog.fragmentshader" );
+	m_programID = LoadShaders( "Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader" );
 	
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -84,12 +84,12 @@ void SceneBase::Init()
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
 	
 	// Fog
-	m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fog.color");
-	m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fog.start");
-	m_parameters[U_FOG_END] = glGetUniformLocation(m_programID, "fog.end");
-	m_parameters[U_FOG_DENSITY] = glGetUniformLocation(m_programID, "fog.density");
-	m_parameters[U_FOG_TYPE] = glGetUniformLocation(m_programID, "fog.type");
-	m_parameters[U_FOG_ENABLE] = glGetUniformLocation(m_programID, "fog.enabled");
+	m_parameters[U_FOG_COLOR] = glGetUniformLocation(m_programID, "fogParam.color");
+	m_parameters[U_FOG_START] = glGetUniformLocation(m_programID, "fogParam.start");
+	m_parameters[U_FOG_END] = glGetUniformLocation(m_programID, "fogParam.end");
+	m_parameters[U_FOG_DENSITY] = glGetUniformLocation(m_programID, "fogParam.density");
+	m_parameters[U_FOG_TYPE] = glGetUniformLocation(m_programID, "fogParam.type");
+	m_parameters[U_FOG_ENABLE] = glGetUniformLocation(m_programID, "fogParam.enabled");
 
 	// Shadow
 	m_parameters[U_LIGHT_DEPTH_MVP_GPASS] = glGetUniformLocation(m_gPassShaderID, "lightDepthMVP");
@@ -100,7 +100,7 @@ void SceneBase::Init()
 	glUseProgram(m_programID);
 
 	lights[0].type = Light::LIGHT_DIRECTIONAL;
-	lights[0].position.Set(0, 150, 0);
+	lights[0].position.Set(0, 150, 200);
 	lights[0].color.Set(1, 1, 1);
 	lights[0].power = 1;
 	lights[0].kC = 10.f;

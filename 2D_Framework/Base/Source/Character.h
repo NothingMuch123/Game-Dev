@@ -10,11 +10,11 @@ public:
 	CCharacter(Vector2 pos = Vector2(0,0), int jumpSpeed = 0, bool midAir_Up = false, bool midAir_Down = false, int animationCounter = 0, bool animationInvert = false);
 	virtual ~CCharacter(void);
 
-	void Update(const double dt);
+	virtual void Update(const double dt, CMap *m_cMap, CMap *m_cRearMap);
 	void Jump();
 	void MoveUpDown(const bool mode, const float timeDiff);
 	void MoveLeftRight(const bool mode, const float timeDiff);
-	void Constrain(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff);
+	void Constrain(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff, CMap *m_cMap);
 
 	void SetPos(Vector2 pos);
 	Vector2 GetPos();
@@ -34,7 +34,7 @@ public:
 	void SetAnimationCounter(int animationCounter);
 	int GetAnimationCounter();
 
-private:
+protected:
 	Vector2 pos;
 	bool midAir_Up, midAir_Down;
 	int jumpSpeed;

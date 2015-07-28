@@ -10,6 +10,9 @@ CMap::CMap(void)
 , theNumOfTiles_MapHeight(0)
 , theNumOfTiles_MapWidth(0)
 , theTileSize(0)
+, mapOffset(0,0)
+, tileOffset(0,0)
+, mapFineOffset(0,0)
 {
 	theScreenMap.clear();
 }
@@ -143,4 +146,34 @@ int CMap::GetMap_Width()
 int CMap::GetMap_Height()
 {
 	return theMap_Height;
+}
+
+void CMap::SetMapOffset(Vector2 mapOffset)
+{
+	this->mapOffset = mapOffset;
+}
+
+Vector2 CMap::GetMapOffset()
+{
+	return mapOffset;
+}
+
+void CMap::SetTileOffset(Vector2 tileOffset)
+{
+	this->tileOffset = tileOffset;
+}
+
+Vector2 CMap::GetTileOffset()
+{
+	return tileOffset;
+}
+
+void CMap::SetMapFineOffset(Vector2 mapFineOffset)
+{
+	this->mapFineOffset = mapFineOffset;
+}
+
+Vector2 CMap::GetMapFineOffset()
+{
+	return mapFineOffset;
 }

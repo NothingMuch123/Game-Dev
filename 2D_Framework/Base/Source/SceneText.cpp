@@ -14,13 +14,7 @@ SceneText::SceneText()
 	, hero_inMidAir_Down(false)
 	, hero_inMidAir_Up(false)
 	, jumpspeed(0)
-	, mapOffset(0,0)
-	, tileOffset(0,0)
-	, mapFineOffset(0,0)
 	, m_cRearMap(NULL)
-	, rearWallOffset(0,0)
-	, rearWallTileOffset(0,0)
-	, rearWallFineOffset(0,0)
 	, heroAnimationCounter(0)
 	, heroAnimationInvert(false)
 {
@@ -655,8 +649,8 @@ void SceneText::Render()
 
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 	
-	//std::cout << tileOffset.x << std::endl;
-	//std::cout << mapOffset.x << std::endl;
+	//std::cout << m_cMap->GetTileOffset().x << std::endl;
+	//std::cout << m_cMap->GetMapOffset().x << std::endl;
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -689,15 +683,16 @@ void SceneText::Exit()
 void SceneText::RenderTileMap()
 {
 	int m = 0;
-	mapFineOffset.x = ((int)mapOffset.x) % m_cMap->GetTileSize();
+	//m_cMap->GetMapFineOffset().x = ((int)m_cMap->GetMapOffset().x) % m_cMap->GetTileSize();
+	m_cMap->SetMapFineOffset( Vector2(((int)m_cMap->GetMapOffset().x) % m_cMap->GetTileSize() , m_cMap->GetMapFineOffset().y) );
 	for(int i = 0; i < m_cMap->GetNumOfTiles_Height(); i ++)
 	{
 		for(int k = 0; k < m_cMap->GetNumOfTiles_Width()+1; k ++)
 		{
-			m = tileOffset.x + k;
+			m = m_cMap->GetTileOffset().x + k;
 
 			// If we have reached the right side of the map, then do not display the extra column of tiles
-			if ((tileOffset.x + k) >= m_cMap->GetNumOfTiles_MapWidth())
+			if ((m_cMap->GetTileOffset().x + k) >= m_cMap->GetNumOfTiles_MapWidth())
 			{
 				break;
 			}
@@ -706,12 +701,12 @@ void SceneText::RenderTileMap()
 			{
 			case TILE_GROUND: 
 				{
-					Render2DMesh(meshList[GEO_TILEGROUND], false, 1.0f, k*m_cMap->GetTileSize() - mapFineOffset.x, 575 - i*m_cMap->GetTileSize());
+					Render2DMesh(meshList[GEO_TILEGROUND], false, 1.0f, k*m_cMap->GetTileSize() - m_cMap->GetMapFineOffset().x, 575 - i*m_cMap->GetTileSize());
 				}
 				break;
 			case TILE_TREE: 
 				{
-					Render2DMesh(meshList[GEO_TILETREE], false, 1.0f, k*m_cMap->GetTileSize() - mapFineOffset.x, 575 - i*m_cMap->GetTileSize());
+					Render2DMesh(meshList[GEO_TILETREE], false, 1.0f, k*m_cMap->GetTileSize() - m_cMap->GetMapFineOffset().x, 575 - i*m_cMap->GetTileSize());
 				}
 				break;
 			}
@@ -753,30 +748,36 @@ void SceneText::RenderTileMap()
 
 void SceneText::RenderRearTileMap()
 {
-	rearWallOffset.x = (int)(mapOffset.x * 0.5);
-	rearWallOffset.y = 0;
-	rearWallTileOffset.y = 0;
-	rearWallTileOffset.x = (int)(rearWallOffset.x / m_cRearMap->GetTileSize());
-	if (rearWallTileOffset.x + m_cRearMap->GetNumOfTiles_Width() > m_cRearMap->GetNumOfTiles_MapWidth())
+	//m_cRearMap->GetMapOffset().x = (int)(m_cMap->GetMapOffset().x * 0.5);
+	m_cRearMap->SetMapOffset( Vector2((int)(m_cMap->GetMapOffset().x * 0.5) , m_cRearMap->GetMapFineOffset().y) );
+	//m_cRearMap->GetMapOffset().y = 0;
+	m_cRearMap->SetMapOffset( Vector2(m_cRearMap->GetMapOffset().x , 0) );
+	//m_cRearMap->GetTileOffset().y = 0;
+	m_cRearMap->SetTileOffset( Vector2(m_cRearMap->GetTileOffset().x , 0) );
+	//m_cRearMap->GetTileOffset().x = (int)(m_cRearMap->GetMapOffset().x / m_cRearMap->GetTileSize());
+	m_cRearMap->SetTileOffset( Vector2((int)(m_cRearMap->GetMapOffset().x / m_cRearMap->GetTileSize()) , m_cRearMap->GetTileOffset().y) );
+	if (m_cRearMap->GetTileOffset().x + m_cRearMap->GetNumOfTiles_Width() > m_cRearMap->GetNumOfTiles_MapWidth())
 	{
-		rearWallTileOffset.x = m_cRearMap->GetNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width();
+		//m_cRearMap->GetTileOffset().x = m_cRearMap->GetNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width();
+		m_cRearMap->SetTileOffset( Vector2(m_cRearMap->GetNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width() , m_cRearMap->GetTileOffset().y) );
 	}
-	rearWallFineOffset.x = ((int)rearWallOffset.x) % m_cRearMap->GetTileSize();
+	//m_cRearMap->GetMapFineOffset().x = ((int)m_cRearMap->GetMapOffset().x) % m_cRearMap->GetTileSize();
+	m_cRearMap->SetMapFineOffset( Vector2(((int)m_cRearMap->GetMapOffset().x) % m_cRearMap->GetTileSize() , m_cRearMap->GetMapFineOffset().y) );
 
 	int m = 0;
 	for (int i = 0; i < m_cRearMap->GetNumOfTiles_Height(); ++i)
 	{
 		for (int k = 0; k < m_cRearMap->GetNumOfTiles_Width() + i; ++k)
 		{
-			m = rearWallTileOffset.x + k;
+			m = m_cRearMap->GetTileOffset().x + k;
 			// If we have reached the right side of the map, then do not display the extra column of tiles
-			if ((rearWallTileOffset.x + k) >= m_cRearMap->GetNumOfTiles_MapWidth())
+			if ((m_cRearMap->GetTileOffset().x + k) >= m_cRearMap->GetNumOfTiles_MapWidth())
 			{
 				break;
 			}
 			if (m_cRearMap->theScreenMap[i][m] == 3)
 			{
-				Render2DMesh(meshList[GEO_TILESTRUCTURE], false, 1.f, k * m_cRearMap->GetTileSize() - rearWallFineOffset.x, 575 - i * m_cRearMap->GetTileSize());
+				Render2DMesh(meshList[GEO_TILESTRUCTURE], false, 1.f, k * m_cRearMap->GetTileSize() - m_cRearMap->GetMapFineOffset().x, 575 - i * m_cRearMap->GetTileSize());
 			}
 		}
 	}
@@ -795,7 +796,7 @@ void SceneText::HeroUpdate(const double dt)
 	else if (hero_inMidAir_Up == true && hero_inMidAir_Down == false) 
 	{ 
 		// Check if the hero can move up into mid air...
-		int checkPosition_X = (int) ((mapOffset.x + HeroPosition.x) / m_cMap->GetTileSize()); 
+		int checkPosition_X = (int) ((m_cMap->GetMapOffset().x + HeroPosition.x) / m_cMap->GetTileSize()); 
 		int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int) ceil( (float) (HeroPosition.y + jumpspeed) / m_cMap->GetTileSize()); 
 		if (m_cMap->theScreenMap[checkPosition_Y][checkPosition_X] == TILE_GROUND || m_cMap->theScreenMap[checkPosition_Y][checkPosition_X + 1] == TILE_GROUND) 
 		{ 
@@ -818,7 +819,7 @@ void SceneText::HeroUpdate(const double dt)
 	else if (hero_inMidAir_Up == false && hero_inMidAir_Down == true) 
 	{ 
 		// Check if the hero is still in mid air...
-		int checkPosition_X = (int) ((mapOffset.x + HeroPosition.x) / m_cMap->GetTileSize());
+		int checkPosition_X = (int) ((m_cMap->GetMapOffset().x + HeroPosition.x) / m_cMap->GetTileSize());
 		if (checkPosition_X < 0)
 		{
 			checkPosition_X = 0;
@@ -851,10 +852,12 @@ void SceneText::HeroUpdate(const double dt)
 	}
 
 	ConstrainHero(25, 750, 25, 575, 1.f);
-	tileOffset.x = (int) (mapOffset.x / m_cMap->GetTileSize());
-	if (tileOffset.x + m_cMap->GetNumOfTiles_Width() > m_cMap->GetNumOfTiles_MapWidth())
+	//m_cMap->GetTileOffset().x = (int) (m_cMap->GetMapOffset().x / m_cMap->GetTileSize());
+	m_cMap->SetTileOffset( Vector2((int) (m_cMap->GetMapOffset().x / m_cMap->GetTileSize()) , m_cMap->GetTileOffset().y) );
+	if (m_cMap->GetTileOffset().x + m_cMap->GetNumOfTiles_Width() > m_cMap->GetNumOfTiles_MapWidth())
 	{
-		tileOffset.x = m_cMap->GetNumOfTiles_MapWidth() - m_cMap->GetNumOfTiles_Width();
+		//m_cMap->GetTileOffset().x = m_cMap->GetNumOfTiles_MapWidth() - m_cMap->GetNumOfTiles_Width();
+		m_cMap->SetTileOffset( Vector2(m_cMap->GetNumOfTiles_MapWidth() - m_cMap->GetNumOfTiles_Width() , m_cMap->GetTileOffset().y) );
 	}
 }
 
@@ -917,19 +920,23 @@ void SceneText::ConstrainHero(const int leftBorder, const int rightBorder, const
 	if (HeroPosition.x < leftBorder)
 	{
 		HeroPosition.x = leftBorder;
-		mapOffset.x = mapOffset.x - (int)(5.f * timeDiff);
-		if (mapOffset.x < 0)
+		//m_cMap->GetMapOffset().x = m_cMap->GetMapOffset().x - (int)(5.f * timeDiff);
+		m_cMap->SetMapOffset( Vector2(m_cMap->GetMapOffset().x - (int)(5.f * timeDiff) , m_cMap->GetMapOffset().y) );
+		if (m_cMap->GetMapOffset().x < 0)
 		{
-			mapOffset.x = 0;
+			//m_cMap->GetMapOffset().x = 0;
+			m_cMap->SetMapOffset( Vector2(0, m_cMap->GetMapOffset().y) );
 		}
 	}
 	else if (HeroPosition.x > rightBorder)
 	{
 		HeroPosition.x = rightBorder;
-		mapOffset.x = mapOffset.x + (int)(5.f * timeDiff);
-		if (mapOffset.x > (m_cMap->GetMap_Width() - m_cMap->GetScreen_Width()))
+		//m_cMap->GetMapOffset().x = m_cMap->GetMapOffset().x + (int)(5.f * timeDiff);
+		m_cMap->SetMapOffset( Vector2(m_cMap->GetMapOffset().x + (int)(5.f * timeDiff), m_cMap->GetMapOffset().y) );
+		if (m_cMap->GetMapOffset().x > (m_cMap->GetMap_Width() - m_cMap->GetScreen_Width()))
 		{
-			mapOffset.x = m_cMap->GetMap_Width() - m_cMap->GetScreen_Width();
+			//m_cMap->GetMapOffset().x = m_cMap->GetMap_Width() - m_cMap->GetScreen_Width();
+			m_cMap->SetMapOffset( Vector2(m_cMap->GetMap_Width() - m_cMap->GetScreen_Width(), m_cMap->GetMapOffset().y) );
 		}
 	}
 

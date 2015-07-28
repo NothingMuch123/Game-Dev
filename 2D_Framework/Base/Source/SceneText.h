@@ -178,16 +178,16 @@ private:
 	void ConstrainHero(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff);
 
 	// Codes for scolling
-	Vector2 mapOffset;
+	/*Vector2 mapOffset;
 	Vector2 tileOffset;
-	Vector2 mapFineOffset;
+	Vector2 mapFineOffset;*/
 
 	// Codes for parallax scrolling
 	CMap *m_cRearMap;
 	void RenderRearTileMap();
-	Vector2 rearWallOffset;
+	/*Vector2 rearWallOffset;
 	Vector2 rearWallTileOffset;
-	Vector2 rearWallFineOffset;
+	Vector2 rearWallFineOffset;*/
 };
 
 #endif
