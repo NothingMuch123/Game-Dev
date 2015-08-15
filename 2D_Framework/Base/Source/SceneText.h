@@ -15,6 +15,8 @@
 #include "Target.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
+#include "EnemyIn2D.h"
+#include "Strategy_Patrol.h"
 
 class SceneText : public Scene
 {
@@ -137,9 +139,7 @@ public:
 	void RenderProjList();
 	CProjectile* FetchProj();
 
-	void InitEnemyList();
-	void RenderEnemyList(CMap *map);
-	CEnemy* FetchEnemy();
+	void RenderEnemyList();
 
 	void RenderTargetList(std::vector<CTarget*> targetList, CMap *map);
 
@@ -180,15 +180,15 @@ private:
 	void RenderTileMap(CMap *map);
 
 	// Handle to screen-based map
-	CMap *screenbasedMap;
+	vector<CMap*> levelMaps;
 
 	// Character information
 	std::vector<CCharacter*> characterList;
 	void RenderCharacter();
 
 	// Codes for parallax scrolling
-	CMap *m_cRearMap;
-	void RenderRearTileMap();
+	//CMap *m_cRearMap;
+	//void RenderRearTileMap();
 
 	// Projectile
 	std::vector<CProjectile*> projList;
@@ -199,11 +199,12 @@ private:
 	float score;
 
 	// Target
-	std::vector<CTarget*> targetList_lvl1, targetList_lvl2;
+	//std::vector<CTarget*> targetList_lvl1, targetList_lvl2;
 
 	// Enemy
-	std::vector<CEnemy*> enemyList;
-	std::vector<CEnemySpawner*> enemySpawnerList_lvl1, enemySpawnerList_lvl2;
+	vector<CEnemyIn2D*> enemyList;
+	//std::vector<CEnemy*> enemyList;
+	//std::vector<CEnemySpawner*> enemySpawnerList_lvl1, enemySpawnerList_lvl2;
 
 	// Game data
 	/*bool gameEnded;

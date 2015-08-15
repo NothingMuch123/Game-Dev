@@ -40,9 +40,9 @@ void CMap::Init(const int theScreen_Height, const int theScreen_Width, const int
 		theScreenMap[i].resize(theNumOfTiles_MapWidth);
 }
 
-bool CMap::LoadMap(const string mapName, std::vector<CTarget*> &targetList, std::vector<CEnemySpawner*> &enemySpawnerList)
+bool CMap::LoadMap(const string mapName)
 {
-	if (LoadFile(mapName, targetList, enemySpawnerList) == true)
+	if (LoadFile(mapName) == true)
 	{
 		printf("Map (%s) has been successfully loaded!\n", mapName.c_str());
 		return true;
@@ -51,7 +51,7 @@ bool CMap::LoadMap(const string mapName, std::vector<CTarget*> &targetList, std:
 	return false;
 }
 
-bool CMap::LoadFile(const string mapName, std::vector<CTarget*> &targetList, std::vector<CEnemySpawner*> &enemySpawnerList)
+bool CMap::LoadFile(const string mapName)
 {
 	int theLineCounter = 0;
 	int theMaxNumOfColumns = 0;
@@ -79,10 +79,10 @@ bool CMap::LoadFile(const string mapName, std::vector<CTarget*> &targetList, std
 				{
 					int tile = atoi(token.c_str());
 					theScreenMap[theLineCounter][theColumnCounter++] = tile;
-					static const float minTime = 1.f, maxTime = 3.f;
+					//static const float minTime = 1.f, maxTime = 3.f;
 					switch (tile)
 					{
-					case TILE_TARGET_RED :
+					/*case TILE_TARGET_RED :
 						{
 							CTarget *t = new CTarget();
 							t->Init(CTarget::TARGET_RED, Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Vector2(1,1), Math::RandFloatMinMax(minTime, maxTime), false, true);
@@ -129,7 +129,7 @@ bool CMap::LoadFile(const string mapName, std::vector<CTarget*> &targetList, std
 							CEnemySpawner *spawner = new CEnemySpawner(Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Math::RandFloatMinMax(1.f, 4.f));
 							enemySpawnerList.push_back(spawner);
 						}
-						break;
+						break;*/
 					}
 				}
 				theLineCounter++;

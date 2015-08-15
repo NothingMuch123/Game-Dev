@@ -13,11 +13,9 @@ float SceneText::MAX_SHOOT_TIME = 0.3f;
 SceneText::SceneText()
 	: m_cMinimap(NULL)
 	, m_cMap(NULL)
-	, m_cRearMap(NULL)
 	, projList(NULL)
 	, shootTimer(MAX_SHOOT_TIME)
-	, targetList_lvl1(NULL)
-	, targetList_lvl2(NULL)
+	, enemyList(NULL)
 {
 }
 
@@ -229,15 +227,29 @@ void SceneText::Init()
 	}
 
 	// Initialise and load the tile map
-	screenbasedMap = new CMap();
-	screenbasedMap->Init(800, 1024, 25, 32, 800, 1024, 32);
-	screenbasedMap->LoadMap( "Image//GDev_Assignment02//MapDesign_lvl1.csv", targetList_lvl1, enemySpawnerList_lvl1 );
+	CMap *newMap = new CMap();
+	levelMaps.push_back(newMap);
+	levelMaps[0]->Init(800, 1024, 25, 32, 800, 1024, 32);
+	levelMaps[0]->LoadMap( "Image//GDev_Assignment02//MapDesign_lvl1.csv");
+	for (int row = 0; row < levelMaps[0]->GetNumOfTiles_MapHeight(); ++row)
+	{
+		for (int col = 0; col < levelMaps[0]->GetNumOfTiles_MapWidth(); ++col)
+		{
+			if (levelMaps[0]->theScreenMap[row][col] == CMap::TILE_ENEMY_GROUND)
+			{
+				CEnemyIn2D *e = new CEnemyIn2D();
+				e->Init( Vector3((col) * levelMaps[0]->GetTileSize(), levelMaps[0]->GetScreen_Height() - (row + 1) * levelMaps[0]->GetTileSize()), 1, meshList[GEO_TILE_STONE], CEnemyIn2D::ENEMY_GROUND );
+				e->ChangeStrategy(new CStrategy_Patrol());
+				enemyList.push_back(e);
+			}
+		}
+	}
 
-	m_cMap = new CMap();
+	//m_cMap = new CMap();
 	//m_cMap->Init( 600, 800, 24, 32, 600, 1600 );
 	//m_cMap->LoadMap( "Image//MapDesign.csv" );
-	m_cMap->Init( 800, 1024, 25, 32, 800, 2048, 32);
-	m_cMap->LoadMap( "Image//GDev_Assignment02//MapDesign_lvl2.csv", targetList_lvl2, enemySpawnerList_lvl2 );
+	//m_cMap->Init( 800, 1024, 25, 32, 800, 2048, 32);
+	//m_cMap->LoadMap( "Image//GDev_Assignment02//MapDesign_lvl2.csv" );
 
 	/*// Initialise and load the rear tile map
 	m_cRearMap = new CMap();
@@ -245,10 +257,6 @@ void SceneText::Init()
 	//m_cRearMap->LoadMap( "Image//MapDesign_Rear.csv" );
 	m_cRearMap->Init( 800, 1024, 25, 32, 800, 2048, 32);
 	m_cRearMap->LoadMap( "Image//GDev_Assignment02//MapDesign_Rear_lvl2.csv", targetList_lvl2 );*/
-
-	// Init character
-	InitCharacter();
-	InitEnemyList();
 
 	// Init projectile list
 	InitProjList();
@@ -265,44 +273,15 @@ void SceneText::Init()
 	level = 1;
 	score = 0;
 	lives = 3;
+
+	// Init character
+	InitCharacter();
+
 	//levelTime = 30.f;
 	//extraLives = targetList_lvl1.size();
 	//lives = 3;
 	//win = targetList_lvl2.size();
 	//gameEnded = false;
-}
-
-void SceneText::InitEnemyList()
-{
-	unsigned texture = LoadTGA("Image//GDev_Assignment02//enemy_animations.tga");
-	for (int i = 0; i < 50; ++i)
-	{
-		CEnemy *e = new CEnemy();
-		SpriteAnimation *sa = MeshBuilder::GenerateSpriteAnimation("E_ANIM_WALK_LEFT", 1, 9);
-		sa->textureID = texture;
-		sa->m_anim = new Animation();
-		sa->m_anim->Set(0, 8, 0, 0.4f);
-		e->SetAnimation(CEnemy::E_ANIM_WALK_LEFT, sa);
-		enemyList.push_back(e);
-	}
-}
-
-CEnemy* SceneText::FetchEnemy()
-{
-	for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-	{
-		CEnemy *e = (CEnemy*)*it;
-		if (!e->GetActive())
-		{
-			return e;
-		}
-	}
-	for (int i = 0; i < 10; ++i)
-	{
-		CEnemy *p = new CEnemy();
-		enemyList.push_back(p);
-	}
-	return enemyList.back();
 }
 
 void SceneText::InitProjList()
@@ -336,148 +315,113 @@ void SceneText::InitCharacter()
 {
 	// Create player
 	CCharacter *c = new CCharacter(Vector2(100,750), Vector2(2,2));
-	c->CalcBound(m_cMap);
+	c->CalcBound(levelMaps[level - 1]);
 
-	// ANIM_FALL_LEFT
-	unsigned int texture = LoadTGA("Image//GDev_Assignment02//player1//player1_animations.tga");
 	SpriteAnimation *sa = MeshBuilder::GenerateSpriteAnimation("ANIM_FALL_LEFT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(0, 0, 0, 1);
-	c->SetAnimation(CCharacter::ANIM_FALL_LEFT, sa);
+	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//player1_animations.tga");
+	c->SetSprite(sa);
+
+	Animation *a;
+	// ANIM_FALL_LEFT
+	a = new Animation();
+	a->Set(0, 0, 0, 1);
+	c->SetAnimation(CCharacter::ANIM_FALL_LEFT, a);
 
 	// ANIM_FALL_RIGHT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_FALL_RIGHT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(1, 1, 0, 1);
-	c->SetAnimation(CCharacter::ANIM_FALL_RIGHT, sa);
+	a = new Animation();
+	a->Set(1, 1, 0, 1);
+	c->SetAnimation(CCharacter::ANIM_FALL_RIGHT, a);
 
 	// ANIM_LIE_LEFT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LIE_LEFT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(2,4,0,1);
-	c->SetAnimation(CCharacter::ANIM_LIE_LEFT, sa);
+	a = new Animation();
+	a->Set(2,4,0,1);
+	c->SetAnimation(CCharacter::ANIM_LIE_LEFT, a);
 
 	// ANIM_LIE_RIGHT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LIE_RIGHT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(5,7,0,1);
-	c->SetAnimation(CCharacter::ANIM_LIE_RIGHT, sa);
+	a = new Animation();
+	a->Set(5,7,0,1);
+	c->SetAnimation(CCharacter::ANIM_LIE_RIGHT, a);
 
 	// ANIM_IDLE_LEFT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_IDLE_LEFT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(8,11,0,1);
-	c->SetAnimation(CCharacter::ANIM_IDLE_LEFT, sa);
+	a = new Animation();
+	a->Set(8,11,0,1);
+	c->SetAnimation(CCharacter::ANIM_IDLE_LEFT, a);
 
 	// ANIM_IDLE_RIGHT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_IDLE_RIGHT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(12,15,0,1);
-	c->SetAnimation(CCharacter::ANIM_IDLE_RIGHT, sa);
+	a = new Animation();
+	a->Set(12,15,0,1);
+	c->SetAnimation(CCharacter::ANIM_IDLE_RIGHT, a);
 
 	// ANIM_JUMP_LEFT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_JUMP_LEFT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(16,23,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_JUMP_LEFT, sa);
+	a = new Animation();
+	a->Set(16,23,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_JUMP_LEFT, a);
 
 	// ANIM_JUMP_RIGHT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_JUMP_RIGHT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(24,31,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_JUMP_RIGHT, sa);
+	a = new Animation();
+	a->Set(24,31,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_JUMP_RIGHT, a);
 
 	// ANIM_LOOK_DOWN_LEFT
 	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LOOK_DOWN_LEFT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(32,35,1,0.05f);
-	c->SetAnimation(CCharacter::ANIM_LOOK_DOWN_LEFT, sa);
+	a = new Animation();
+	a->Set(32,35,1,0.05f);
+	c->SetAnimation(CCharacter::ANIM_LOOK_DOWN_LEFT, a);
 
 	// ANIM_LOOK_DOWN_RIGHT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LOOK_DOWN_RIGHT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(36,39,1,0.05f);
-	c->SetAnimation(CCharacter::ANIM_LOOK_DOWN_RIGHT, sa);
+	a = new Animation();
+	a->Set(36,39,1,0.05f);
+	c->SetAnimation(CCharacter::ANIM_LOOK_DOWN_RIGHT, a);
 
 	// ANIM_LOOK_UP_LEFT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LOOK_UP_LEFT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(40,43,1,0.05f);
-	c->SetAnimation(CCharacter::ANIM_LOOK_UP_LEFT, sa);
+	a = new Animation();
+	a->Set(40,43,1,0.05f);
+	c->SetAnimation(CCharacter::ANIM_LOOK_UP_LEFT, a);
 
 	// ANIM_LOOK_UP_RIGHT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LOOK_UP_RIGHT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(44,47,1,0.05f);
-	c->SetAnimation(CCharacter::ANIM_LOOK_UP_RIGHT, sa);
+	a = new Animation();
+	a->Set(44,47,1,0.05f);
+	c->SetAnimation(CCharacter::ANIM_LOOK_UP_RIGHT, a);
 
 	// ANIM_MOVE_LEFT_SHOOT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_MOVE_LEFT_SHOOT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(48,51,0,0.2f);
-	c->SetAnimation(CCharacter::ANIM_MOVE_LEFT_SHOOT, sa);
+	a = new Animation();
+	a->Set(48,51,0,0.2f);
+	c->SetAnimation(CCharacter::ANIM_MOVE_LEFT_SHOOT, a);
 
 	// ANIM_MOVE_RIGHT_SHOOT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_MOVE_RIGHT_SHOOT", 7, 8);
-	sa->textureID = texture;
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(52,55,0,0.2f);
-	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT, sa);
+	a = new Animation();
+	a->Set(52,55,0,0.2f);
+	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT, a);
 
 	// ANIM_RUN_LEFT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_RUN_LEFT", 2, 6);
-	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//run_left.tga");
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(0,10,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_RUN_LEFT, sa);
+	a = new Animation();
+	a->Set(0,10,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_RUN_LEFT, a);
 
 	// ANIM_RUN_RIGHT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_RUN_RIGHT", 2, 6);
-	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//run_right.tga");
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(0,10,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_RUN_RIGHT, sa);
+	a = new Animation();
+	a->Set(0,10,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_RUN_RIGHT, a);
 
 	//ANIM_MOVE_LEFT_SHOOT_TOP
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_MOVE_LEFT_SHOOT_TOP", 3, 7);
-	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//run_shoot_top_left.tga");
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(0,19,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_MOVE_LEFT_SHOOT_TOP, sa);
+	a = new Animation();
+	a->Set(0,19,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_MOVE_LEFT_SHOOT_TOP, a);
 	
 	//ANIM_MOVE_LEFT_SHOOT_DOWN
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_MOVE_LEFT_SHOOT_DOWN", 2, 6);
-	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//run_shoot_bottom_left.tga");
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(0,10,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_MOVE_LEFT_SHOOT_DOWN, sa);
+	a = new Animation();
+	a->Set(0,10,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_MOVE_LEFT_SHOOT_DOWN, a);
 
 	//ANIM_MOVE_RIGHT_SHOOT_TOP
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_MOVE_RIGHT_SHOOT_TOP", 3, 7);
-	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//run_shoot_top_right.tga");
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(0,19,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT_TOP, sa);
+	a = new Animation();
+	a->Set(0,19,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT_TOP, a);
 	
 	//ANIM_MOVE_RIGHT_SHOOT_DOWN
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_MOVE_RIGHT_SHOOT_DOWN", 2, 6);
-	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//run_shoot_bottom_right.tga");
-	sa->m_anim = new Animation();
-	sa->m_anim->Set(0,10,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT_DOWN, sa);
+	a = new Animation();
+	a->Set(0,10,0,0.5f);
+	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT_DOWN, a);
 
 	characterList.push_back(c);
 }
@@ -583,21 +527,19 @@ void SceneText::Update(double dt)
 			}
 		}*/
 
-		SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_TARGET_CLOSE]);
+		/*SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_TARGET_CLOSE]);
 		if (sa)
 		{
 			sa->Update(dt);
-		}
+		}*/
 
 		if (shootTimer < MAX_SHOOT_TIME)
 		{
 			shootTimer += dt;
 		}
 
-		if (level == 1)
-		{
-			characterList[0]->Update(dt, screenbasedMap);
-			for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
+		characterList[0]->Update(dt, levelMaps[level - 1]);
+		/*for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
 			{
 				CTarget *t = (CTarget*)*it;
 				if (t->GetActive()) // Update target
@@ -624,7 +566,7 @@ void SceneText::Update(double dt)
 						e->Reset();
 					}
 				}
-			}
+			}*/
 
 			/*for (std::vector<CEnemySpawner*>::iterator it = enemySpawnerList_lvl1.begin(); it != enemySpawnerList_lvl1.end(); ++it)
 			{
@@ -635,7 +577,6 @@ void SceneText::Update(double dt)
 					e->Init(spawner->GetPos(), Vector2(2,2));
 				}
 			}*/
-		}
 		/*else if (level == 2)
 		{
 			characterList[0]->Update(dt, m_cMap);
@@ -679,14 +620,14 @@ void SceneText::Update(double dt)
 		}*/
 
 		// Update enemy list
-		for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+		/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 		{
 			CEnemy *e = (CEnemy*)*it;
 			if (e->GetActive())
 			{
 				if (level == 1)
 				{
-					e->Update(dt, screenbasedMap);
+					e->Update(dt, levelMaps);
 				}
 				else if (level == 2)
 				{
@@ -702,15 +643,15 @@ void SceneText::Update(double dt)
 				if (level == 1)
 				{
 					if (e->GetActive() &&
-						screenbasedMap->GetMapOffset().x + c->GetMinBound().x < e->GetMaxBound().x && screenbasedMap->GetMapOffset().x + c->GetMaxBound().x > e->GetMinBound().x &&
-						screenbasedMap->GetMapOffset().y + c->GetMinBound().y < e->GetMaxBound().y && screenbasedMap->GetMapOffset().y + c->GetMaxBound().y > e->GetMinBound().y) // Collide
+						levelMaps->GetMapOffset().x + c->GetMinBound().x < e->GetMaxBound().x && levelMaps->GetMapOffset().x + c->GetMaxBound().x > e->GetMinBound().x &&
+						levelMaps->GetMapOffset().y + c->GetMinBound().y < e->GetMaxBound().y && levelMaps->GetMapOffset().y + c->GetMaxBound().y > e->GetMinBound().y) // Collide
 					{
 						c->SetPos(Vector2(100,750));
 						//--lives;
 						e->Reset();
 					}
 				}
-				/*else if (level == 2)
+				else if (level == 2)
 				{
 					if (e->GetActive() &&
 						m_cMap->GetMapOffset().x + c->GetMinBound().x < e->GetMaxBound().x && m_cMap->GetMapOffset().x + c->GetMaxBound().x > e->GetMinBound().x &&
@@ -720,9 +661,9 @@ void SceneText::Update(double dt)
 						--lives;
 						e->Reset();
 					}
-				}*/
+				}
 			}
-		}
+		}*/
 
 		for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
 		{
@@ -733,7 +674,7 @@ void SceneText::Update(double dt)
 			}
 
 			// Projectile-Target collision check
-			if (level == 1) // Using level 1 targetList
+			/*if (level == 1) // Using level 1 targetList
 			{
 				for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
 				{
@@ -741,8 +682,8 @@ void SceneText::Update(double dt)
 
 					// Collision check
 					if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && t->GetOpen() && p->GetActive() &&
-						t->GetMinBound().x < screenbasedMap->GetMapOffset().x + p->GetMaxBound().x && t->GetMaxBound().x > screenbasedMap->GetMapOffset().x + p->GetMinBound().x &&
-						t->GetMinBound().y < screenbasedMap->GetMapOffset().y + p->GetMaxBound().y && t->GetMaxBound().y > screenbasedMap->GetMapOffset().y + p->GetMinBound().y) // Collide
+						t->GetMinBound().x < levelMaps->GetMapOffset().x + p->GetMaxBound().x && t->GetMaxBound().x > levelMaps->GetMapOffset().x + p->GetMinBound().x &&
+						t->GetMinBound().y < levelMaps->GetMapOffset().y + p->GetMaxBound().y && t->GetMaxBound().y > levelMaps->GetMapOffset().y + p->GetMinBound().y) // Collide
 					{
 						t->SetType(CTarget::TARGET_DESTROY);
 						//--extraLives;
@@ -750,7 +691,7 @@ void SceneText::Update(double dt)
 					}
 				}
 			}
-			/*else if (level == 2) // Using level 2 targetList
+			else if (level == 2) // Using level 2 targetList
 			{
 				for (std::vector<CTarget*>::iterator it = targetList_lvl2.begin(); it != targetList_lvl2.end(); ++it)
 				{
@@ -804,20 +745,20 @@ void SceneText::Update(double dt)
 			}*/
 
 			// Projectile-Enemy collision check
-			for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+			/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 			{
 				CEnemy *e = (CEnemy*)*it;
 				if (level == 1)
 				{
 					if (e->GetActive() && p->GetActive() &&
-						screenbasedMap->GetMapOffset().x + p->GetMinBound().x < e->GetMaxBound().x && screenbasedMap->GetMapOffset().x + p->GetMaxBound().x > e->GetMinBound().x &&
-						screenbasedMap->GetMapOffset().y + p->GetMinBound().y < e->GetMaxBound().y && screenbasedMap->GetMapOffset().y + p->GetMaxBound().y > e->GetMinBound().y) // Collide
+						levelMaps->GetMapOffset().x + p->GetMinBound().x < e->GetMaxBound().x && levelMaps->GetMapOffset().x + p->GetMaxBound().x > e->GetMinBound().x &&
+						levelMaps->GetMapOffset().y + p->GetMinBound().y < e->GetMaxBound().y && levelMaps->GetMapOffset().y + p->GetMaxBound().y > e->GetMinBound().y) // Collide
 					{
 						e->Reset();
 						p->Reset();
 					}
 				}
-				/*else if (level == 2)
+				else if (level == 2)
 				{
 					if (e->GetActive() && p->GetActive() &&
 						m_cMap->GetMapOffset().x + p->GetMinBound().x < e->GetMaxBound().x && m_cMap->GetMapOffset().x + p->GetMaxBound().x > e->GetMinBound().x &&
@@ -826,8 +767,15 @@ void SceneText::Update(double dt)
 						e->Reset();
 						p->Reset();
 					}
-				}*/
-			}
+				}
+			}*/
+		}
+
+		// Update enemy list based on level
+		for (std::vector<CEnemyIn2D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+		{
+			CEnemyIn2D *e = (CEnemyIn2D*)*it;
+			e->Update(levelMaps[level - 1], dt);
 		}
 
 		camera.Update(dt);
@@ -1065,7 +1013,7 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, const bool enableLight, const float s
 void SceneText::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, float y, float rotate)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, m_cMap->GetScreen_Width(), 0, m_cMap->GetScreen_Height(), -10, 10);
+	ortho.SetToOrtho(0, levelMaps[level - 1]->GetScreen_Width(), 0, levelMaps[level - 1]->GetScreen_Height(), -10, 10);
 	projectionStack.PushMatrix();
 		projectionStack.LoadMatrix(ortho);
 		viewStack.PushMatrix();
@@ -1219,14 +1167,14 @@ void SceneText::RenderSkybox()
 
 void SceneText::RenderBackGround_Mountain()
 {
-	Render2DMesh(meshList[GEO_BACKGROUND_MOUNTAIN], false, 1.f, -m_cMap->GetMapOffset().x * 0.2f, m_cMap->GetMapOffset().y);
-	Render2DMesh(meshList[GEO_BACKGROUND_MOUNTAIN], false, 1.f, (-m_cMap->GetMapOffset().x * 0.2f) + m_cMap->GetScreen_Width(), m_cMap->GetMapOffset().y);
+	Render2DMesh(meshList[GEO_BACKGROUND_MOUNTAIN], false, 1.f, -levelMaps[level - 1]->GetMapOffset().x * 0.2f, levelMaps[level - 1]->GetMapOffset().y);
+	Render2DMesh(meshList[GEO_BACKGROUND_MOUNTAIN], false, 1.f, (-levelMaps[level - 1]->GetMapOffset().x * 0.2f) + levelMaps[level - 1]->GetScreen_Width(), levelMaps[level - 1]->GetMapOffset().y);
 }
 
 void SceneText::RenderBackGround_Stars()
 {
-	Render2DMesh(meshList[GEO_BACKGROUND_STARS], false, 1.f, -m_cMap->GetMapOffset().x * 0.5f, m_cMap->GetMapOffset().y);
-	Render2DMesh(meshList[GEO_BACKGROUND_STARS], false, 1.f, (-m_cMap->GetMapOffset().x * 0.5f) + m_cMap->GetScreen_Width(), m_cMap->GetMapOffset().y);
+	Render2DMesh(meshList[GEO_BACKGROUND_STARS], false, 1.f, -levelMaps[level - 1]->GetMapOffset().x * 0.5f, levelMaps[level - 1]->GetMapOffset().y);
+	Render2DMesh(meshList[GEO_BACKGROUND_STARS], false, 1.f, (-levelMaps[level - 1]->GetMapOffset().x * 0.5f) + levelMaps[level - 1]->GetScreen_Width(), levelMaps[level - 1]->GetMapOffset().y);
 }
 
 void SceneText::Render()
@@ -1258,15 +1206,9 @@ void SceneText::Render()
 	// Render tile map
 	if (level == 1)
 	{
-		RenderTileMap(screenbasedMap);
-		RenderTargetList(targetList_lvl1, screenbasedMap);
-		RenderEnemyList(screenbasedMap);
-	}
-	else
-	{
-		RenderTileMap(m_cMap);
-		RenderTargetList(targetList_lvl2, m_cMap);
-		RenderEnemyList(m_cMap);
+		RenderTileMap(levelMaps[level - 1]);
+		//RenderTargetList(targetList_lvl1, levelMaps);
+		RenderEnemyList();
 	}
 
 	// Render character
@@ -1311,14 +1253,22 @@ void SceneText::Render()
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneText::RenderEnemyList(CMap *map)
+void SceneText::RenderEnemyList()
 {
-	for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
 		CEnemy *e = (CEnemy*)*it;
 		if (e->GetActive())
 		{
 			Render2DMesh(e->GetCurrentAnimation(), false, e->GetScale().x * map->GetTileSize(), e->GetPos().x - map->GetMapOffset().x, e->GetPos().y - map->GetMapOffset().y);
+		}
+	}*/
+	for (std::vector<CEnemyIn2D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+		CEnemyIn2D *e = (CEnemyIn2D*)*it;
+		if (e->GetActive())
+		{
+			Render2DMesh(e->GetMesh(), false, 1.f, e->GetPos().x, e->GetPos().y);
 		}
 	}
 }
@@ -1332,11 +1282,11 @@ void SceneText::RenderTargetList(std::vector<CTarget*> targetList, CMap *map)
 		{
 			if (t->GetOpen())
 			{
-				Render2DMesh(t->GetSA(), false, m_cMap->GetTileSize(), t->GetPos().x - map->GetMapOffset().x, t->GetPos().y - map->GetMapOffset().y);
+				Render2DMesh(t->GetSA(), false, map->GetTileSize(), t->GetPos().x - map->GetMapOffset().x, t->GetPos().y - map->GetMapOffset().y);
 			}
 			else
 			{
-				Render2DMesh(meshList[GEO_TARGET_CLOSE], false, m_cMap->GetTileSize(), t->GetPos().x - map->GetMapOffset().x, t->GetPos().y - map->GetMapOffset().y);
+				Render2DMesh(meshList[GEO_TARGET_CLOSE], false, map->GetTileSize(), t->GetPos().x - map->GetMapOffset().x, t->GetPos().y - map->GetMapOffset().y);
 			}
 		}
 	}
@@ -1375,10 +1325,10 @@ void SceneText::Exit()
 		delete m_cMap;
 	}
 
-	if (m_cRearMap)
+	/*if (m_cRearMap)
 	{
 		delete m_cRearMap;
-	}
+	}*/
 
 	if (m_cMinimap)
 	{
@@ -1396,7 +1346,7 @@ void SceneText::Exit()
 		}
 	}
 
-	for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
+	/*for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
 	{
 		CTarget *t = (CTarget*)*it;
 		if (t)
@@ -1414,9 +1364,9 @@ void SceneText::Exit()
 			delete t;
 			t = NULL;
 		}
-	}
+	}*/
 
-	for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
 		CEnemy *e = (CEnemy*)*it;
 		if (e)
@@ -1444,7 +1394,7 @@ void SceneText::Exit()
 			delete spawner;
 			spawner = NULL;
 		}
-	}
+	}*/
 
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
@@ -1502,7 +1452,7 @@ void SceneText::RenderTileMap(CMap *map)
 	}
 }
 
-void SceneText::RenderRearTileMap()
+/*void SceneText::RenderRearTileMap()
 {
 	//m_cRearMap->GetMapOffset().x = (int)(m_cMap->GetMapOffset().x * 0.5);
 	m_cRearMap->SetMapOffset( Vector2((int)(m_cMap->GetMapOffset().x * 0.5) , m_cRearMap->GetMapFineOffset().y) );
@@ -1537,11 +1487,11 @@ void SceneText::RenderRearTileMap()
 			}
 		}
 	}
-}
+}*/
 
 void SceneText::RenderCharacter()
 {
 	// Hero animation
 	CCharacter *c = characterList[0];
-	Render2DMesh(c->GetCurrentAnimation(), false, m_cMap->GetTileSize() * c->GetScale().x, c->GetPos().x, c->GetPos().y);
+	Render2DMesh(c->GetSprite(), false, levelMaps[level - 1]->GetTileSize() * c->GetScale().x, c->GetPos().x, c->GetPos().y);
 }

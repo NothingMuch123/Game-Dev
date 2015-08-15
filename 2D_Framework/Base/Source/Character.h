@@ -95,8 +95,8 @@ public:
 
 	void SetActions(const CHARACTER_ACTION action, const bool status);
 
-	void SetAnimation(CHARACTER_ANIMATION type, SpriteAnimation* sa);
-	SpriteAnimation* GetCurrentAnimation();
+	void SetAnimation(CHARACTER_ANIMATION type, Animation* a);
+	SpriteAnimation* GetSprite();
 
 	void CheckReset(CHARACTER_ANIMATION type);
 
@@ -105,6 +105,8 @@ public:
 	bool GetAction(CHARACTER_ACTION action);
 
 	CHARACTER_ANIMATION GetCurrentAnim();
+
+	void SetSprite(SpriteAnimation* sprite);
 
 	Vector2 GetMinBound();
 	Vector2 GetMaxBound();
@@ -121,7 +123,8 @@ protected:
 	float fallingThroughDist;
 	
 	// Sprite animation
-	SpriteAnimation* animationList[NUM_ANIM];
+	SpriteAnimation *sprite;
+	Animation* animationList[NUM_ANIM];
 	CHARACTER_ANIMATION currentAnim;
 };
 

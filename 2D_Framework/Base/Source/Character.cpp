@@ -214,7 +214,7 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 	}
 
 	// Update animation
-	animationList[currentAnim]->Update(dt);
+	sprite->Update(dt);
 
 	if (fallingThroughDist >= m_cMap->GetTileSize()  * scale.x)
 	{
@@ -376,14 +376,7 @@ void CCharacter::MoveLeftRight(const bool mode, const float timeDiff, CMap *map)
 	if (mode)
 	{
 		Vector2 tilePos( (map->GetMapOffset().x + (pos.x - (current_speed * timeDiff))) / map->GetTileSize() , map->GetNumOfTiles_Height() - (int) (ceil( pos.y / map->GetTileSize()) + 1) ); // New position if move
-		if (map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE || 
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_ENEMY_SPANWER ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_RED ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_LIGHT_BLUE ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_DARK_BLUE ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_GREEN ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_YELLOW ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_WHITE ||
+		if (map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE ||
 			(midAir_Up && map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_FLOATING) ||
 			(fallingThrough && map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_FLOATING)) // Check collision when walking left
 		{
@@ -395,13 +388,6 @@ void CCharacter::MoveLeftRight(const bool mode, const float timeDiff, CMap *map)
 	{
 		Vector2 tilePos( (int)ceil((float)(map->GetMapOffset().x + ((pos.x + map->GetTileSize() * (scale.x - 1)) + (current_speed * timeDiff))) / map->GetTileSize()) , map->GetNumOfTiles_Height() - ((int) ceil( pos.y / map->GetTileSize()) + 1) ); // New position if move
 		if (map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE || 
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_ENEMY_SPANWER ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_RED ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_LIGHT_BLUE ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_DARK_BLUE ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_GREEN ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_YELLOW ||
-			map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_TARGET_WHITE ||
 			(midAir_Up && map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_FLOATING) ||
 			(fallingThrough && map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_FLOATING)) // Check collision when walking right
 		{
@@ -512,14 +498,14 @@ void CCharacter::SetActions(const CHARACTER_ACTION action, const bool status)
 	actions[action] = status;
 }
 
-void CCharacter::SetAnimation(CHARACTER_ANIMATION type, SpriteAnimation* sa)
+void CCharacter::SetAnimation(CHARACTER_ANIMATION type, Animation* a)
 {
-	animationList[type] = sa;
+	animationList[type] = a;
 }
 
-SpriteAnimation* CCharacter::GetCurrentAnimation()
+SpriteAnimation* CCharacter::GetSprite()
 {
-	return animationList[currentAnim];
+	return sprite;
 }
 
 void CCharacter::CheckReset(CHARACTER_ANIMATION type)
@@ -527,7 +513,8 @@ void CCharacter::CheckReset(CHARACTER_ANIMATION type)
 	if (currentAnim != type)
 	{
 		currentAnim = type;
-		animationList[currentAnim]->Reset();
+		sprite->m_anim = animationList[currentAnim];
+		sprite->Reset();
 	}
 }
 
@@ -555,4 +542,9 @@ Vector2 CCharacter::GetMinBound()
 Vector2 CCharacter::GetMaxBound()
 {
 	return maxBound;
+}
+
+void CCharacter::SetSprite(SpriteAnimation *sprite)
+{
+	this->sprite = sprite;
 }
