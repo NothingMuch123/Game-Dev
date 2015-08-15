@@ -17,6 +17,7 @@
 #include "EnemySpawner.h"
 #include "EnemyIn2D.h"
 #include "Strategy_Patrol.h"
+#include "Collidable.h"
 
 class SceneText : public Scene
 {
@@ -191,8 +192,11 @@ private:
 	//void RenderRearTileMap();
 
 	// Projectile
-	std::vector<CProjectile*> projList;
+	//std::vector<CProjectile*> projList;
 	float shootTimer;
+
+	// Collidables
+	std::vector<Collidable*> collideList;
 
 	// Game details
 	int level;

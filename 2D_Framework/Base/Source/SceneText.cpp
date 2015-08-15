@@ -13,7 +13,6 @@ float SceneText::MAX_SHOOT_TIME = 0.3f;
 SceneText::SceneText()
 	: m_cMinimap(NULL)
 	, m_cMap(NULL)
-	, projList(NULL)
 	, shootTimer(MAX_SHOOT_TIME)
 	, enemyList(NULL)
 {
@@ -289,26 +288,29 @@ void SceneText::InitProjList()
 	for (int i = 0; i < 50; ++i)
 	{
 		CProjectile *p = new CProjectile();
-		projList.push_back(p);
+		collideList.push_back(p);
 	}
 }
 
 CProjectile* SceneText::FetchProj()
 {
-	for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
+	for (std::vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
 	{
-		CProjectile *p = (CProjectile*)*it;
-		if (!p->GetActive())
+		CProjectile *p = dynamic_cast<CProjectile*>(*it);
+		if (p != NULL && !p->GetActive())
 		{
 			return p;
 		}
 	}
-	for (int i = 0; i < 10; ++i)
+
+	static const int BATCH_MAKE = 10;
+
+	for (int i = 0; i < BATCH_MAKE; ++i)
 	{
 		CProjectile *p = new CProjectile();
-		projList.push_back(p);
+		collideList.push_back(p);
 	}
-	return projList.back();
+	return dynamic_cast<CProjectile*>(collideList.back());
 }
 
 void SceneText::InitCharacter()
@@ -669,10 +671,10 @@ void SceneText::Update(double dt)
 			}
 		}*/
 
-		for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
+		for (std::vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
 		{
-			CProjectile *p = (CProjectile*)*it;
-			if (p->GetActive()) // Update projectile
+			CProjectile *p = dynamic_cast<CProjectile*>(*it);
+			if (p != NULL && p->GetActive()) // Update projectile
 			{
 				p->Update(dt, m_cMap);
 			}
@@ -1298,10 +1300,10 @@ void SceneText::RenderTargetList(std::vector<CTarget*> targetList, CMap *map)
 
 void SceneText::RenderProjList()
 {
-	for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
+	for (std::vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
 	{
-		CProjectile *p = (CProjectile*)*it;
-		if (p->GetActive())
+		CProjectile *p = dynamic_cast<CProjectile*>(*it);
+		if (p != NULL && p->GetActive())
 		{
 			switch (p->GetType())
 			{
@@ -1340,13 +1342,12 @@ void SceneText::Exit()
 		m_cMinimap = NULL;
 	}
 
-	for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
+	while (collideList.size() > 0)
 	{
-		CProjectile *p = (CProjectile*)*it;
-		if (p)
+		if (collideList.back() != NULL)
 		{
-			delete p;
-			p = NULL;
+			delete collideList.back();
+			collideList.pop_back();
 		}
 	}
 
