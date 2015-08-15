@@ -3,7 +3,7 @@
 
 CStrategy_Patrol::CStrategy_Patrol(void)
 {
-	this->FacingNormal.Set(1, 0 ,0);
+	this->FacingNormal.Set(1, 0);
 	this->ChangeFacingTimer = 1.f;
 	this->ChangeFacing = false;
 }
@@ -13,7 +13,7 @@ CStrategy_Patrol::~CStrategy_Patrol(void)
 {
 }
 
-void CStrategy_Patrol::Update(CMap *m_cMap, Vector3* Position, double dt)
+void CStrategy_Patrol::Update(CMap *m_cMap, Vector2* Position, double dt)
 {
 	// m_cMap is a map containing all the bound location
 
@@ -30,14 +30,14 @@ void CStrategy_Patrol::Update(CMap *m_cMap, Vector3* Position, double dt)
 	/*int checkPosition_X = (int) ((m_cMap->GetMapOffset().x + Position->x) / m_cMap->GetTileSize());
 	int checkPosition_Y = m_cMap->GetNumOfTiles_Height() - (int) ceil( (float)(Position->y) / m_cMap->GetTileSize());*/
 	
-	Vector3 Velocity = FacingNormal * 200;
+	Vector2 Velocity = FacingNormal * 200;
 	//Check going left or right
 	if(FacingNormal.x > 0)
 	{
 		Vector2 tilePos( (int)ceil((float)(m_cMap->GetMapOffset().x + ((Position->x + m_cMap->GetTileSize()) + (Velocity.x * dt))) / m_cMap->GetTileSize()) , m_cMap->GetNumOfTiles_Height() - ((int) ceil( Position->y / m_cMap->GetTileSize()) + 1) ); // New position if move
 		if(m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE || m_cMap->theScreenMap[tilePos.y][tilePos.x+1] == CMap::TILE_NONE)
 		{
-			*Position += Velocity * dt;
+			*Position =  *Position + Velocity * dt;
 		}
 	}
 	else if(FacingNormal.x < 0)
@@ -45,7 +45,7 @@ void CStrategy_Patrol::Update(CMap *m_cMap, Vector3* Position, double dt)
 		Vector2 tilePos( (m_cMap->GetMapOffset().x + (Position->x - (Velocity.x * dt))) / m_cMap->GetTileSize() , m_cMap->GetNumOfTiles_Height() - (int) (ceil( Position->y / m_cMap->GetTileSize()) + 1) ); // New position if move
 		if(m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE || m_cMap->theScreenMap[tilePos.y][tilePos.x+1] == CMap::TILE_NONE)
 		{
-			*Position += Velocity * dt;
+			*Position = *Position + Velocity * dt;
 		}
 	}
 }

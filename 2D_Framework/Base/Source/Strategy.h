@@ -9,7 +9,7 @@ class CStrategy
 public:
 	CStrategy(void);
 	~CStrategy(void);
-	virtual void Update(CMap*, Vector3*, double)=0;
+	virtual void Update(CMap*, Vector2*, double)=0;
 };
 
 #endif

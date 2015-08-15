@@ -14,6 +14,9 @@ class Collidable
 	virtual void CalcBound();
 	virtual void Reset();
 
+	void SetActive(bool _active);
+	void SetPos(Vector2 _pos);
+
 	bool GetActive();
 	Vector2 GetPos();
 	Vector2 GetMinBound();

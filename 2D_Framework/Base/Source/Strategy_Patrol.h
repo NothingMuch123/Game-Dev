@@ -10,11 +10,11 @@ public:
 	CStrategy_Patrol(void);
 	~CStrategy_Patrol(void);
 
-	virtual void Update(CMap *m_cMap, Vector3* Position, double dt);
+	virtual void Update(CMap *m_cMap, Vector2* Position, double dt);
 	
 private:
 	// The Destination is the position of the target
-	Vector3 FacingNormal;
+	Vector2 FacingNormal;
 	float ChangeFacingTimer;
 	bool ChangeFacing;
 };

@@ -39,6 +39,16 @@ void Collidable::Reset()
 	this->pos = this->minBound = this->maxBound = Vector2(0, 0);
 }
 
+void Collidable::SetActive(bool _active)
+{
+	active = _active;
+}
+
+void Collidable::SetPos(Vector2 _pos)
+{
+	pos = _pos;
+}
+
 bool Collidable::GetActive()
 {
 	return this->active;

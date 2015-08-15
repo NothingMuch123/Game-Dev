@@ -238,7 +238,7 @@ void SceneText::Init()
 			if (levelMaps[0]->theScreenMap[row][col] == CMap::TILE_ENEMY_GROUND)
 			{
 				CEnemyIn2D *e = new CEnemyIn2D();
-				e->Init( Vector3((col) * levelMaps[0]->GetTileSize(), levelMaps[0]->GetScreen_Height() - (row + 1) * levelMaps[0]->GetTileSize()), 1, meshList[GEO_TILE_STONE], CEnemyIn2D::ENEMY_GROUND );
+				e->Init( Vector2((col) * levelMaps[0]->GetTileSize(), levelMaps[0]->GetScreen_Height() - (row + 1) * levelMaps[0]->GetTileSize()), 1, meshList[GEO_TILE_STONE], CEnemyIn2D::ENEMY_GROUND, m_cMap);
 				e->ChangeStrategy(new CStrategy_Patrol());
 				enemyList.push_back(e);
 			}

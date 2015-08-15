@@ -1,7 +1,7 @@
 #include "EnemyIn2D.h"
 
 
-CEnemyIn2D::CEnemyIn2D(void) : theStrategy(NULL)
+CEnemyIn2D::CEnemyIn2D(void) : theStrategy(NULL), Collidable()
 {
 }
 
@@ -16,19 +16,13 @@ CEnemyIn2D::~CEnemyIn2D(void)
 }
 
 // Initialise this class instance
-void CEnemyIn2D::Init(Vector3 NewPosition, int gameLevel, Mesh* newMesh, ENEMY_TYPE newType)
+void CEnemyIn2D::Init(Vector2 NewPosition, int gameLevel, Mesh* newMesh, ENEMY_TYPE newType, CMap* map)
 {
-	this->m_Position = NewPosition;
+	Collidable::Init(NewPosition, map, true);
+
 	this->m_currentLevel = gameLevel;
 	this->m_Mesh = newMesh;
 	this->m_Type = newType;
-	this->m_Active = true;
-}
-
-// Set position of the enemy
-void CEnemyIn2D::SetPos(Vector3 NewPosition)
-{
-	m_Position = NewPosition;
 }
 
 // Set Mesh of the enemy
@@ -37,22 +31,10 @@ void CEnemyIn2D::SetMesh(Mesh* newMesh)
 	this->m_Mesh = newMesh;
 }
 
-// Set Active
-void CEnemyIn2D::SetActive(bool newActive)
-{
-	this->m_Active = newActive;
-}
-
 // Set Enemy type
 void CEnemyIn2D::SetEnemyType(ENEMY_TYPE newType)
 {
 	this->m_Type = newType;
-}
-
-// Get position of the enemy
-Vector3 CEnemyIn2D::GetPos()
-{
-	return m_Position;
 }
 
 // Get gamelevel of the enemy	
@@ -68,7 +50,7 @@ void CEnemyIn2D::Update(CMap* m_cMap, double dt)
 {
 	if (theStrategy != NULL)
 	{
-		theStrategy->Update(m_cMap, &m_Position, dt);
+		theStrategy->Update(m_cMap, &pos, dt);
 	}
 }
 
@@ -105,12 +87,6 @@ Mesh* CEnemyIn2D::GetMesh()
 bool CEnemyIn2D::GetFacing()
 {
 	return m_FaceRight;
-}
-
-// Get Active
-bool CEnemyIn2D::GetActive()
-{
-	return m_Active;
 }
 
 // Get Enemy type

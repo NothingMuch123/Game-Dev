@@ -2,9 +2,11 @@
 #define ENEMY_IN_2D_H
 
 #include "Strategy.h"
-#include "Mesh.h"
 
-class CEnemyIn2D
+#include "Mesh.h"
+#include "Collidable.h"
+
+class CEnemyIn2D : public Collidable
 {
 public:
 	CEnemyIn2D(void);
@@ -20,17 +22,11 @@ public:
 	};
 
 	// Initialise this class instance
-	void Init(Vector3 NewPosition, int gameLevel, Mesh* newMesh, ENEMY_TYPE newType);
-	// Set position of the enemy
-	void SetPos(Vector3 NewPos);
+	void Init(Vector2 NewPosition, int gameLevel, Mesh* newMesh, ENEMY_TYPE newType, CMap* map);
 	// Set Mesh of the enemy
 	void SetMesh(Mesh* newMesh);
-	// Set Active
-	void SetActive(bool newActive);
 	// Set Enemy type
 	void SetEnemyType(ENEMY_TYPE newtype);
-	// Get position of the enemy
-	Vector3 GetPos();
 	// Get gamelevel of the enemy
 	int GetCurrentLevel();
 	// ENEMY Update
@@ -43,14 +39,10 @@ public:
 	Mesh* GetMesh();
 	// Get Facing
 	bool GetFacing();
-	// Get Active
-	bool GetActive();
 	// Get Enemy type
 	ENEMY_TYPE GetEnemyType();
 
 private:
-	// Enemy's information
-	Vector3 m_Position;
 	// Enemy's gamelevel
 	int m_currentLevel;
 	// The Destination is the position of the Hero
@@ -59,8 +51,6 @@ private:
 	Mesh* m_Mesh;
 	// Enemy's Facing;
 	bool m_FaceRight;
-	// Active
-	bool m_Active;
 	// Enemy type
 	ENEMY_TYPE m_Type;
 };
