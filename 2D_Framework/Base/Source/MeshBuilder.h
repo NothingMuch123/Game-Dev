@@ -3,6 +3,7 @@
 
 #include "Mesh.h"
 #include "Vertex.h"
+#include "SpriteAnimation.h"
 
 /******************************************************************************/
 /*!
@@ -26,6 +27,8 @@ public:
 	static Mesh* GenerateMinimapBorder(const std::string &meshName, Color color, float length = 1.f);
 	static Mesh* GenerateMinimapAvatar(const std::string &meshName, Color color, float length = 1.f);
 	static Mesh* Generate2DMesh(const std::string &meshName, Color color, int pos_x, int pos_y, int width, int height);
+	static SpriteAnimation* GenerateSpriteAnimation(const std::string & meshName, unsigned numRow, unsigned numCol);
+	static Mesh* GenerateMeshFromSheet(const std::string &meshName, Color color, unsigned numRow = 1, unsigned numCol = 1, unsigned rowFrame = 1, unsigned colFrame = 1, float length = 1.f);
 };
 
 #endif

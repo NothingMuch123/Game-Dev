@@ -17,6 +17,7 @@
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\EnemySpawner.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -24,17 +25,11 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minimap.cpp" />
-    <ClCompile Include="Source\Scene1.cpp" />
-    <ClCompile Include="Source\Scene2.cpp" />
-    <ClCompile Include="Source\Scene3.cpp" />
-    <ClCompile Include="Source\Scene4.cpp" />
-    <ClCompile Include="Source\Scene5.cpp" />
-    <ClCompile Include="Source\SceneLight.cpp" />
-    <ClCompile Include="Source\SceneLight2.cpp" />
-    <ClCompile Include="Source\SceneSkybox.cpp" />
+    <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
-    <ClCompile Include="Source\SceneTexture.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SpriteAnimation.cpp" />
+    <ClCompile Include="Source\Target.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +39,7 @@
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Character.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\EnemySpawner.h" />
     <ClInclude Include="Source\Geometry.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
@@ -53,18 +49,12 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Minimap.h" />
+    <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\Scene1.h" />
-    <ClInclude Include="Source\Scene2.h" />
-    <ClInclude Include="Source\Scene3.h" />
-    <ClInclude Include="Source\Scene4.h" />
-    <ClInclude Include="Source\Scene5.h" />
-    <ClInclude Include="Source\SceneLight.h" />
-    <ClInclude Include="Source\SceneLight2.h" />
-    <ClInclude Include="Source\SceneSkybox.h" />
     <ClInclude Include="Source\SceneText.h" />
-    <ClInclude Include="Source\SceneTexture.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\SpriteAnimation.h" />
+    <ClInclude Include="Source\Target.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>

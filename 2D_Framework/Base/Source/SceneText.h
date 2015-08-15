@@ -10,9 +10,15 @@
 #include "Minimap.h"
 #include "Map.h"
 #include "Vector2.h"
+#include "Character.h"
+#include "Projectile.h"
+#include "Target.h"
+#include "Enemy.h"
+#include "EnemySpawner.h"
 
 class SceneText : public Scene
 {
+	static float MAX_SHOOT_TIME;
 	enum UNIFORM_TYPE
 	{
 		U_MVP = 0,
@@ -78,19 +84,29 @@ class SceneText : public Scene
 		GEO_BACK,
 		GEO_GRASS_DARKGREEN,
 		GEO_GRASS_LIGHTGREEN,
-		GEO_BACKGROUND,
+		GEO_BACKGROUND_MAIN,
+		GEO_BACKGROUND_MOUNTAIN,
+		GEO_BACKGROUND_STARS,
 		GEO_TILEGROUND,
 		GEO_TILETREE,
 		GEO_TILESTRUCTURE,
 		GEO_TILEHERO,
 		GEO_OBJECT,
 		GEO_TEXT,
+		GEO_LIVE,
 
-		// Hero animation frames
-		GEO_TILEHERO_FRAME0,
-		GEO_TILEHERO_FRAME1,
-		GEO_TILEHERO_FRAME2,
-		GEO_TILEHERO_FRAME3,
+		// Projectile
+		GEO_BULLET,
+
+		// Tile
+		GEO_TILE_DIRT,
+		GEO_TILE_GRASS,
+		GEO_TILE_STONE,
+		GEO_TILE_SLAB,
+		GEO_TILE_FLOATING,
+
+		// Target
+		GEO_TARGET_CLOSE,
 
 		NUM_GEOMETRY,
 	};
@@ -100,11 +116,10 @@ public:
 	~SceneText();
 
 	virtual void Init();
+	virtual void InitCharacter();
 	virtual void Update(double dt);
-	// Update Camera status
-	virtual void UpdateCameraStatus(const unsigned char key, const bool status = true);
-	// Update Weapon status
-	virtual void UpdateWeaponStatus(const unsigned char key);
+	virtual void UpdateCameraStatus(const unsigned char key, const bool status = true); // Update Camera status
+	virtual void UpdateCharacterStatus(const CCharacter::CHARACTER_ACTION action, const bool status = true); // Update Character status
 	virtual void Render();
 	virtual void Exit();
 
@@ -114,13 +129,19 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderGround();
 	void RenderSkybox();
-	void RenderBackground();
-	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size=1.0f, const float x=0.0f, const float y=0.0f, const bool rotate=false);
+	void RenderBackGround_Mountain();
+	void RenderBackGround_Stars();
+	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size=1.0f, const float x=0.0f, const float y=0.0f, const float rotate=0.f);
 
-	void HeroUpdate(const double dt);
-	void HeroJump();
-	void HeroMoveUpDown(const bool mode, const float timeDiff);
-	void HeroMoveLeftRight(const bool mode, const float timeDiff);
+	void InitProjList();
+	void RenderProjList();
+	CProjectile* FetchProj();
+
+	void InitEnemyList();
+	void RenderEnemyList(CMap *map);
+	CEnemy* FetchEnemy();
+
+	void RenderTargetList(std::vector<CTarget*> targetList, CMap *map);
 
 	enum WEAPON_ACTION
 	{
@@ -129,15 +150,6 @@ public:
 		WA_RELOAD,
 		WA_CHANGEWEAPON,
 		WA_TOTAL,
-	};
-
-	enum TILE_TYPE
-	{
-		TILE_NONE,
-		TILE_GROUND,
-		TILE_TREE,
-		TILE_HERO,
-		NUM_TILE,
 	};
 
 private:
@@ -165,29 +177,38 @@ private:
 
 	// Handle to the tilemaps
 	CMap* m_cMap;
-	void RenderTileMap();
+	void RenderTileMap(CMap *map);
 
-	// Hero information
-	Vector2 HeroPosition;
-	bool hero_inMidAir_Up, hero_inMidAir_Down;
-	int jumpspeed;
-	bool heroAnimationInvert;
-	int heroAnimationCounter;
+	// Handle to screen-based map
+	CMap *screenbasedMap;
 
-	// Constrain position of hero within the border
-	void ConstrainHero(const int leftBorder, const int rightBorder, const int topBorder, const int bottomBorder, float timeDiff);
-
-	// Codes for scolling
-	/*Vector2 mapOffset;
-	Vector2 tileOffset;
-	Vector2 mapFineOffset;*/
+	// Character information
+	std::vector<CCharacter*> characterList;
+	void RenderCharacter();
 
 	// Codes for parallax scrolling
 	CMap *m_cRearMap;
 	void RenderRearTileMap();
-	/*Vector2 rearWallOffset;
-	Vector2 rearWallTileOffset;
-	Vector2 rearWallFineOffset;*/
+
+	// Projectile
+	std::vector<CProjectile*> projList;
+	float shootTimer;
+
+	// Game details
+	int level;
+	float score;
+
+	// Target
+	std::vector<CTarget*> targetList_lvl1, targetList_lvl2;
+
+	// Enemy
+	std::vector<CEnemy*> enemyList;
+	std::vector<CEnemySpawner*> enemySpawnerList_lvl1, enemySpawnerList_lvl2;
+
+	// Game data
+	/*bool gameEnded;
+	float levelTime;*/
+	int lives;
 };
 
 #endif

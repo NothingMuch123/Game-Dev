@@ -5,6 +5,8 @@
 #include <string>
 #include <sstream>
 #include "Vector2.h"
+#include "Target.h"
+#include "EnemySpawner.h"
 
 using namespace std;
 
@@ -14,17 +16,32 @@ public:
 	enum TILE_TYPE
 	{
 		TILE_NONE,
-		TILE_GROUND,
-		TILE_TREE,
-		TILE_HERO,
+
+		// Normal tiles
+		TILE_DIRT,
+		TILE_GRASS,
+		TILE_STONE,
+		TILE_SLAB,
+		TILE_FLOATING,
+
+		// Target tiles with sprite
+		TILE_TARGET_RED,
+		TILE_TARGET_LIGHT_BLUE,
+		TILE_TARGET_DARK_BLUE,
+		TILE_TARGET_GREEN,
+		TILE_TARGET_YELLOW,
+		TILE_TARGET_WHITE,
+
+		// Enemy spawner
+		TILE_ENEMY_SPANWER,
 		NUM_TILE,
 	};
 
 	CMap(void);
 	~CMap(void);
 
-	void Init(const int theScreen_Height, const int theScreen_Width, const int theNumOfTiles_Height, const int theNumOfTiles_Width, const int theMap_Height, const int theMap_Width, const int theTileSize=25);
-	bool LoadMap(const string mapName);
+	void Init(const int theScreen_Height, const int theScreen_Width, const int theNumOfTiles_Height, const int theNumOfTiles_Width, const int theMap_Height, const int theMap_Width, const int theTileSize=32);
+	bool LoadMap(const string mapName, std::vector<CTarget*> &targetList, std::vector<CEnemySpawner*> &enemySpawnerList);
 	int GetNumOfTiles_Height(void);	// Get the number of tiles for height of screen
 	int GetNumOfTiles_Width(void); // Get the number of tiles for width of screen
 	int GetTileSize(void);
@@ -62,5 +79,5 @@ private:
 	Vector2 tileOffset;
 	Vector2 mapFineOffset;
 
-	bool LoadFile(const string mapName);
+	bool LoadFile(const string mapName, std::vector<CTarget*> &targetList, std::vector<CEnemySpawner*> &enemySpawnerList);
 };

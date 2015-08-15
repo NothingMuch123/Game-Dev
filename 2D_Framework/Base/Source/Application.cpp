@@ -11,17 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-#include "Scene1.h"
-#include "Scene2.h"
-#include "Scene3.h"
-#include "Scene4.h"
-#include "Scene5.h"
-#include "SceneLight.h"
-#include "SceneLight2.h"
-#include "SceneTexture.h"
-#include "SceneSkybox.h"
-
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -84,7 +73,7 @@ bool Application::GetMouseUpdate()
 
 	// Get the mouse button status
 	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		scene->UpdateWeaponStatus(scene->WA_FIRE);
+		//scene->UpdateWeaponStatus(scene->WA_FIRE);
 
     return false;
 }
@@ -93,27 +82,39 @@ bool Application::GetKeyboardUpdate()
 {
 	if (IsKeyPressed('A'))
 	{
-		scene->UpdateCameraStatus('a');
+		scene->UpdateCharacterStatus(CCharacter::CA_LEFT);
 	}
 	if (IsKeyPressed('D'))
 	{
-		scene->UpdateCameraStatus('d');
+		scene->UpdateCharacterStatus(CCharacter::CA_RIGHT);
 	}
 	if (IsKeyPressed('W'))
 	{
-		scene->UpdateCameraStatus('w');
-	}
-	else
-	{
-		scene->UpdateCameraStatus('w', false);
+		scene->UpdateCharacterStatus(CCharacter::CA_LOOK_UP);
 	}
 	if (IsKeyPressed('S'))
 	{
-		scene->UpdateCameraStatus('s');
+		scene->UpdateCharacterStatus(CCharacter::CA_LOOK_DOWN);
 	}
-	if (IsKeyPressed(32))
+	if (IsKeyPressed(' '))
 	{
-		scene->UpdateCameraStatus(32);
+		scene->UpdateCharacterStatus(CCharacter::CA_JUMP);
+	}
+	if (IsKeyPressed('J'))
+	{
+		scene->UpdateCharacterStatus(CCharacter::CA_SHOOT);
+	}
+	if (IsKeyPressed('K'))
+	{
+		scene->UpdateCharacterStatus(CCharacter::CA_LIE);
+	}
+	if (IsKeyPressed(VK_SHIFT))
+	{
+		scene->UpdateCharacterStatus(CCharacter::CA_RUN);
+	}
+	else
+	{
+		scene->UpdateCharacterStatus(CCharacter::CA_RUN, false);
 	}
     return true;
 }

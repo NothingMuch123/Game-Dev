@@ -40,9 +40,9 @@ void CMap::Init(const int theScreen_Height, const int theScreen_Width, const int
 		theScreenMap[i].resize(theNumOfTiles_MapWidth);
 }
 
-bool CMap::LoadMap(const string mapName)
+bool CMap::LoadMap(const string mapName, std::vector<CTarget*> &targetList, std::vector<CEnemySpawner*> &enemySpawnerList)
 {
-	if (LoadFile(mapName) == true)
+	if (LoadFile(mapName, targetList, enemySpawnerList) == true)
 	{
 		printf("Map (%s) has been successfully loaded!\n", mapName.c_str());
 		return true;
@@ -51,7 +51,7 @@ bool CMap::LoadMap(const string mapName)
 	return false;
 }
 
-bool CMap::LoadFile(const string mapName)
+bool CMap::LoadFile(const string mapName, std::vector<CTarget*> &targetList, std::vector<CEnemySpawner*> &enemySpawnerList)
 {
 	int theLineCounter = 0;
 	int theMaxNumOfColumns = 0;
@@ -71,33 +71,82 @@ bool CMap::LoadFile(const string mapName)
 			// If this line is not a comment line, then process it
 			if(!(aLineOfText.find("//*") == NULL) && aLineOfText != "")
 			{
-				if (theLineCounter == 0)
-				{
-					// This is the first line of the map data file
-					string token;
-					istringstream iss(aLineOfText);
-					while(getline(iss, token, ','))
-					{
-						// Count the number of columns
-						theMaxNumOfColumns = atoi(token.c_str());
-					}
-					if ( theMaxNumOfColumns != theNumOfTiles_MapWidth)
-						return false;
-				}
-				else
-				{
-					int theColumnCounter = 0;
+				int theColumnCounter = 0;
 
-					string token;
-					istringstream iss(aLineOfText);
-					while(getline(iss, token, ',') && (theColumnCounter<theNumOfTiles_MapWidth))
+				string token;
+				istringstream iss(aLineOfText);
+				while(getline(iss, token, ',') && (theColumnCounter<theNumOfTiles_MapWidth))
+				{
+					int tile = atoi(token.c_str());
+					theScreenMap[theLineCounter][theColumnCounter++] = tile;
+					static const float minTime = 1.f, maxTime = 3.f;
+					switch (tile)
 					{
-						theScreenMap[theLineCounter][theColumnCounter++] = atoi(token.c_str());
+					case TILE_TARGET_RED :
+						{
+							CTarget *t = new CTarget();
+							t->Init(CTarget::TARGET_RED, Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Vector2(1,1), Math::RandFloatMinMax(minTime, maxTime), false, true);
+							targetList.push_back(t);
+						}
+						break;
+					case TILE_TARGET_LIGHT_BLUE :
+						{
+							CTarget *t = new CTarget();
+							t->Init(CTarget::TARGET_LIGHT_BLUE, Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Vector2(1,1), Math::RandFloatMinMax(minTime, maxTime), false, true);
+							targetList.push_back(t);
+						}
+						break;
+					case TILE_TARGET_DARK_BLUE :
+						{
+							CTarget *t = new CTarget();
+							t->Init(CTarget::TARGET_DARK_BLUE, Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Vector2(1,1), Math::RandFloatMinMax(minTime, maxTime), false, true);
+							targetList.push_back(t);
+						}
+						break;
+					case TILE_TARGET_GREEN :
+						{
+							CTarget *t = new CTarget();
+							t->Init(CTarget::TARGET_GREEN, Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Vector2(1,1), Math::RandFloatMinMax(minTime, maxTime), false, true);
+							targetList.push_back(t);
+						}
+						break;
+					case TILE_TARGET_YELLOW :
+						{
+							CTarget *t = new CTarget();
+							t->Init(CTarget::TARGET_YELLOW, Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Vector2(1,1), Math::RandFloatMinMax(minTime, maxTime), false, true);
+							targetList.push_back(t);
+						}
+						break;
+					case TILE_TARGET_WHITE :
+						{
+							CTarget *t = new CTarget();
+							t->Init(CTarget::TARGET_WHITE, Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Vector2(1,1), Math::RandFloatMinMax(minTime, maxTime), false, true);
+							targetList.push_back(t);
+						}
+						break;
+					case TILE_ENEMY_SPANWER :
+						{
+							CEnemySpawner *spawner = new CEnemySpawner(Vector2((theColumnCounter - 1) * theTileSize, theScreen_Height - (theLineCounter + 1) * theTileSize), Math::RandFloatMinMax(1.f, 4.f));
+							enemySpawnerList.push_back(spawner);
+						}
+						break;
 					}
 				}
+				theLineCounter++;
 			}
-
-			theLineCounter++;
+			else
+			{
+				// This is the first line of the map data file
+				string token;
+				istringstream iss(aLineOfText);
+				while(getline(iss, token, ','))
+				{
+					// Count the number of columns
+					theMaxNumOfColumns = atoi(token.c_str());
+				}
+				if ( theMaxNumOfColumns != theNumOfTiles_MapWidth)
+					return false;
+			}
 		}
 	}
 	return true;
