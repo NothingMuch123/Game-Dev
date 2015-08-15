@@ -4,8 +4,8 @@ float CCharacter::WALK_SPEED = 250.f;
 float CCharacter::RUN_SPEED = 400.f;
 float CCharacter::GRAVITY = 1000.f;
 
-CCharacter::CCharacter(Vector2 pos, Vector2 scale, float jumpSpeed, bool midAir_Up, bool midAir_Down, bool dir) :	
-					pos(pos),
+CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, float jumpSpeed, bool midAir_Up, bool midAir_Down, bool dir) : Collidable(pos, true, map), Elemental()
+					,
 					scale(scale),
 					jumpSpeed(jumpSpeed),
 					midAir_Up(midAir_Up),
@@ -256,7 +256,7 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 		{ 
 			pos.y += jumpSpeed * dt;
 			jumpSpeed -= GRAVITY * dt;
-			CalcBound(m_cMap);
+			CalcBound();
 			if (jumpSpeed <= 0)
 			{
 				midAir_Up = false; 
@@ -297,7 +297,7 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 			{
 				pos.y = ((int) (pos.y / m_cMap->GetTileSize())) * m_cMap->GetTileSize();
 			}
-			CalcBound(m_cMap);
+			CalcBound();
 			if (fallingThrough)
 			{
 				if (fallingThroughDist >= m_cMap->GetTileSize())
@@ -319,7 +319,7 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 				fallingThroughDist += jumpSpeed * dt;
 			}
 			jumpSpeed += GRAVITY * dt;
-			CalcBound(m_cMap);
+			CalcBound();
 		}
 	}
 
@@ -435,17 +435,7 @@ void CCharacter::Constrain(float timeDiff, CMap *m_cMap)
 		pos.y = bottomBorder;
 	}
 	
-	CalcBound(m_cMap);
-}
-
-void CCharacter::SetPos(Vector2 pos)
-{
-	this->pos = pos;
-}
-
-Vector2 CCharacter::GetPos()
-{
-	return pos;
+	CalcBound();
 }
 
 Vector2 CCharacter::GetScale()
@@ -518,10 +508,10 @@ void CCharacter::CheckReset(CHARACTER_ANIMATION type)
 	}
 }
 
-void CCharacter::CalcBound(CMap *map)
+void CCharacter::CalcBound()
 {
 	minBound.Set(pos.x, pos.y);
-	maxBound.Set(pos.x + map->GetTileSize() * scale.x, pos.y + map->GetTileSize() * scale.y);
+	maxBound.Set(pos.x + tileSize * scale.x, pos.y + tileSize * scale.y);
 }
 
 bool CCharacter::GetAction(CHARACTER_ACTION action)
@@ -532,16 +522,6 @@ bool CCharacter::GetAction(CHARACTER_ACTION action)
 CCharacter::CHARACTER_ANIMATION CCharacter::GetCurrentAnim()
 {
 	return currentAnim;
-}
-
-Vector2 CCharacter::GetMinBound()
-{
-	return minBound;
-}
-
-Vector2 CCharacter::GetMaxBound()
-{
-	return maxBound;
 }
 
 void CCharacter::SetSprite(SpriteAnimation *sprite)

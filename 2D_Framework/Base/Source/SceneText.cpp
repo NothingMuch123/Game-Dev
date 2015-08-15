@@ -314,8 +314,8 @@ CProjectile* SceneText::FetchProj()
 void SceneText::InitCharacter()
 {
 	// Create player
-	CCharacter *c = new CCharacter(Vector2(100,750), Vector2(2,2));
-	c->CalcBound(levelMaps[level - 1]);
+	CCharacter *c = new CCharacter(Vector2(100,750), Vector2(2,2), levelMaps[level - 1]);
+	c->CalcBound();
 
 	SpriteAnimation *sa = MeshBuilder::GenerateSpriteAnimation("ANIM_FALL_LEFT", 7, 8);
 	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//player1_animations.tga");
@@ -428,6 +428,8 @@ void SceneText::InitCharacter()
 
 void SceneText::Update(double dt)
 {
+	#pragma region Debug Controls
+
 	if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
 	if(Application::IsKeyPressed('2'))
@@ -474,6 +476,8 @@ void SceneText::Update(double dt)
 	if(Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
+#pragma endregion
+	
 	/*if (lives <= 0)
 	{
 		gameEnded = true;

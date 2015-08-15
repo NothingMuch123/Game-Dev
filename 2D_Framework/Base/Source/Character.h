@@ -1,13 +1,15 @@
 #ifndef _CHARACTER_H
 #define _CHARACTER_H
 
+#include "Elemental.h"
+#include "Collidable.h"
+
 #include "Vector2.h"
 #include "Map.h"
 #include "SpriteAnimation.h"
 #include <iostream>
-#include "Elemental.h"
 
-class CCharacter : Elemental
+class CCharacter : public Elemental, public Collidable
 {
 public:
 	static float WALK_SPEED, RUN_SPEED, GRAVITY;
@@ -68,7 +70,7 @@ public:
 
 		NUM_ANIM,
 	};
-	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
+	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), CMap* map = NULL, float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
 	virtual ~CCharacter(void);
 
 	virtual void Update(const double dt, CMap *m_cMap);
@@ -76,9 +78,6 @@ public:
 	void MoveUpDown(const bool mode, const float timeDiff);
 	void MoveLeftRight(const bool mode, const float timeDiff, CMap *map);
 	void Constrain(float timeDiff, CMap *m_cMap);
-
-	void SetPos(Vector2 pos);
-	Vector2 GetPos();
 
 	Vector2 GetScale();
 
@@ -101,7 +100,7 @@ public:
 
 	void CheckReset(CHARACTER_ANIMATION type);
 
-	void CalcBound(CMap *map);
+	void CalcBound(void);
 
 	bool GetAction(CHARACTER_ACTION action);
 
@@ -109,11 +108,8 @@ public:
 
 	void SetSprite(SpriteAnimation* sprite);
 
-	Vector2 GetMinBound();
-	Vector2 GetMaxBound();
-
 protected:
-	Vector2 pos, scale; // Within screen size
+	Vector2 scale; // Within screen size
 	bool midAir_Up, midAir_Down;
 	float jumpSpeed;
 	bool actions[NUM_CA];
