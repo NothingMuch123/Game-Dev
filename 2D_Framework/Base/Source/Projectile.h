@@ -1,10 +1,12 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
+#include "Collidable.h"
+
 #include "Vector2.h"
 #include "Map.h"
 
-class CProjectile
+class CProjectile : public Collidable
 {
 public:
 	static float BULLET_SPEED;
@@ -19,19 +21,13 @@ public:
 
 	void Init(PROJ_TYPE type, Vector2 pos, Vector2 vel, CMap *map, bool active = true);
 	void Update(const float dt, CMap *map);
-	void CalcBound(CMap *map);
 	void Reset();
 
 	PROJ_TYPE GetType();
-	bool GetActive();
-	Vector2 GetPos();
 	Vector2 GetVel();
-	Vector2 GetMinBound();
-	Vector2 GetMaxBound();
 
 private:
-	Vector2 pos, vel, minBound, maxBound;
-	bool active;
+	Vector2 vel;
 	PROJ_TYPE type;
 };
 
