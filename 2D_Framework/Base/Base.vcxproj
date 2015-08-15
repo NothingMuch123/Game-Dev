@@ -26,6 +26,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Minimap.cpp" />
+    <ClCompile Include="Source\PowerUp.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -53,6 +54,7 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Minimap.h" />
+    <ClInclude Include="Source\PowerUp.h" />
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneText.h" />
