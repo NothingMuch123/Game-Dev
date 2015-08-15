@@ -1,5 +1,7 @@
 #include "Map.h"
 
+#include "PowerUp.h"
+
 CMap::CMap(void)
 : theScreen_Height(0)
 , theScreen_Width(0)
@@ -53,6 +55,9 @@ bool CMap::LoadMap(const string mapName)
 
 bool CMap::LoadFile(const string mapName)
 {
+	// Clear the spawn list for adding
+	spawnList.clear();
+
 	int theLineCounter = 0;
 	int theMaxNumOfColumns = 0;
 
@@ -130,6 +135,18 @@ bool CMap::LoadFile(const string mapName)
 							enemySpawnerList.push_back(spawner);
 						}
 						break;*/
+					case TILE_FIRE_POWER:
+						Vector2 pos(theColumnCounter * theTileSize, theScreen_Height - ((theLineCounter)* theTileSize));
+						spawnList.push_back(new PowerUp(pos, true, Elemental::FIRE_TYPE, this));
+						break;
+					case TILE_WATER_POWER:
+						Vector2 pos(theColumnCounter * theTileSize, theScreen_Height - ((theLineCounter)* theTileSize));
+						spawnList.push_back(new PowerUp(pos, true, Elemental::WATER_TYPE, this));
+						break;
+					case TILE_AIR_POWER:
+						Vector2 pos(theColumnCounter * theTileSize, theScreen_Height - ((theLineCounter)* theTileSize));
+						spawnList.push_back(new PowerUp(pos, true, Elemental::AIR_TYPE, this));
+						break;
 					}
 				}
 				theLineCounter++;
@@ -225,4 +242,9 @@ void CMap::SetMapFineOffset(Vector2 mapFineOffset)
 Vector2 CMap::GetMapFineOffset()
 {
 	return mapFineOffset;
+}
+
+vector<Collidable*> CMap::GetObjsToSpawn(void)
+{
+	return spawnList;
 }

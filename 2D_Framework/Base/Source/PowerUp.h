@@ -7,6 +7,18 @@
 class PowerUp : public Collidable, public Elemental
 {
 	public:
+		enum POWER_UP_TYPE
+		{
+			FIRE_TYPE,
+			WATER_TYPE,
+			AIR_TYPE,
+			NUM_POWER_UPS
+		};
+
+	private:
+		POWER_UP_TYPE powerType;
+
+	public:
 		PowerUp(Vector2 pos = Vector2(0, 0), bool active = false, ELEMENT_TYPE element = NORMAL_TYPE, CMap *map = NULL);
 		virtual ~PowerUp();
 

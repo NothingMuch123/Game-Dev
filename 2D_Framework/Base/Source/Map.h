@@ -7,6 +7,7 @@
 #include "Vector2.h"
 #include "Target.h"
 #include "EnemySpawner.h"
+#include "Collidable.h"
 
 using namespace std;
 
@@ -26,6 +27,11 @@ public:
 
 		// Enemy
 		TILE_ENEMY_GROUND,
+
+		// Power Ups
+		TILE_FIRE_POWER,
+		TILE_WATER_POWER,
+		TILE_AIR_POWER,
 
 		// Target tiles with sprite
 		/*TILE_TARGET_RED,
@@ -68,6 +74,9 @@ public:
 
 	vector<vector<int> > theScreenMap;
 
+	// For getting the spawns of some items
+	vector<Collidable*> GetObjsToSpawn(void);
+
 private:
 	int theScreen_Height;
 	int theScreen_Width;
@@ -83,4 +92,6 @@ private:
 	Vector2 mapFineOffset;
 
 	bool LoadFile(const string mapName);
+
+	vector<Collidable*> spawnList;
 };

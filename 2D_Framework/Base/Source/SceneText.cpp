@@ -7,6 +7,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include <sstream>
+#include "PowerUp.h"
 
 float SceneText::MAX_SHOOT_TIME = 0.3f;
 
@@ -1221,7 +1222,7 @@ void SceneText::Render()
 	RenderCharacter();
 
 	// Render projectile
-	RenderProjList();
+	RenderCollideList();
 
 	// Render lives
 	Render2DMesh(meshList[GEO_LIVE], false, 64.f, 0.f, 736.f);
@@ -1298,11 +1299,13 @@ void SceneText::RenderTargetList(std::vector<CTarget*> targetList, CMap *map)
 	}
 }
 
-void SceneText::RenderProjList()
+void SceneText::RenderCollideList()
 {
 	for (std::vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
 	{
 		CProjectile *p = dynamic_cast<CProjectile*>(*it);
+		PowerUp* pu = dynamic_cast<PowerUp*>(*it);
+
 		if (p != NULL && p->GetActive())
 		{
 			switch (p->GetType())
@@ -1313,6 +1316,11 @@ void SceneText::RenderProjList()
 				}
 				break;
 			}
+		}
+		else if (pu != NULL && pu->GetActive())
+		{
+			// TODO: Change sprite to legit sprite
+			Render2DMesh(meshList[GEO_BULLET], false, 1.f, p->GetPos().x, p->GetPos().y, 0.0f);
 		}
 	}
 }
