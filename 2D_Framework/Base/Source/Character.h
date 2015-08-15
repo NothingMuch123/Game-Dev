@@ -5,8 +5,9 @@
 #include "Map.h"
 #include "SpriteAnimation.h"
 #include <iostream>
+#include "Elemental.h"
 
-class CCharacter
+class CCharacter : Elemental
 {
 public:
 	static float WALK_SPEED, RUN_SPEED, GRAVITY;
