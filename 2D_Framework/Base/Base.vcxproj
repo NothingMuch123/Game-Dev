@@ -30,6 +30,7 @@
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\Skill.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\Strategy.cpp" />
     <ClCompile Include="Source\Strategy_Patrol.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Skill.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\Strategy.h" />
     <ClInclude Include="Source\Strategy_Patrol.h" />

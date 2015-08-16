@@ -1021,7 +1021,7 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, const bool enableLight, const float s
 
 }
 
-void SceneText::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, float y, float rotate)
+void SceneText::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, float y, float rotateY, float rotateZ)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, levelMaps[level - 1]->GetScreen_Width(), 0, levelMaps[level - 1]->GetScreen_Height(), -10, 10);
@@ -1033,8 +1033,8 @@ void SceneText::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, 
 				modelStack.LoadIdentity();
 				modelStack.Translate(x, y, 0);
 				modelStack.Scale(size, size, size);
-				if (rotate)
-					modelStack.Rotate(rotate, 0, 0, 1);
+				modelStack.Rotate(rotateY, 0, 1, 0);
+				modelStack.Rotate(rotateZ, 0, 0, 1);
        
 				Mtx44 MVP, modelView, modelView_inverse_transpose;
 	
@@ -1510,5 +1510,13 @@ void SceneText::RenderCharacter()
 {
 	// Hero animation
 	CCharacter *c = characterList[0];
-	Render2DMesh(c->GetSprite(), false, levelMaps[level - 1]->GetTileSize() * c->GetScale().x, c->GetPos().x, c->GetPos().y);
+
+	Vector3 rotation;
+
+	if (c->GetFlip())
+	{
+		rotation.y = 180.0f;
+	}
+
+	Render2DMesh(c->GetSprite(), false, levelMaps[level - 1]->GetTileSize() * c->GetScale().x, c->GetPos().x, c->GetPos().y, rotation.y);
 }

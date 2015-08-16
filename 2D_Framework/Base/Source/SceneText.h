@@ -134,7 +134,7 @@ public:
 	void RenderSkybox();
 	void RenderBackGround_Mountain();
 	void RenderBackGround_Stars();
-	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size=1.0f, const float x=0.0f, const float y=0.0f, const float rotate=0.f);
+	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size=1.0f, const float x=0.0f, const float y=0.0f, const float rotateY=0.f, const float rotateZ = 0.f);
 
 	void InitProjList();
 	void RenderCollideList();
