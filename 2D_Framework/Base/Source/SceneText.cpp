@@ -235,6 +235,8 @@ void SceneText::Init()
 	levelMaps[0]->Init(800, 1024, 25, 32, 800, 1024, 32);
 	levelMaps[0]->LoadMap( "Image//GDev_Assignment02//MapDesign_lvl1.csv");
 	m_cMap = levelMaps[0];
+	// Put into the collide list the Collidables
+	collideList = newMap->GetObjsToSpawn();
 	for (int row = 0; row < levelMaps[0]->GetNumOfTiles_MapHeight(); ++row)
 	{
 		for (int col = 0; col < levelMaps[0]->GetNumOfTiles_MapWidth(); ++col)
@@ -245,12 +247,10 @@ void SceneText::Init()
 				e->Init( Vector2((col) * levelMaps[0]->GetTileSize(), levelMaps[0]->GetScreen_Height() - (row + 1) * levelMaps[0]->GetTileSize()), 1, meshList[GEO_TILE_STONE], CEnemyIn2D::ENEMY_GROUND, levelMaps[0]);
 				e->ChangeStrategy(new CStrategy_Patrol());
 				enemyList.push_back(e);
+				collideList.push_back(e);
 			}
 		}
 	}
-
-	// Put into the collide list the Collidables
-	collideList = newMap->GetObjsToSpawn();
 
 	//m_cMap = new CMap();
 	//m_cMap->Init( 600, 800, 24, 32, 600, 1600 );
@@ -682,9 +682,14 @@ void SceneText::Update(double dt)
 		for (std::vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
 		{
 			CProjectile *p = dynamic_cast<CProjectile*>(*it);
+			CEnemyIn2D *e = dynamic_cast<CEnemyIn2D*>(*it);
 			if (p != NULL && p->GetActive()) // Update projectile
 			{
 				p->Update(dt, m_cMap->GetScreen_Width(), m_cMap->GetScreen_Height());
+			}
+			else if (e != NULL && e->GetActive())
+			{
+				e->Update(levelMaps[level - 1], dt);
 			}
 
 			// Projectile-Target collision check
@@ -786,11 +791,11 @@ void SceneText::Update(double dt)
 		}
 
 		// Update enemy list based on level
-		for (std::vector<CEnemyIn2D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+		/*for (std::vector<CEnemyIn2D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 		{
 			CEnemyIn2D *e = (CEnemyIn2D*)*it;
 			e->Update(levelMaps[level - 1], dt);
-		}
+		}*/
 
 		camera.Update(dt);
 
