@@ -106,6 +106,9 @@ class SceneText : public Scene
 		GEO_TILE_SLAB,
 		GEO_TILE_FLOATING,
 
+		GEO_TILE_CONCRETE,
+		GEO_TILE_CONCRETE_TOP,
+
 		// Target
 		GEO_TARGET_CLOSE,
 
