@@ -35,7 +35,7 @@ void CStrategy_Patrol::Update(CMap *m_cMap, Vector2* Position, double dt)
 	if(FacingNormal.x > 0)
 	{
 		Vector2 tilePos( (int)ceil((float)(m_cMap->GetMapOffset().x + ((Position->x + m_cMap->GetTileSize()) + (Velocity.x * dt))) / m_cMap->GetTileSize()) , m_cMap->GetNumOfTiles_Height() - ((int) ceil( Position->y / m_cMap->GetTileSize()) + 1) ); // New position if move
-		if(m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE || m_cMap->theScreenMap[tilePos.y][tilePos.x+1] == CMap::TILE_NONE)
+		if(m_cMap->theScreenMap[tilePos.y][tilePos.x+1] == CMap::TILE_NONE)
 		{
 			*Position =  *Position + Velocity * dt;
 		}
@@ -43,7 +43,7 @@ void CStrategy_Patrol::Update(CMap *m_cMap, Vector2* Position, double dt)
 	else if(FacingNormal.x < 0)
 	{
 		Vector2 tilePos( (m_cMap->GetMapOffset().x + (Position->x - (Velocity.x * dt))) / m_cMap->GetTileSize() , m_cMap->GetNumOfTiles_Height() - (int) (ceil( Position->y / m_cMap->GetTileSize()) + 1) ); // New position if move
-		if(m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE || m_cMap->theScreenMap[tilePos.y][tilePos.x+1] == CMap::TILE_NONE)
+		if(m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE)
 		{
 			*Position = *Position + Velocity * dt;
 		}

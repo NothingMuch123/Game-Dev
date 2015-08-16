@@ -1,9 +1,268 @@
-﻿Build started 16/8/2015 2:36:05 AM.
-     1>Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\2D_Framework\Base\Base.vcxproj" on node 2 (clean target(s)).
-     1>_PrepareForClean:
-         Deleting file "Release\Base.lastbuildstate".
-     1>Done Building Project "C:\Users\Envy 15.Envy\Documents\School Work\Semester 3\Game Dev & ACG (Git)\2D_Framework\Base\Base.vcxproj" (clean target(s)).
+﻿Build started 8/16/2015 2:57:12 PM.
+     1>Project "C:\Users\KahWei\Git\Game-Dev\2D_Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\KahWei\Git\Game-Dev\2D_Framework\/Common/Source" /I"C:\Users\KahWei\Git\Game-Dev\2D_Framework\/glew/include" /I"C:\Users\KahWei\Git\Game-Dev\2D_Framework\/glfw/include" /I"C:\Program Files (x86)\Visual Leak Detector\include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _VARIADIC_MAX=10 /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\Camera.cpp Source\Camera2.cpp Source\Camera3.cpp Source\Character.cpp Source\Collidable.cpp Source\Elemental.cpp Source\EnemyIn2D.cpp Source\IOwnerID.cpp Source\LoadOBJ.cpp Source\LoadTGA.cpp Source\main.cpp Source\Map.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\Minimap.cpp Source\PowerUp.cpp Source\Projectile.cpp Source\SceneText.cpp Source\shader.cpp Source\Skill.cpp Source\SkillHitBox.cpp Source\SpriteAnimation.cpp Source\Strategy.cpp Source\Strategy_Patrol.cpp Source\Target.cpp Source\Utility.cpp
+         Application.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Camera.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Camera2.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Camera3.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Camera3.cpp(386): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+         Character.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Character.cpp(20): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>Source\Character.cpp(49): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
+     1>Source\Character.cpp(60): warning C4244: 'argument' : conversion from 'const double' to 'const float', possible loss of data
+     1>Source\Character.cpp(281): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(281): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(282): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(282): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(282): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(282): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(283): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(283): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(283): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(283): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(291): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(291): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(296): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(296): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(296): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(296): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(297): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(297): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(297): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(297): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(298): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(298): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(298): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(298): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(299): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(299): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(299): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(299): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(300): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(300): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(300): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(300): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(301): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(301): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(301): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(301): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(312): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Character.cpp(313): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Character.cpp(325): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(325): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(334): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(342): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(344): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(344): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(344): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(344): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(345): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(345): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(345): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(345): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(346): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(346): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(346): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(346): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(347): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(347): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(347): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(347): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(348): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(348): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(348): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(348): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(349): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(349): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(349): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(349): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(350): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(350): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(350): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(350): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(350): warning C4554: '|' : check operator precedence for possible error; use parentheses to clarify precedence
+     1>Source\Character.cpp(355): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(373): warning C4244: '-=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Character.cpp(376): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Character.cpp(378): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Character.cpp(383): warning C4244: 'argument' : conversion from 'const double' to 'float', possible loss of data
+     1>Source\Character.cpp(385): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(389): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(418): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(419): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(419): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(420): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(420): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(421): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(421): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(430): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(430): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(431): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(431): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(432): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(432): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(433): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(433): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Character.cpp(446): warning C4244: 'initializing' : conversion from 'float' to 'const int', possible loss of data
+     1>Source\Character.cpp(461): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>Source\Character.cpp(467): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(473): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>Source\Character.cpp(477): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>Source\Character.cpp(510): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Character.cpp(515): warning C4244: 'return' : conversion from 'float' to 'int', possible loss of data
+         Collidable.cpp
+     1>Source\Collidable.cpp(8): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Collidable.cpp(22): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Elemental.cpp
+         EnemyIn2D.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\EnemyIn2D.cpp(22): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         IOwnerID.cpp
+         LoadOBJ.cpp
+         LoadTGA.cpp
+         main.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Map.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Map.cpp(140): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(140): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(141): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(146): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(146): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(147): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(153): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(153): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Map.cpp(154): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         Mesh.cpp
+         MeshBuilder.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\MeshBuilder.cpp(705): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\MeshBuilder.cpp(711): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\MeshBuilder.cpp(711): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\MeshBuilder.cpp(717): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         Minimap.cpp
+         PowerUp.cpp
+     1>Source\PowerUp.cpp(4): warning C4800: 'float' : forcing value to bool 'true' or 'false' (performance warning)
+         Projectile.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         SceneText.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(181): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(181): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(181): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(181): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(184): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(184): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(184): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(184): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(186): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(186): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(186): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(186): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(188): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(188): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(188): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(188): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(190): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(190): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(190): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(190): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(193): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(193): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(193): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(193): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(257): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneText.cpp(257): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneText.cpp(673): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SceneText.cpp(809): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneText.cpp(809): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneText.cpp(809): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1418): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1422): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1549): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneText.cpp(1554): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SceneText.cpp(1566): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1571): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1576): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1581): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1586): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1591): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1596): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1601): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1606): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1611): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>Source\SceneText.cpp(1667): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>Source\SceneText.cpp(1700): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         shader.cpp
+         Compiling...
+         Skill.cpp
+     1>Source\Skill.cpp(25): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+         SkillHitBox.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         SpriteAnimation.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\SpriteAnimation.cpp(22): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\SpriteAnimation.cpp(39): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Strategy.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Strategy_Patrol.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Strategy_Patrol.cpp(20): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Strategy_Patrol.cpp(37): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Strategy_Patrol.cpp(37): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Strategy_Patrol.cpp(38): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Strategy_Patrol.cpp(38): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Strategy_Patrol.cpp(40): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Strategy_Patrol.cpp(45): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>Source\Strategy_Patrol.cpp(45): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Strategy_Patrol.cpp(46): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Strategy_Patrol.cpp(46): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
+     1>Source\Strategy_Patrol.cpp(48): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+         Target.cpp
+     1>c:\users\kahwei\git\game-dev\2d_framework\base\source\SpriteAnimation.h(13): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Target.cpp(97): warning C4244: '+=' : conversion from 'const double' to 'float', possible loss of data
+         Utility.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\KahWei\Git\Game-Dev\2D_Framework\Release\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\KahWei\Git\Game-Dev\2D_Framework\Release" /LIBPATH:"C:\Users\KahWei\Git\Game-Dev\2D_Framework\/glfw/lib-msvc100" /LIBPATH:"C:\Users\KahWei\Git\Game-Dev\2D_Framework\/glew/lib" /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\Base.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\KahWei\Git\Game-Dev\2D_Framework\Release\Base.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\KahWei\Git\Game-Dev\2D_Framework\Release\Base.lib" /MACHINE:X86 Release\Application.obj
+         Release\Camera.obj
+         Release\Camera2.obj
+         Release\Camera3.obj
+         Release\Character.obj
+         Release\Collidable.obj
+         Release\Elemental.obj
+         Release\EnemyIn2D.obj
+         Release\IOwnerID.obj
+         Release\LoadOBJ.obj
+         Release\LoadTGA.obj
+         Release\main.obj
+         Release\Map.obj
+         Release\Mesh.obj
+         Release\MeshBuilder.obj
+         Release\Minimap.obj
+         Release\PowerUp.obj
+         Release\Projectile.obj
+         Release\SceneText.obj
+         Release\shader.obj
+         Release\Skill.obj
+         Release\SkillHitBox.obj
+         Release\SpriteAnimation.obj
+         Release\Strategy.obj
+         Release\Strategy_Patrol.obj
+         Release\Target.obj
+         Release\Utility.obj
+         Generating code
+         Finished generating code
+         Base.vcxproj -> C:\Users\KahWei\Git\Game-Dev\2D_Framework\Release\Base.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\KahWei\Git\Game-Dev\2D_Framework\Release\Base.exe;#1" /manifest Release\Base.exe.intermediate.manifest
+     1>Done Building Project "C:\Users\KahWei\Git\Game-Dev\2D_Framework\Base\Base.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.13
+Time Elapsed 00:00:31.90

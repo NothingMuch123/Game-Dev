@@ -297,6 +297,8 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_GRASS || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_GRASS || 
 			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_STONE || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_STONE || 
 			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_SLAB || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_SLAB || 
+			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_CONCRETE || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_CONCRETE ||
+			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_CONCRETE_TOP || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_CONCRETE_TOP ||
 			pos.y >= m_cMap->GetScreen_Height() - m_cMap->GetTileSize()) // Hit object while jumping
 		{ 
 			// Since the new position does not allow the hero to move into, then go back to the old position
@@ -343,6 +345,8 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_GRASS || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_GRASS || 
 			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_STONE || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_STONE || 
 			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_SLAB || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_SLAB || 
+			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_CONCRETE || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_CONCRETE ||
+			m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_CONCRETE_TOP || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_CONCRETE_TOP |
 			(!fallingThrough && (m_cMap->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_FLOATING || m_cMap->theScreenMap[tilePos.y][tilePos.x + scale.x] == CMap::TILE_FLOATING))) // Landed
 		{
 			// Since the new position does not allow the hero to move into, then go back to the old position
@@ -438,7 +442,7 @@ void CCharacter::MoveLeftRight(const bool mode, const float timeDiff, CMap *map)
 void CCharacter::Constrain(float timeDiff, CMap *m_cMap)
 {
 	// Tile point at bottom left
-	const int leftBorder = m_cMap->GetTileSize(), topBorder = m_cMap->GetTileSize();
+	const int leftBorder = 0, topBorder = m_cMap->GetTileSize();
 	const int rightBorder = m_cMap->GetScreen_Width() - (m_cMap->GetTileSize() * (scale.x + 1)); // Minus 2 tiles because width is at the most right while tile starts at its left
 	const int bottomBorder = m_cMap->GetScreen_Height() - m_cMap->GetTileSize();
 	if (pos.x < leftBorder)

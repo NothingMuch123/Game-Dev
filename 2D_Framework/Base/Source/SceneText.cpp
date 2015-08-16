@@ -148,8 +148,8 @@ void SceneText::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
+//	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
+//	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 10.f);
@@ -1588,12 +1588,12 @@ void SceneText::RenderTileMap(CMap *map)
 				break;
 			case CMap::TILE_CONCRETE:
 				{
-					Render2DMesh(meshList[GEO_TILE_CONCRETE], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+					Render2DMesh(meshList[GEO_TILE_CONCRETE], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i+1)*map->GetTileSize());
 				}
 				break;
 			case CMap::TILE_CONCRETE_TOP:
 				{
-					Render2DMesh(meshList[GEO_TILE_CONCRETE_TOP], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+					Render2DMesh(meshList[GEO_TILE_CONCRETE_TOP], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i+1)*map->GetTileSize());
 				}
 				break;
 			case CMap::TILE_FIRE_POWER:
@@ -1603,12 +1603,12 @@ void SceneText::RenderTileMap(CMap *map)
 				break;
 			case CMap::TILE_WATER_POWER:
 				{
-					Render2DMesh(meshList[GEO_TILE_WATER_CON], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+					Render2DMesh(meshList[GEO_TILE_WATER_CON], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i+1)*map->GetTileSize());
 				}
 				break;
 			case CMap::TILE_AIR_POWER:
 				{
-					Render2DMesh(meshList[GEO_TILE_AIR_CON], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+					Render2DMesh(meshList[GEO_TILE_AIR_CON], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i+1)*map->GetTileSize());
 				}
 				break;
 			}

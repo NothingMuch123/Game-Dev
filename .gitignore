@@ -7,3 +7,5 @@
 *.manifest
 *.lastbuildstate
 *.idb
+2D_Framework/Common/Release/
+*.tlog
