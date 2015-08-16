@@ -12,17 +12,17 @@ CProjectile::~CProjectile(void)
 {
 }
 
-void CProjectile::Init(PROJ_TYPE type, Vector2 pos, Vector2 vel, CMap *map, bool active)
+void CProjectile::Init(PROJ_TYPE type, Vector2 pos, Vector2 vel, float tileSize, bool active)
 {
 	this->type = type;
 	this->vel = vel;
 
-	Collidable::Init(pos, map, active);
+	Collidable::Init(pos, tileSize, active);
 }
 
-void CProjectile::Update(const float dt, CMap *map)
+void CProjectile::Update(const float dt, float screenWidth, float screenHeight)
 {
-	if (pos.x < 0 || pos.x > map->GetScreen_Width() || pos.y < 0 || pos.y > map->GetScreen_Height())
+	if (pos.x < 0 || pos.x > screenWidth || pos.y < 0 || pos.y > screenHeight)
 	{
 		Reset();
 	}

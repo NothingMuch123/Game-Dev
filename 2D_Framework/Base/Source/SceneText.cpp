@@ -231,6 +231,7 @@ void SceneText::Init()
 	levelMaps.push_back(newMap);
 	levelMaps[0]->Init(800, 1024, 25, 32, 800, 1024, 32);
 	levelMaps[0]->LoadMap( "Image//GDev_Assignment02//MapDesign_lvl1.csv");
+	m_cMap = levelMaps[0];
 	for (int row = 0; row < levelMaps[0]->GetNumOfTiles_MapHeight(); ++row)
 	{
 		for (int col = 0; col < levelMaps[0]->GetNumOfTiles_MapWidth(); ++col)
@@ -238,7 +239,7 @@ void SceneText::Init()
 			if (levelMaps[0]->theScreenMap[row][col] == CMap::TILE_ENEMY_GROUND)
 			{
 				CEnemyIn2D *e = new CEnemyIn2D();
-				e->Init( Vector2((col) * levelMaps[0]->GetTileSize(), levelMaps[0]->GetScreen_Height() - (row + 1) * levelMaps[0]->GetTileSize()), 1, meshList[GEO_TILE_STONE], CEnemyIn2D::ENEMY_GROUND, m_cMap);
+				e->Init( Vector2((col) * levelMaps[0]->GetTileSize(), levelMaps[0]->GetScreen_Height() - (row + 1) * levelMaps[0]->GetTileSize()), 1, meshList[GEO_TILE_STONE], CEnemyIn2D::ENEMY_GROUND, levelMaps[0]);
 				e->ChangeStrategy(new CStrategy_Patrol());
 				enemyList.push_back(e);
 			}
@@ -369,7 +370,7 @@ void SceneText::InitCharacter()
 	c->SetAnimation(CCharacter::ANIM_JUMP_RIGHT, a);
 
 	// ANIM_LOOK_DOWN_LEFT
-	sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LOOK_DOWN_LEFT", 7, 8);
+	//sa = MeshBuilder::GenerateSpriteAnimation("ANIM_LOOK_DOWN_LEFT", 7, 8);
 	a = new Animation();
 	a->Set(32,35,1,0.05f);
 	c->SetAnimation(CCharacter::ANIM_LOOK_DOWN_LEFT, a);
@@ -680,7 +681,7 @@ void SceneText::Update(double dt)
 			CProjectile *p = dynamic_cast<CProjectile*>(*it);
 			if (p != NULL && p->GetActive()) // Update projectile
 			{
-				p->Update(dt, m_cMap);
+				p->Update(dt, m_cMap->GetScreen_Width(), m_cMap->GetScreen_Height());
 			}
 
 			// Projectile-Target collision check
@@ -818,85 +819,85 @@ void SceneText::UpdateCharacterStatus(const CCharacter::CHARACTER_ACTION action,
 			case CCharacter::ANIM_LIE_LEFT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.15f * c->GetScale().x), Vector2(-1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.15f * c->GetScale().x), Vector2(-1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_LIE_RIGHT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.15f * c->GetScale().x), Vector2(1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.15f * c->GetScale().x), Vector2(1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_IDLE_LEFT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.4f * c->GetScale().x), Vector2(-1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.4f * c->GetScale().x), Vector2(-1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_IDLE_RIGHT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.3f * c->GetScale().x), Vector2(1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.3f * c->GetScale().x), Vector2(1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_MOVE_LEFT_SHOOT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.4f * c->GetScale().x), Vector2(-1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.4f * c->GetScale().x), Vector2(-1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_MOVE_RIGHT_SHOOT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.3f * c->GetScale().x), Vector2(1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.3f * c->GetScale().x), Vector2(1 * CProjectile::BULLET_SPEED, 0 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_LOOK_DOWN_LEFT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.4f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, -1 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.4f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, -1 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_LOOK_DOWN_RIGHT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.4f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, -1 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.4f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, -1 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_LOOK_UP_LEFT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.6f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, 1 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.6f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, 1 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_LOOK_UP_RIGHT :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.6f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, 1 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.6f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0 * CProjectile::BULLET_SPEED, 1 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_MOVE_LEFT_SHOOT_DOWN :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(-0.5 * CProjectile::BULLET_SPEED, -0.5 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(-0.5 * CProjectile::BULLET_SPEED, -0.5 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_MOVE_LEFT_SHOOT_TOP :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(-0.5 * CProjectile::BULLET_SPEED, 0.5 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(-0.5 * CProjectile::BULLET_SPEED, 0.5 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_MOVE_RIGHT_SHOOT_DOWN :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0.5 * CProjectile::BULLET_SPEED, -0.5 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0.5 * CProjectile::BULLET_SPEED, -0.5 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			case CCharacter::ANIM_MOVE_RIGHT_SHOOT_TOP :
 				{
 					CProjectile *p = FetchProj();
-					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0.5 * CProjectile::BULLET_SPEED, 0.5 * CProjectile::BULLET_SPEED), m_cMap, true);
+					p->Init(CProjectile::PROJ_BULLET, Vector2(c->GetPos().x + m_cMap->GetTileSize() * 0.5f * c->GetScale().x, c->GetPos().y + m_cMap->GetTileSize() * 0.5f * c->GetScale().x), Vector2(0.5 * CProjectile::BULLET_SPEED, 0.5 * CProjectile::BULLET_SPEED), m_cMap->GetTileSize(), true);
 				}
 				break;
 			}
@@ -1323,7 +1324,7 @@ void SceneText::RenderCollideList()
 		else if (pu != NULL && pu->GetActive())
 		{
 			// TODO: Change sprite to legit sprite
-			Render2DMesh(meshList[GEO_BULLET], false, 1.f, p->GetPos().x, p->GetPos().y, 0.0f);
+			Render2DMesh(meshList[GEO_BULLET], false, 1.f, pu->GetPos().x, pu->GetPos().y, 0.0f);
 		}
 	}
 }

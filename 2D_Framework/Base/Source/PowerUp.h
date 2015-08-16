@@ -19,10 +19,10 @@ class PowerUp : public Collidable, public Elemental
 		POWER_UP_TYPE powerType;
 
 	public:
-		PowerUp(Vector2 pos = Vector2(0, 0), bool active = false, ELEMENT_TYPE element = NORMAL_TYPE, CMap *map = NULL);
+		PowerUp(Vector2 pos = Vector2(0, 0), bool active = false, ELEMENT_TYPE element = NORMAL_TYPE, float tileSize = 0);
 		virtual ~PowerUp();
 
-		virtual void Init(Vector2 pos, CMap *map, bool active, ELEMENT_TYPE element);
+		virtual void Init(Vector2 pos, float tileSize, bool active, ELEMENT_TYPE element);
 };
 
 #endif

@@ -4,7 +4,7 @@ float CCharacter::WALK_SPEED = 250.f;
 float CCharacter::RUN_SPEED = 400.f;
 float CCharacter::GRAVITY = 1000.f;
 
-CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, float jumpSpeed, bool midAir_Up, bool midAir_Down, bool dir) : Collidable(pos, true, map), Elemental()
+CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, float jumpSpeed, bool midAir_Up, bool midAir_Down, bool dir) : Collidable(pos, true, map->GetTileSize()), Elemental()
 					,
 					scale(scale),
 					jumpSpeed(jumpSpeed),

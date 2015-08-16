@@ -2,15 +2,14 @@
 #define COLLIDABLE_H
 
 #include "Vector2.h"
-#include "Map.h"
 
 class Collidable
 {
-	public:
-		Collidable(Vector2 pos = Vector2(0, 0), bool active = false, CMap *map = NULL);
-		virtual ~Collidable();
+public:
+	Collidable(Vector2 pos = Vector2(0, 0), bool active = false, float tileSize = 0);
+	virtual ~Collidable();
 
-	virtual void Init(Vector2 pos, CMap *map, bool active);
+	virtual void Init(Vector2 pos, float tileSize, bool active);
 	virtual void CalcBound();
 	virtual void Reset();
 
@@ -24,10 +23,10 @@ class Collidable
 
 	bool CollideWith(Collidable* other);
 
-	protected:
-		bool active;
-		int tileSize;
-		Vector2 pos, minBound, maxBound;
+protected:
+	bool active;
+	int tileSize;
+	Vector2 pos, minBound, maxBound;
 };
 
 #endif

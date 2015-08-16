@@ -1,13 +1,11 @@
 #include "Collidable.h"
 
-Collidable::Collidable(Vector2 pos, bool active, CMap *map)
+Collidable::Collidable(Vector2 pos, bool active, float tileSize)
 	: pos(pos)
 	, active(active)
 {
-	if (map != NULL)
-	{
-		tileSize = map->GetTileSize();
-	}
+
+	this->tileSize = tileSize;
 }
 
 
@@ -15,16 +13,15 @@ Collidable::~Collidable()
 {
 }
 
-void Collidable::Init(Vector2 pos, CMap *map, bool active)
+void Collidable::Init(Vector2 pos, float tileSize, bool active)
 {
 	this->pos = pos;
 	this->active = active;
 
-	if (map != NULL)
-	{
-		this->tileSize = map->GetTileSize();
-		CalcBound();
-	}
+
+	this->tileSize = tileSize;
+	CalcBound();
+
 }
 
 void Collidable::CalcBound()

@@ -19,8 +19,8 @@ public:
 	CProjectile(PROJ_TYPE type = PROJ_NONE, Vector2 pos = Vector2(0,0), Vector2 vel = Vector2(0,0), bool active = false);
 	~CProjectile(void);
 
-	void Init(PROJ_TYPE type, Vector2 pos, Vector2 vel, CMap *map, bool active = true);
-	void Update(const float dt, CMap *map);
+	void Init(PROJ_TYPE type, Vector2 pos, Vector2 vel, float tileSize, bool active = true);
+	void Update(const float dt, float screenWidth, float screenHeight);
 	void Reset();
 
 	PROJ_TYPE GetType();

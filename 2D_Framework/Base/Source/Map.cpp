@@ -136,17 +136,25 @@ bool CMap::LoadFile(const string mapName)
 						}
 						break;*/
 					case TILE_FIRE_POWER:
+					{
 						Vector2 pos(theColumnCounter * theTileSize, theScreen_Height - ((theLineCounter)* theTileSize));
-						spawnList.push_back(new PowerUp(pos, true, Elemental::FIRE_TYPE, this));
-						break;
+						spawnList.push_back(new PowerUp(pos, true, Elemental::FIRE_TYPE, this->theTileSize));
+					}
+					break;
 					case TILE_WATER_POWER:
+					{
 						Vector2 pos(theColumnCounter * theTileSize, theScreen_Height - ((theLineCounter)* theTileSize));
-						spawnList.push_back(new PowerUp(pos, true, Elemental::WATER_TYPE, this));
-						break;
+						spawnList.push_back(new PowerUp(pos, true, Elemental::WATER_TYPE, this->theTileSize));
+					}
+
+					break;
 					case TILE_AIR_POWER:
+					{
 						Vector2 pos(theColumnCounter * theTileSize, theScreen_Height - ((theLineCounter)* theTileSize));
-						spawnList.push_back(new PowerUp(pos, true, Elemental::AIR_TYPE, this));
-						break;
+						spawnList.push_back(new PowerUp(pos, true, Elemental::AIR_TYPE, this->theTileSize));
+					}
+
+					break;
 					}
 				}
 				theLineCounter++;

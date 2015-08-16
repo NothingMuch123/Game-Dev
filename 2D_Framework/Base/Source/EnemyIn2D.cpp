@@ -18,7 +18,7 @@ CEnemyIn2D::~CEnemyIn2D(void)
 // Initialise this class instance
 void CEnemyIn2D::Init(Vector2 NewPosition, int gameLevel, Mesh* newMesh, ENEMY_TYPE newType, CMap* map)
 {
-	Collidable::Init(NewPosition, map, true);
+	Collidable::Init(NewPosition, map->GetTileSize(), true);
 
 	this->m_currentLevel = gameLevel;
 	this->m_Mesh = newMesh;

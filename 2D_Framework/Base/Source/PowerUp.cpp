@@ -1,6 +1,6 @@
 #include "PowerUp.h"
 
-PowerUp::PowerUp(Vector2 pos, bool active, ELEMENT_TYPE element, CMap *map) : Collidable(pos, active, map)
+PowerUp::PowerUp(Vector2 pos, bool active, ELEMENT_TYPE element, float tileSize) : Collidable(pos, active, tileSize)
 {
 	m_element = element;
 }
@@ -10,8 +10,8 @@ PowerUp::~PowerUp()
 {
 }
 
-void PowerUp::Init(Vector2 pos, CMap * map, bool active, ELEMENT_TYPE element)
+void PowerUp::Init(Vector2 pos, float tileSize, bool active, ELEMENT_TYPE element)
 {
-	Collidable::Init(pos, map, active);
+	Collidable::Init(pos, tileSize, active);
 	m_element = element;
 }
