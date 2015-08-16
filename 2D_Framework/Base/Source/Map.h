@@ -33,6 +33,10 @@ public:
 		TILE_WATER_POWER,
 		TILE_AIR_POWER,
 
+		//Concrete tiles
+		TILE_CONCRETE,
+		TILE_CONCRETE_TOP,
+
 		// Target tiles with sprite
 		/*TILE_TARGET_RED,
 		TILE_TARGET_LIGHT_BLUE,

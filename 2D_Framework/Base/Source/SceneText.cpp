@@ -31,9 +31,9 @@ void SceneText::Init()
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS); 
-	
+
 	glEnable(GL_CULL_FACE);
-	
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glEnable(GL_BLEND);
@@ -43,7 +43,7 @@ void SceneText::Init()
 	glBindVertexArray(m_vertexArrayID);
 
 	m_programID = LoadShaders( "Shader//Texture.vertexshader", "Shader//Text.fragmentshader" );
-	
+
 	// Get a handle for our uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
 	//m_parameters[U_MODEL] = glGetUniformLocation(m_programID, "M");
@@ -84,7 +84,7 @@ void SceneText::Init()
 	// Get a handle for our "textColor" uniform
 	m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
-	
+
 	// Use our shader
 	glUseProgram(m_programID);
 
@@ -111,7 +111,7 @@ void SceneText::Init()
 	//lights[1].cosInner = cos(Math::DegreeToRadian(30));
 	//lights[1].exponent = 3.f;
 	//lights[1].spotDirection.Set(0.f, 1.f, 0.f);
-	
+
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 
@@ -124,7 +124,7 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], lights[0].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], lights[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], lights[0].exponent);
-	
+
 	glUniform1i(m_parameters[U_LIGHT1_TYPE], lights[1].type);
 	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &lights[1].color.r);
 	glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
@@ -158,7 +158,7 @@ void SceneText::Init()
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
-	
+
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
@@ -180,7 +180,7 @@ void SceneText::Init()
 
 	meshList[GEO_BACKGROUND] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
 	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//Targa_Assets//BG_Tile.tga");
-	
+
 	meshList[GEO_TILEGROUND] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 32.f, 32.f);
 	meshList[GEO_TILEGROUND]->textureID = LoadTGA("Image//tile1_ground.tga");
 	meshList[GEO_TILETREE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 32.f, 32.f);
@@ -210,11 +210,21 @@ void SceneText::Init()
 	meshList[GEO_TILE_FLOATING]->textureID = texture;
 
 	texture = LoadTGA("Image//Targa_Assets//E_SpriteSheet.tga");
-	meshList[GEO_TILE_CONCRETE] = MeshBuilder::GenerateMeshFromSheet("Tile Concrete", Color(1,1,1), 1, 5, 1, 2, 32.f);
+	meshList[GEO_TILE_CONCRETE] = MeshBuilder::GenerateMeshFromSheet("Tile Concrete", Color(1,1,1), 1, 2, 1, 1, 32.f);
 	meshList[GEO_TILE_CONCRETE]->textureID = texture;
 
-	meshList[GEO_TILE_CONCRETE_TOP] = MeshBuilder::GenerateMeshFromSheet("Tile Concrete Top", Color(1,1,1), 1, 5, 1, 3, 32.f);
+	meshList[GEO_TILE_CONCRETE_TOP] = MeshBuilder::GenerateMeshFromSheet("Tile Concrete Top", Color(1,1,1), 1, 2, 1, 2, 32.f);
 	meshList[GEO_TILE_CONCRETE_TOP]->textureID = texture;
+
+	texture = LoadTGA("Image//Targa_Assets//Con_SpriteSheet.tga");
+	meshList[GEO_TILE_FIRE_CON] = MeshBuilder::GenerateMeshFromSheet("Tile Fire Con", Color(1,1,1), 1, 3, 1, 1, 32.f);
+	meshList[GEO_TILE_FIRE_CON]->textureID = texture;
+
+	meshList[GEO_TILE_WATER_CON] = MeshBuilder::GenerateMeshFromSheet("Tile Water Con", Color(1,1,1), 1, 3, 1, 2, 32.f);
+	meshList[GEO_TILE_WATER_CON]->textureID = texture;
+
+	meshList[GEO_TILE_AIR_CON] = MeshBuilder::GenerateMeshFromSheet("Tile Air Con", Color(1,1,1), 1, 3, 1, 3, 32.f);
+	meshList[GEO_TILE_AIR_CON]->textureID = texture;
 
 	meshList[GEO_LIVE] = MeshBuilder::Generate2DMesh("Live", Color(1,1,1), 0, 0, 1, 1);
 	meshList[GEO_LIVE]->textureID = LoadTGA("Image//GDev_Assignment02//live.tga");
@@ -273,7 +283,7 @@ void SceneText::Init()
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
-	
+
 	rotateAngle = 0;
 
 	bLightEnabled = true;
@@ -417,7 +427,7 @@ void SceneText::InitCharacter()
 	a = new Animation();
 	a->Set(0,19,0,0.5f);
 	c->SetAnimation(CCharacter::ANIM_MOVE_LEFT_SHOOT_TOP, a);
-	
+
 	//ANIM_MOVE_LEFT_SHOOT_DOWN
 	a = new Animation();
 	a->Set(0,10,0,0.5f);
@@ -427,7 +437,7 @@ void SceneText::InitCharacter()
 	a = new Animation();
 	a->Set(0,19,0,0.5f);
 	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT_TOP, a);
-	
+
 	//ANIM_MOVE_RIGHT_SHOOT_DOWN
 	a = new Animation();
 	a->Set(0,10,0,0.5f);
@@ -438,7 +448,7 @@ void SceneText::InitCharacter()
 
 void SceneText::Update(double dt)
 {
-	#pragma region Debug Controls
+#pragma region Debug Controls
 
 	if(Application::IsKeyPressed('1'))
 		glEnable(GL_CULL_FACE);
@@ -448,7 +458,7 @@ void SceneText::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	if(Application::IsKeyPressed('4'))
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
+
 	if(Application::IsKeyPressed('5'))
 	{
 		lights[0].type = Light::LIGHT_POINT;
@@ -487,324 +497,324 @@ void SceneText::Update(double dt)
 		lights[0].position.y += (float)(10.f * dt);
 
 #pragma endregion
-	
+
 	/*if (lives <= 0)
 	{
-		gameEnded = true;
+	gameEnded = true;
 	}
 	if (!gameEnded)
 	{
+	if (level == 1)
+	{
+	if (extraLives == 0)
+	{
+	level = 2;
+	characterList[0]->SetPos(Vector2(100, 750));
+	lives += extraLives;
+	for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+	CEnemy *e = (CEnemy*)*it;
+	e->Reset();
+	}
+	for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
+	{
+	CProjectile *p = (CProjectile*)*it;
+	p->Reset();
+	}
+	}
+	if (levelTime > 0.f)
+	{
+	levelTime -= dt;
+	}
+	else // Level 1 ended
+	{
+	level = 2;
+	characterList[0]->SetPos(Vector2(100, 750));
+	lives += extraLives;
+	for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+	CEnemy *e = (CEnemy*)*it;
+	e->Reset();
+	}
+	for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
+	{
+	CProjectile *p = (CProjectile*)*it;
+	p->Reset();
+	}
+	}
+	}
+	else if (level == 2)
+	{
+	if (win == 0)
+	{
+	gameEnded = true;
+	}
+	}*/
+
+	/*SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_TARGET_CLOSE]);
+	if (sa)
+	{
+	sa->Update(dt);
+	}*/
+
+	if (shootTimer < MAX_SHOOT_TIME)
+	{
+		shootTimer += dt;
+	}
+
+	characterList[0]->Update(dt, levelMaps[level - 1]);
+	/*for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
+	{
+	CTarget *t = (CTarget*)*it;
+	if (t->GetActive()) // Update target
+	{
+	t->Update(dt);
+	}
+	if (t->GetActive() && t->GetType() == CTarget::TARGET_DESTROY && t->GetSA()->m_anim->ended) // Delete target if disappear
+	{
+	t->SetActive(false);
+	}
+
+	// Target-Enemy collision check
+	for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+	CEnemy *e = (CEnemy*)*it;
+
+	// Collision check
+	if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && e->GetActive() &&
+	t->GetMinBound().x < e->GetMaxBound().x && t->GetMaxBound().x > e->GetMinBound().x &&
+	t->GetMinBound().y < e->GetMaxBound().y && t->GetMaxBound().y > e->GetMinBound().y) // Collide
+	{
+	t->SetType(CTarget::TARGET_DESTROY);
+	//--extraLives;
+	e->Reset();
+	}
+	}
+	}*/
+
+	/*for (std::vector<CEnemySpawner*>::iterator it = enemySpawnerList_lvl1.begin(); it != enemySpawnerList_lvl1.end(); ++it)
+	{
+	CEnemySpawner *spawner = (CEnemySpawner*)*it;
+	if (spawner->CheckSpawn(dt)) // Spawn enemy
+	{
+	CEnemy *e = FetchEnemy();
+	e->Init(spawner->GetPos(), Vector2(2,2));
+	}
+	}*/
+	/*else if (level == 2)
+	{
+	characterList[0]->Update(dt, m_cMap);
+	for (std::vector<CTarget*>::iterator it = targetList_lvl2.begin(); it != targetList_lvl2.end(); ++it)
+	{
+	CTarget *t = (CTarget*)*it;
+	if (t->GetActive())
+	{
+	t->Update(dt);
+	}
+	if (t->GetActive() && t->GetType() == CTarget::TARGET_DESTROY && t->GetSA()->m_anim->ended)
+	{
+	t->SetActive(false);
+	}
+
+	// Target-Enemy collision check
+	for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+	CEnemy *e = (CEnemy*)*it;
+
+	// Collision check
+	if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && e->GetActive() &&
+	t->GetMinBound().x < e->GetMaxBound().x && t->GetMaxBound().x > e->GetMinBound().x &&
+	t->GetMinBound().y < e->GetMaxBound().y && t->GetMaxBound().y > e->GetMinBound().y) // Collide
+	{
+	t->SetType(CTarget::TARGET_DESTROY);
+	e->Reset();
+	}
+	}
+	}
+
+	for (std::vector<CEnemySpawner*>::iterator it = enemySpawnerList_lvl2.begin(); it != enemySpawnerList_lvl2.end(); ++it)
+	{
+	CEnemySpawner *spawner = (CEnemySpawner*)*it;
+	if (spawner->CheckSpawn(dt)) // Spawn enemy
+	{
+	CEnemy *e = FetchEnemy();
+	e->Init(spawner->GetPos(), Vector2(2,2));
+	}
+	}
+	}*/
+
+	// Update enemy list
+	/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+	CEnemy *e = (CEnemy*)*it;
+	if (e->GetActive())
+	{
+	if (level == 1)
+	{
+	e->Update(dt, levelMaps);
+	}
+	else if (level == 2)
+	{
+	e->Update(dt, m_cMap);
+	}
+	}
+
+	// Enemy-Player collision check
+	for (std::vector<CCharacter*>::iterator it = characterList.begin(); it != characterList.end(); ++it)
+	{
+	CCharacter *c = (CCharacter*)*it;
+
+	if (level == 1)
+	{
+	if (e->GetActive() &&
+	levelMaps->GetMapOffset().x + c->GetMinBound().x < e->GetMaxBound().x && levelMaps->GetMapOffset().x + c->GetMaxBound().x > e->GetMinBound().x &&
+	levelMaps->GetMapOffset().y + c->GetMinBound().y < e->GetMaxBound().y && levelMaps->GetMapOffset().y + c->GetMaxBound().y > e->GetMinBound().y) // Collide
+	{
+	c->SetPos(Vector2(100,750));
+	//--lives;
+	e->Reset();
+	}
+	}
+	else if (level == 2)
+	{
+	if (e->GetActive() &&
+	m_cMap->GetMapOffset().x + c->GetMinBound().x < e->GetMaxBound().x && m_cMap->GetMapOffset().x + c->GetMaxBound().x > e->GetMinBound().x &&
+	m_cMap->GetMapOffset().y + c->GetMinBound().y < e->GetMaxBound().y && m_cMap->GetMapOffset().y + c->GetMaxBound().y > e->GetMinBound().y) // Collide
+	{
+	c->SetPos(Vector2(100,750));
+	--lives;
+	e->Reset();
+	}
+	}
+	}
+	}*/
+
+	for (std::vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
+	{
+		CProjectile *p = dynamic_cast<CProjectile*>(*it);
+		CEnemyIn2D *e = dynamic_cast<CEnemyIn2D*>(*it);
+		if (p != NULL && p->GetActive()) // Update projectile
+		{
+			p->Update(dt, m_cMap->GetScreen_Width(), m_cMap->GetScreen_Height());
+		}
+		else if (e != NULL && e->GetActive())
+		{
+			e->Update(levelMaps[level - 1], dt);
+		}
+
+		// Projectile-Target collision check
+		/*if (level == 1) // Using level 1 targetList
+		{
+		for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
+		{
+		CTarget *t = (CTarget*)*it;
+
+		// Collision check
+		if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && t->GetOpen() && p->GetActive() &&
+		t->GetMinBound().x < levelMaps->GetMapOffset().x + p->GetMaxBound().x && t->GetMaxBound().x > levelMaps->GetMapOffset().x + p->GetMinBound().x &&
+		t->GetMinBound().y < levelMaps->GetMapOffset().y + p->GetMaxBound().y && t->GetMaxBound().y > levelMaps->GetMapOffset().y + p->GetMinBound().y) // Collide
+		{
+		t->SetType(CTarget::TARGET_DESTROY);
+		//--extraLives;
+		p->Reset();
+		}
+		}
+		}
+		else if (level == 2) // Using level 2 targetList
+		{
+		for (std::vector<CTarget*>::iterator it = targetList_lvl2.begin(); it != targetList_lvl2.end(); ++it)
+		{
+		CTarget *t = (CTarget*)*it;
+
+		// Collision check
+		if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && t->GetOpen() && p->GetActive() &&
+		t->GetMinBound().x < m_cMap->GetMapOffset().x + p->GetMaxBound().x && t->GetMaxBound().x > m_cMap->GetMapOffset().x + p->GetMinBound().x &&
+		t->GetMinBound().y < m_cMap->GetMapOffset().y + p->GetMaxBound().y && t->GetMaxBound().y > m_cMap->GetMapOffset().y + p->GetMinBound().y) // Collide
+		{
+		// Adding score
+		switch (t->GetType())
+		{
+		case CTarget::TARGET_RED :
+		{
+		score += 1;
+		}
+		break;
+		case CTarget::TARGET_LIGHT_BLUE :
+		{
+		score += 2;
+		}
+		break;
+		case CTarget::TARGET_DARK_BLUE :
+		{
+		score += 3;
+		}
+		break;
+		case CTarget::TARGET_GREEN :
+		{
+		score += 4;
+		}
+		break;
+		case CTarget::TARGET_YELLOW :
+		{
+		score += 5;
+		}
+		break;
+		case CTarget::TARGET_WHITE :
+		{
+		score += 6;
+		}
+		break;
+		}
+
+		t->SetType(CTarget::TARGET_DESTROY);
+		--win;
+		p->Reset();
+		}
+		}
+		}*/
+
+		// Projectile-Enemy collision check
+		/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+		{
+		CEnemy *e = (CEnemy*)*it;
 		if (level == 1)
 		{
-			if (extraLives == 0)
-			{
-				level = 2;
-				characterList[0]->SetPos(Vector2(100, 750));
-				lives += extraLives;
-				for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-				{
-					CEnemy *e = (CEnemy*)*it;
-					e->Reset();
-				}
-				for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
-				{
-					CProjectile *p = (CProjectile*)*it;
-					p->Reset();
-				}
-			}
-			if (levelTime > 0.f)
-			{
-				levelTime -= dt;
-			}
-			else // Level 1 ended
-			{
-				level = 2;
-				characterList[0]->SetPos(Vector2(100, 750));
-				lives += extraLives;
-				for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-				{
-					CEnemy *e = (CEnemy*)*it;
-					e->Reset();
-				}
-				for (std::vector<CProjectile*>::iterator it = projList.begin(); it != projList.end(); ++it)
-				{
-					CProjectile *p = (CProjectile*)*it;
-					p->Reset();
-				}
-			}
+		if (e->GetActive() && p->GetActive() &&
+		levelMaps->GetMapOffset().x + p->GetMinBound().x < e->GetMaxBound().x && levelMaps->GetMapOffset().x + p->GetMaxBound().x > e->GetMinBound().x &&
+		levelMaps->GetMapOffset().y + p->GetMinBound().y < e->GetMaxBound().y && levelMaps->GetMapOffset().y + p->GetMaxBound().y > e->GetMinBound().y) // Collide
+		{
+		e->Reset();
+		p->Reset();
+		}
 		}
 		else if (level == 2)
 		{
-			if (win == 0)
-			{
-				gameEnded = true;
-			}
-		}*/
-
-		/*SpriteAnimation *sa = dynamic_cast<SpriteAnimation*>(meshList[GEO_TARGET_CLOSE]);
-		if (sa)
+		if (e->GetActive() && p->GetActive() &&
+		m_cMap->GetMapOffset().x + p->GetMinBound().x < e->GetMaxBound().x && m_cMap->GetMapOffset().x + p->GetMaxBound().x > e->GetMinBound().x &&
+		m_cMap->GetMapOffset().y + p->GetMinBound().y < e->GetMaxBound().y && m_cMap->GetMapOffset().y + p->GetMaxBound().y > e->GetMinBound().y) // Collide
 		{
-			sa->Update(dt);
-		}*/
-
-		if (shootTimer < MAX_SHOOT_TIME)
-		{
-			shootTimer += dt;
+		e->Reset();
+		p->Reset();
 		}
-
-		characterList[0]->Update(dt, levelMaps[level - 1]);
-		/*for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
-			{
-				CTarget *t = (CTarget*)*it;
-				if (t->GetActive()) // Update target
-				{
-					t->Update(dt);
-				}
-				if (t->GetActive() && t->GetType() == CTarget::TARGET_DESTROY && t->GetSA()->m_anim->ended) // Delete target if disappear
-				{
-					t->SetActive(false);
-				}
-
-				// Target-Enemy collision check
-				for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-				{
-					CEnemy *e = (CEnemy*)*it;
-
-					// Collision check
-					if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && e->GetActive() &&
-						t->GetMinBound().x < e->GetMaxBound().x && t->GetMaxBound().x > e->GetMinBound().x &&
-						t->GetMinBound().y < e->GetMaxBound().y && t->GetMaxBound().y > e->GetMinBound().y) // Collide
-					{
-						t->SetType(CTarget::TARGET_DESTROY);
-						//--extraLives;
-						e->Reset();
-					}
-				}
-			}*/
-
-			/*for (std::vector<CEnemySpawner*>::iterator it = enemySpawnerList_lvl1.begin(); it != enemySpawnerList_lvl1.end(); ++it)
-			{
-				CEnemySpawner *spawner = (CEnemySpawner*)*it;
-				if (spawner->CheckSpawn(dt)) // Spawn enemy
-				{
-					CEnemy *e = FetchEnemy();
-					e->Init(spawner->GetPos(), Vector2(2,2));
-				}
-			}*/
-		/*else if (level == 2)
-		{
-			characterList[0]->Update(dt, m_cMap);
-			for (std::vector<CTarget*>::iterator it = targetList_lvl2.begin(); it != targetList_lvl2.end(); ++it)
-			{
-				CTarget *t = (CTarget*)*it;
-				if (t->GetActive())
-				{
-					t->Update(dt);
-				}
-				if (t->GetActive() && t->GetType() == CTarget::TARGET_DESTROY && t->GetSA()->m_anim->ended)
-				{
-					t->SetActive(false);
-				}
-
-				// Target-Enemy collision check
-				for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-				{
-					CEnemy *e = (CEnemy*)*it;
-
-					// Collision check
-					if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && e->GetActive() &&
-						t->GetMinBound().x < e->GetMaxBound().x && t->GetMaxBound().x > e->GetMinBound().x &&
-						t->GetMinBound().y < e->GetMaxBound().y && t->GetMaxBound().y > e->GetMinBound().y) // Collide
-					{
-						t->SetType(CTarget::TARGET_DESTROY);
-						e->Reset();
-					}
-				}
-			}
-
-			for (std::vector<CEnemySpawner*>::iterator it = enemySpawnerList_lvl2.begin(); it != enemySpawnerList_lvl2.end(); ++it)
-			{
-				CEnemySpawner *spawner = (CEnemySpawner*)*it;
-				if (spawner->CheckSpawn(dt)) // Spawn enemy
-				{
-					CEnemy *e = FetchEnemy();
-					e->Init(spawner->GetPos(), Vector2(2,2));
-				}
-			}
-		}*/
-
-		// Update enemy list
-		/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-		{
-			CEnemy *e = (CEnemy*)*it;
-			if (e->GetActive())
-			{
-				if (level == 1)
-				{
-					e->Update(dt, levelMaps);
-				}
-				else if (level == 2)
-				{
-					e->Update(dt, m_cMap);
-				}
-			}
-
-			// Enemy-Player collision check
-			for (std::vector<CCharacter*>::iterator it = characterList.begin(); it != characterList.end(); ++it)
-			{
-				CCharacter *c = (CCharacter*)*it;
-
-				if (level == 1)
-				{
-					if (e->GetActive() &&
-						levelMaps->GetMapOffset().x + c->GetMinBound().x < e->GetMaxBound().x && levelMaps->GetMapOffset().x + c->GetMaxBound().x > e->GetMinBound().x &&
-						levelMaps->GetMapOffset().y + c->GetMinBound().y < e->GetMaxBound().y && levelMaps->GetMapOffset().y + c->GetMaxBound().y > e->GetMinBound().y) // Collide
-					{
-						c->SetPos(Vector2(100,750));
-						//--lives;
-						e->Reset();
-					}
-				}
-				else if (level == 2)
-				{
-					if (e->GetActive() &&
-						m_cMap->GetMapOffset().x + c->GetMinBound().x < e->GetMaxBound().x && m_cMap->GetMapOffset().x + c->GetMaxBound().x > e->GetMinBound().x &&
-						m_cMap->GetMapOffset().y + c->GetMinBound().y < e->GetMaxBound().y && m_cMap->GetMapOffset().y + c->GetMaxBound().y > e->GetMinBound().y) // Collide
-					{
-						c->SetPos(Vector2(100,750));
-						--lives;
-						e->Reset();
-					}
-				}
-			}
-		}*/
-
-		for (std::vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
-		{
-			CProjectile *p = dynamic_cast<CProjectile*>(*it);
-			CEnemyIn2D *e = dynamic_cast<CEnemyIn2D*>(*it);
-			if (p != NULL && p->GetActive()) // Update projectile
-			{
-				p->Update(dt, m_cMap->GetScreen_Width(), m_cMap->GetScreen_Height());
-			}
-			else if (e != NULL && e->GetActive())
-			{
-				e->Update(levelMaps[level - 1], dt);
-			}
-
-			// Projectile-Target collision check
-			/*if (level == 1) // Using level 1 targetList
-			{
-				for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
-				{
-					CTarget *t = (CTarget*)*it;
-
-					// Collision check
-					if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && t->GetOpen() && p->GetActive() &&
-						t->GetMinBound().x < levelMaps->GetMapOffset().x + p->GetMaxBound().x && t->GetMaxBound().x > levelMaps->GetMapOffset().x + p->GetMinBound().x &&
-						t->GetMinBound().y < levelMaps->GetMapOffset().y + p->GetMaxBound().y && t->GetMaxBound().y > levelMaps->GetMapOffset().y + p->GetMinBound().y) // Collide
-					{
-						t->SetType(CTarget::TARGET_DESTROY);
-						//--extraLives;
-						p->Reset();
-					}
-				}
-			}
-			else if (level == 2) // Using level 2 targetList
-			{
-				for (std::vector<CTarget*>::iterator it = targetList_lvl2.begin(); it != targetList_lvl2.end(); ++it)
-				{
-					CTarget *t = (CTarget*)*it;
-
-					// Collision check
-					if (t->GetActive() && t->GetType() != CTarget::TARGET_DESTROY && t->GetOpen() && p->GetActive() &&
-						t->GetMinBound().x < m_cMap->GetMapOffset().x + p->GetMaxBound().x && t->GetMaxBound().x > m_cMap->GetMapOffset().x + p->GetMinBound().x &&
-						t->GetMinBound().y < m_cMap->GetMapOffset().y + p->GetMaxBound().y && t->GetMaxBound().y > m_cMap->GetMapOffset().y + p->GetMinBound().y) // Collide
-					{
-						// Adding score
-						switch (t->GetType())
-						{
-						case CTarget::TARGET_RED :
-							{
-								score += 1;
-							}
-							break;
-						case CTarget::TARGET_LIGHT_BLUE :
-							{
-								score += 2;
-							}
-							break;
-						case CTarget::TARGET_DARK_BLUE :
-							{
-								score += 3;
-							}
-							break;
-						case CTarget::TARGET_GREEN :
-							{
-								score += 4;
-							}
-							break;
-						case CTarget::TARGET_YELLOW :
-							{
-								score += 5;
-							}
-							break;
-						case CTarget::TARGET_WHITE :
-							{
-								score += 6;
-							}
-							break;
-						}
-						
-						t->SetType(CTarget::TARGET_DESTROY);
-						--win;
-						p->Reset();
-					}
-				}
-			}*/
-
-			// Projectile-Enemy collision check
-			/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-			{
-				CEnemy *e = (CEnemy*)*it;
-				if (level == 1)
-				{
-					if (e->GetActive() && p->GetActive() &&
-						levelMaps->GetMapOffset().x + p->GetMinBound().x < e->GetMaxBound().x && levelMaps->GetMapOffset().x + p->GetMaxBound().x > e->GetMinBound().x &&
-						levelMaps->GetMapOffset().y + p->GetMinBound().y < e->GetMaxBound().y && levelMaps->GetMapOffset().y + p->GetMaxBound().y > e->GetMinBound().y) // Collide
-					{
-						e->Reset();
-						p->Reset();
-					}
-				}
-				else if (level == 2)
-				{
-					if (e->GetActive() && p->GetActive() &&
-						m_cMap->GetMapOffset().x + p->GetMinBound().x < e->GetMaxBound().x && m_cMap->GetMapOffset().x + p->GetMaxBound().x > e->GetMinBound().x &&
-						m_cMap->GetMapOffset().y + p->GetMinBound().y < e->GetMaxBound().y && m_cMap->GetMapOffset().y + p->GetMaxBound().y > e->GetMinBound().y) // Collide
-					{
-						e->Reset();
-						p->Reset();
-					}
-				}
-			}*/
 		}
-
-		// Update enemy list based on level
-		/*for (std::vector<CEnemyIn2D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
-		{
-			CEnemyIn2D *e = (CEnemyIn2D*)*it;
-			e->Update(levelMaps[level - 1], dt);
 		}*/
+	}
 
-		camera.Update(dt);
+	// Update enemy list based on level
+	/*for (std::vector<CEnemyIn2D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
+	{
+	CEnemyIn2D *e = (CEnemyIn2D*)*it;
+	e->Update(levelMaps[level - 1], dt);
+	}*/
 
-		fps = (float)(1.f / dt);
+	camera.Update(dt);
+
+	fps = (float)(1.f / dt);
 }
 
 /********************************************************************************
- Update Camera position
- ********************************************************************************/
+Update Camera position
+********************************************************************************/
 void SceneText::UpdateCameraStatus(const unsigned char key, const bool status)
 {
 	//camera.UpdateStatus(key, status);
@@ -813,8 +823,8 @@ void SceneText::UpdateCameraStatus(const unsigned char key, const bool status)
 }
 
 /********************************************************************************
- Update Character status
- ********************************************************************************/
+Update Character status
+********************************************************************************/
 void SceneText::UpdateCharacterStatus(const CCharacter::CHARACTER_ACTION action, const bool status)
 {
 	if (action == CCharacter::CA_SHOOT) // Shoot
@@ -924,7 +934,7 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if(!mesh || mesh->textureID <= 0)
 		return;
-	
+
 	glDisable(GL_DEPTH_TEST);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
@@ -939,7 +949,7 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	
+
 		mesh->Render((unsigned)text[i] * 6, 6);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -951,38 +961,38 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 {
 	if(!mesh || mesh->textureID <= 0)
 		return;
-	
+
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -10, 10);
 	projectionStack.PushMatrix();
-		projectionStack.LoadMatrix(ortho);
-		viewStack.PushMatrix();
-			viewStack.LoadIdentity();
-			modelStack.PushMatrix();
-				modelStack.LoadIdentity();
-				modelStack.Translate(x, y, 0);
-				modelStack.Scale(size, size, size);
-				glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-				glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
-				glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-				glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-				glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-				for(unsigned i = 0; i < text.length(); ++i)
-				{
-					Mtx44 characterSpacing;
-					characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
-					Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
-					glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	
-					mesh->Render((unsigned)text[i] * 6, 6);
-				}
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-			modelStack.PopMatrix();
-		viewStack.PopMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	for(unsigned i = 0; i < text.length(); ++i)
+	{
+		Mtx44 characterSpacing;
+		characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
+		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
+		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+		mesh->Render((unsigned)text[i] * 6, 6);
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
@@ -992,39 +1002,39 @@ void SceneText::RenderMeshIn2D(Mesh *mesh, const bool enableLight, const float s
 	Mtx44 ortho;
 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
 	projectionStack.PushMatrix();
-		projectionStack.LoadMatrix(ortho);
-		viewStack.PushMatrix();
-			viewStack.LoadIdentity();
-			modelStack.PushMatrix();
-				modelStack.LoadIdentity();
-				modelStack.Translate(x, y, 0);
-				modelStack.Scale(size, size, size);
-				if (rotate)
-					modelStack.Rotate(rotateAngle, 0, 0, 1);
-       
-				Mtx44 MVP, modelView, modelView_inverse_transpose;
-	
-				MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-				if(mesh->textureID > 0)
-				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-					glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-				}
-				else
-				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-				}
-				mesh->Render();
-				if(mesh->textureID > 0)
-				{
-					glBindTexture(GL_TEXTURE_2D, 0);
-				}
-       
-			modelStack.PopMatrix();
-		viewStack.PopMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
+	if (rotate)
+		modelStack.Rotate(rotateAngle, 0, 0, 1);
+
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	if(mesh->textureID > 0)
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+	mesh->Render();
+	if(mesh->textureID > 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
 
 }
@@ -1034,39 +1044,39 @@ void SceneText::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, 
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, levelMaps[level - 1]->GetScreen_Width(), 0, levelMaps[level - 1]->GetScreen_Height(), -10, 10);
 	projectionStack.PushMatrix();
-		projectionStack.LoadMatrix(ortho);
-		viewStack.PushMatrix();
-			viewStack.LoadIdentity();
-			modelStack.PushMatrix();
-				modelStack.LoadIdentity();
-				modelStack.Translate(x, y, 0);
-				modelStack.Scale(size, size, size);
-				modelStack.Rotate(rotateY, 0, 1, 0);
-				modelStack.Rotate(rotateZ, 0, 0, 1);
-       
-				Mtx44 MVP, modelView, modelView_inverse_transpose;
-	
-				MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-				glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-				if(mesh->textureID > 0)
-				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-					glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-				}
-				else
-				{
-					glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-				}
-				mesh->Render();
-				if(mesh->textureID > 0)
-				{
-					glBindTexture(GL_TEXTURE_2D, 0);
-				}
-       
-			modelStack.PopMatrix();
-		viewStack.PopMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
+	modelStack.Rotate(rotateY, 0, 1, 0);
+	modelStack.Rotate(rotateZ, 0, 0, 1);
+
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	if(mesh->textureID > 0)
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else
+	{
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+	mesh->Render();
+	if(mesh->textureID > 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
 	projectionStack.PopMatrix();
 
 }
@@ -1074,7 +1084,7 @@ void SceneText::Render2DMesh(Mesh *mesh, bool enableLight, float size, float x, 
 void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
-	
+
 	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 	if(enableLight && bLightEnabled)
@@ -1084,7 +1094,7 @@ void SceneText::RenderMesh(Mesh *mesh, bool enableLight)
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView.a[0]);
-		
+
 		//load material
 		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
 		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
@@ -1146,27 +1156,27 @@ void SceneText::RenderSkybox()
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
@@ -1174,7 +1184,7 @@ void SceneText::RenderSkybox()
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
 	RenderMesh(meshList[GEO_TOP], false);
 	modelStack.PopMatrix();
-	
+
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
@@ -1198,14 +1208,14 @@ void SceneText::Render()
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
-	
+
 	// Camera matrix
 	viewStack.LoadIdentity();
 	viewStack.LookAt(
-						camera.position.x, camera.position.y, camera.position.z,
-						camera.target.x, camera.target.y, camera.target.z,
-						camera.up.x, camera.up.y, camera.up.z
-					);
+		camera.position.x, camera.position.y, camera.position.z,
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z
+		);
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
 
@@ -1238,30 +1248,30 @@ void SceneText::Render()
 	//On screen text
 	/*if (gameEnded && win != 0)
 	{
-		std::ostringstream gameover;
-		gameover << "Game Over";
-		RenderTextOnScreen(meshList[GEO_TEXT], gameover.str(), Color(1, 1, 1), 5, 17.5, 25);
+	std::ostringstream gameover;
+	gameover << "Game Over";
+	RenderTextOnScreen(meshList[GEO_TEXT], gameover.str(), Color(1, 1, 1), 5, 17.5, 25);
 	}
 	else if (gameEnded && win == 0)
 	{
-		std::ostringstream youWin;
-		youWin << "You Win";
-		RenderTextOnScreen(meshList[GEO_TEXT], youWin.str(), Color(1, 1, 1), 5, 22.5, 25);
+	std::ostringstream youWin;
+	youWin << "You Win";
+	RenderTextOnScreen(meshList[GEO_TEXT], youWin.str(), Color(1, 1, 1), 5, 22.5, 25);
 	}*/
 
 	/*if (level == 1)
 	{
-		std::ostringstream sLevelTime;
-		int time = ceil(levelTime);
-		sLevelTime << "Time: " << time;
-		RenderTextOnScreen(meshList[GEO_TEXT], sLevelTime.str(), Color(1, 1, 1), 4, 0, 2);
+	std::ostringstream sLevelTime;
+	int time = ceil(levelTime);
+	sLevelTime << "Time: " << time;
+	RenderTextOnScreen(meshList[GEO_TEXT], sLevelTime.str(), Color(1, 1, 1), 4, 0, 2);
 	}*/
 
 	std::ostringstream sFPS;
 	sFPS.precision(5);
 	sFPS << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], sFPS.str(), Color(1, 1, 1), 2, 0, 0);
-	
+
 	glEnable(GL_DEPTH_TEST);
 }
 
@@ -1269,11 +1279,11 @@ void SceneText::RenderEnemyList()
 {
 	/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
-		CEnemy *e = (CEnemy*)*it;
-		if (e->GetActive())
-		{
-			Render2DMesh(e->GetCurrentAnimation(), false, e->GetScale().x * map->GetTileSize(), e->GetPos().x - map->GetMapOffset().x, e->GetPos().y - map->GetMapOffset().y);
-		}
+	CEnemy *e = (CEnemy*)*it;
+	if (e->GetActive())
+	{
+	Render2DMesh(e->GetCurrentAnimation(), false, e->GetScale().x * map->GetTileSize(), e->GetPos().x - map->GetMapOffset().x, e->GetPos().y - map->GetMapOffset().y);
+	}
 	}*/
 	for (std::vector<CEnemyIn2D*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
@@ -1346,7 +1356,7 @@ void SceneText::Exit()
 
 	/*if (m_cRearMap)
 	{
-		delete m_cRearMap;
+	delete m_cRearMap;
 	}*/
 
 	if (m_cMinimap)
@@ -1366,52 +1376,52 @@ void SceneText::Exit()
 
 	/*for (std::vector<CTarget*>::iterator it = targetList_lvl1.begin(); it != targetList_lvl1.end(); ++it)
 	{
-		CTarget *t = (CTarget*)*it;
-		if (t)
-		{
-			delete t;
-			t = NULL;
-		}
+	CTarget *t = (CTarget*)*it;
+	if (t)
+	{
+	delete t;
+	t = NULL;
+	}
 	}
 
 	for (std::vector<CTarget*>::iterator it = targetList_lvl2.begin(); it != targetList_lvl2.end(); ++it)
 	{
-		CTarget *t = (CTarget*)*it;
-		if (t)
-		{
-			delete t;
-			t = NULL;
-		}
+	CTarget *t = (CTarget*)*it;
+	if (t)
+	{
+	delete t;
+	t = NULL;
+	}
 	}*/
 
 	/*for (std::vector<CEnemy*>::iterator it = enemyList.begin(); it != enemyList.end(); ++it)
 	{
-		CEnemy *e = (CEnemy*)*it;
-		if (e)
-		{
-			delete e;
-			e = NULL;
-		}
+	CEnemy *e = (CEnemy*)*it;
+	if (e)
+	{
+	delete e;
+	e = NULL;
+	}
 	}
 
 	for (std::vector<CEnemySpawner*>::iterator it = enemySpawnerList_lvl1.begin(); it != enemySpawnerList_lvl1.end(); ++it)
 	{
-		CEnemySpawner *spawner = (CEnemySpawner*)*it;
-		if (spawner)
-		{
-			delete spawner;
-			spawner = NULL;
-		}
+	CEnemySpawner *spawner = (CEnemySpawner*)*it;
+	if (spawner)
+	{
+	delete spawner;
+	spawner = NULL;
+	}
 	}
 
 	for (std::vector<CEnemySpawner*>::iterator it = enemySpawnerList_lvl2.begin(); it != enemySpawnerList_lvl2.end(); ++it)
 	{
-		CEnemySpawner *spawner = (CEnemySpawner*)*it;
-		if (spawner)
-		{
-			delete spawner;
-			spawner = NULL;
-		}
+	CEnemySpawner *spawner = (CEnemySpawner*)*it;
+	if (spawner)
+	{
+	delete spawner;
+	spawner = NULL;
+	}
 	}*/
 
 	glDeleteProgram(m_programID);
@@ -1419,8 +1429,8 @@ void SceneText::Exit()
 }
 
 /********************************************************************************
- Render the tile map. This is a private function for use in this class only
- ********************************************************************************/
+Render the tile map. This is a private function for use in this class only
+********************************************************************************/
 void SceneText::RenderTileMap(CMap *map)
 {
 	int m = 0;
@@ -1465,6 +1475,31 @@ void SceneText::RenderTileMap(CMap *map)
 					Render2DMesh(meshList[GEO_TILE_FLOATING], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i+1)*map->GetTileSize());
 				}
 				break;
+			case CMap::TILE_CONCRETE:
+				{
+					Render2DMesh(meshList[GEO_TILE_CONCRETE], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+				}
+				break;
+			case CMap::TILE_CONCRETE_TOP:
+				{
+					Render2DMesh(meshList[GEO_TILE_CONCRETE_TOP], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+				}
+				break;
+			case CMap::TILE_FIRE_POWER:
+				{
+					Render2DMesh(meshList[GEO_TILE_FIRE_CON], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i+1)*map->GetTileSize());
+				}
+				break;
+			case CMap::TILE_WATER_POWER:
+				{
+					Render2DMesh(meshList[GEO_TILE_WATER_CON], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+				}
+				break;
+			case CMap::TILE_AIR_POWER:
+				{
+					Render2DMesh(meshList[GEO_TILE_AIR_CON], false, 1.0f, k*map->GetTileSize() - map->GetMapFineOffset().x, map->GetScreen_Height() - (i*+1)*map->GetTileSize());
+				}
+				break;
 			}
 		}
 	}
@@ -1472,39 +1507,39 @@ void SceneText::RenderTileMap(CMap *map)
 
 /*void SceneText::RenderRearTileMap()
 {
-	//m_cRearMap->GetMapOffset().x = (int)(m_cMap->GetMapOffset().x * 0.5);
-	m_cRearMap->SetMapOffset( Vector2((int)(m_cMap->GetMapOffset().x * 0.5) , m_cRearMap->GetMapFineOffset().y) );
-	//m_cRearMap->GetMapOffset().y = 0;
-	m_cRearMap->SetMapOffset( Vector2(m_cRearMap->GetMapOffset().x , 0) );
-	//m_cRearMap->GetTileOffset().y = 0;
-	m_cRearMap->SetTileOffset( Vector2(m_cRearMap->GetTileOffset().x , 0) );
-	//m_cRearMap->GetTileOffset().x = (int)(m_cRearMap->GetMapOffset().x / m_cRearMap->GetTileSize());
-	m_cRearMap->SetTileOffset( Vector2((int)(m_cRearMap->GetMapOffset().x / m_cRearMap->GetTileSize()) , m_cRearMap->GetTileOffset().y) );
-	if (m_cRearMap->GetTileOffset().x + m_cRearMap->GetNumOfTiles_Width() > m_cRearMap->GetNumOfTiles_MapWidth())
-	{
-		//m_cRearMap->GetTileOffset().x = m_cRearMap->GetNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width();
-		m_cRearMap->SetTileOffset( Vector2(m_cRearMap->GetNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width() , m_cRearMap->GetTileOffset().y) );
-	}
-	//m_cRearMap->GetMapFineOffset().x = ((int)m_cRearMap->GetMapOffset().x) % m_cRearMap->GetTileSize();
-	m_cRearMap->SetMapFineOffset( Vector2(((int)m_cRearMap->GetMapOffset().x) % m_cRearMap->GetTileSize() , m_cRearMap->GetMapFineOffset().y) );
+//m_cRearMap->GetMapOffset().x = (int)(m_cMap->GetMapOffset().x * 0.5);
+m_cRearMap->SetMapOffset( Vector2((int)(m_cMap->GetMapOffset().x * 0.5) , m_cRearMap->GetMapFineOffset().y) );
+//m_cRearMap->GetMapOffset().y = 0;
+m_cRearMap->SetMapOffset( Vector2(m_cRearMap->GetMapOffset().x , 0) );
+//m_cRearMap->GetTileOffset().y = 0;
+m_cRearMap->SetTileOffset( Vector2(m_cRearMap->GetTileOffset().x , 0) );
+//m_cRearMap->GetTileOffset().x = (int)(m_cRearMap->GetMapOffset().x / m_cRearMap->GetTileSize());
+m_cRearMap->SetTileOffset( Vector2((int)(m_cRearMap->GetMapOffset().x / m_cRearMap->GetTileSize()) , m_cRearMap->GetTileOffset().y) );
+if (m_cRearMap->GetTileOffset().x + m_cRearMap->GetNumOfTiles_Width() > m_cRearMap->GetNumOfTiles_MapWidth())
+{
+//m_cRearMap->GetTileOffset().x = m_cRearMap->GetNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width();
+m_cRearMap->SetTileOffset( Vector2(m_cRearMap->GetNumOfTiles_MapWidth() - m_cRearMap->GetNumOfTiles_Width() , m_cRearMap->GetTileOffset().y) );
+}
+//m_cRearMap->GetMapFineOffset().x = ((int)m_cRearMap->GetMapOffset().x) % m_cRearMap->GetTileSize();
+m_cRearMap->SetMapFineOffset( Vector2(((int)m_cRearMap->GetMapOffset().x) % m_cRearMap->GetTileSize() , m_cRearMap->GetMapFineOffset().y) );
 
-	int m = 0;
-	for (int i = 0; i < m_cRearMap->GetNumOfTiles_Height(); ++i)
-	{
-		for (int k = 0; k < m_cRearMap->GetNumOfTiles_Width() + i; ++k)
-		{
-			m = m_cRearMap->GetTileOffset().x + k;
-			// If we have reached the right side of the map, then do not display the extra column of tiles
-			if ((m_cRearMap->GetTileOffset().x + k) >= m_cRearMap->GetNumOfTiles_MapWidth())
-			{
-				break;
-			}
-			if (m_cRearMap->theScreenMap[i][m] == 3)
-			{
-				Render2DMesh(meshList[GEO_TILESTRUCTURE], false, 1.f, k * m_cRearMap->GetTileSize() - m_cRearMap->GetMapFineOffset().x, m_cMap->GetScreen_Height() - (i+1) * m_cRearMap->GetTileSize());
-			}
-		}
-	}
+int m = 0;
+for (int i = 0; i < m_cRearMap->GetNumOfTiles_Height(); ++i)
+{
+for (int k = 0; k < m_cRearMap->GetNumOfTiles_Width() + i; ++k)
+{
+m = m_cRearMap->GetTileOffset().x + k;
+// If we have reached the right side of the map, then do not display the extra column of tiles
+if ((m_cRearMap->GetTileOffset().x + k) >= m_cRearMap->GetNumOfTiles_MapWidth())
+{
+break;
+}
+if (m_cRearMap->theScreenMap[i][m] == 3)
+{
+Render2DMesh(meshList[GEO_TILESTRUCTURE], false, 1.f, k * m_cRearMap->GetTileSize() - m_cRearMap->GetMapFineOffset().x, m_cMap->GetScreen_Height() - (i+1) * m_cRearMap->GetTileSize());
+}
+}
+}
 }*/
 
 void SceneText::RenderCharacter()

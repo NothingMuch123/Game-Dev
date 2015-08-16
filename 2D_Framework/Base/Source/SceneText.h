@@ -109,6 +109,10 @@ class SceneText : public Scene
 		GEO_TILE_CONCRETE,
 		GEO_TILE_CONCRETE_TOP,
 
+		GEO_TILE_FIRE_CON,
+		GEO_TILE_WATER_CON,
+		GEO_TILE_AIR_CON,
+
 		// Target
 		GEO_TARGET_CLOSE,
 
