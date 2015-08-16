@@ -87,9 +87,7 @@ class SceneText : public Scene
 		GEO_BACK,
 		GEO_GRASS_DARKGREEN,
 		GEO_GRASS_LIGHTGREEN,
-		GEO_BACKGROUND_MAIN,
-		GEO_BACKGROUND_MOUNTAIN,
-		GEO_BACKGROUND_STARS,
+		GEO_BACKGROUND,
 		GEO_TILEGROUND,
 		GEO_TILETREE,
 		GEO_TILESTRUCTURE,
@@ -132,8 +130,7 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderGround();
 	void RenderSkybox();
-	void RenderBackGround_Mountain();
-	void RenderBackGround_Stars();
+	void RenderBackGround();
 	void Render2DMesh(Mesh *mesh, const bool enableLight, const float size=1.0f, const float x=0.0f, const float y=0.0f, const float rotateY=0.f, const float rotateZ = 0.f);
 
 	void InitProjList();

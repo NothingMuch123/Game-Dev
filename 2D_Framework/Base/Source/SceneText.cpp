@@ -178,13 +178,9 @@ void SceneText::Init()
 	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
 
-	meshList[GEO_BACKGROUND_MAIN] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
-	meshList[GEO_BACKGROUND_MAIN]->textureID = LoadTGA("Image//Targa_Assets//BG_Tile.tga");
-	meshList[GEO_BACKGROUND_MOUNTAIN] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
-	meshList[GEO_BACKGROUND_MOUNTAIN]->textureID = LoadTGA("Image//GDev_Assignment02//background_mountain.tga");
-	meshList[GEO_BACKGROUND_STARS] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
-	meshList[GEO_BACKGROUND_STARS]->textureID = LoadTGA("Image//GDev_Assignment02//background_stars.tga");
-
+	meshList[GEO_BACKGROUND] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
+	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//Targa_Assets//BG_Tile.tga");
+	
 	meshList[GEO_TILEGROUND] = MeshBuilder::Generate2DMesh("GEO_TILEGROUND", Color(1, 1, 1), 0.0f, 0.0f, 32.f, 32.f);
 	meshList[GEO_TILEGROUND]->textureID = LoadTGA("Image//tile1_ground.tga");
 	meshList[GEO_TILETREE] = MeshBuilder::Generate2DMesh("GEO_TILETREE", Color(1, 1, 1), 0.0f, 0.0f, 32.f, 32.f);
@@ -1176,16 +1172,10 @@ void SceneText::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
-void SceneText::RenderBackGround_Mountain()
+void SceneText::RenderBackGround()
 {
-	Render2DMesh(meshList[GEO_BACKGROUND_MOUNTAIN], false, 1.f, -levelMaps[level - 1]->GetMapOffset().x * 0.2f, levelMaps[level - 1]->GetMapOffset().y);
-	Render2DMesh(meshList[GEO_BACKGROUND_MOUNTAIN], false, 1.f, (-levelMaps[level - 1]->GetMapOffset().x * 0.2f) + levelMaps[level - 1]->GetScreen_Width(), levelMaps[level - 1]->GetMapOffset().y);
-}
-
-void SceneText::RenderBackGround_Stars()
-{
-	Render2DMesh(meshList[GEO_BACKGROUND_STARS], false, 1.f, -levelMaps[level - 1]->GetMapOffset().x * 0.5f, levelMaps[level - 1]->GetMapOffset().y);
-	Render2DMesh(meshList[GEO_BACKGROUND_STARS], false, 1.f, (-levelMaps[level - 1]->GetMapOffset().x * 0.5f) + levelMaps[level - 1]->GetScreen_Width(), levelMaps[level - 1]->GetMapOffset().y);
+	Render2DMesh(meshList[GEO_BACKGROUND], false, 1.f, -levelMaps[level - 1]->GetMapOffset().x * 0.2f, levelMaps[level - 1]->GetMapOffset().y);
+	Render2DMesh(meshList[GEO_BACKGROUND], false, 1.f, (-levelMaps[level - 1]->GetMapOffset().x * 0.2f) + levelMaps[level - 1]->GetScreen_Width(), levelMaps[level - 1]->GetMapOffset().y);
 }
 
 void SceneText::Render()
@@ -1209,8 +1199,7 @@ void SceneText::Render()
 
 	// Render the background image
 	//RenderBackground();
-	RenderBackGround_Stars();
-	RenderBackGround_Mountain();
+	RenderBackGround();
 
 	// Render the rear tile map
 
