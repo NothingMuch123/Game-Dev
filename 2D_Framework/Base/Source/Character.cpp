@@ -4,7 +4,7 @@ float CCharacter::WALK_SPEED = 250.f;
 float CCharacter::RUN_SPEED = 400.f;
 float CCharacter::GRAVITY = 1000.f;
 
-CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, float jumpSpeed, bool midAir_Up, bool midAir_Down, bool dir) : Collidable(pos, true, map->GetTileSize()), Elemental()
+CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, bool defaultLookingLeft, float jumpSpeed, bool midAir_Up, bool midAir_Down, bool dir) : Collidable(pos, true, map->GetTileSize()), Elemental()
 					,
 					scale(scale),
 					jumpSpeed(jumpSpeed),
@@ -14,7 +14,9 @@ CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, float jumpSpeed, b
 					currentAnim(ANIM_IDLE_RIGHT),
 					current_speed(WALK_SPEED),
 					fallingThrough(false),
-					fallingThroughDist(0.f)
+					fallingThroughDist(0.f),
+					defaultLook(defaultLookingLeft),
+					flipSprite(false)
 {
 	for (int i = 0; i < NUM_CA; ++i)
 	{
@@ -373,7 +375,7 @@ void CCharacter::MoveUpDown(const bool mode, const float timeDiff)
 
 void CCharacter::MoveLeftRight(const bool mode, const float timeDiff, CMap *map)
 {
-	if (mode)
+	if (mode)		// Left
 	{
 		Vector2 tilePos( (map->GetMapOffset().x + (pos.x - (current_speed * timeDiff))) / map->GetTileSize() , map->GetNumOfTiles_Height() - (int) (ceil( pos.y / map->GetTileSize()) + 1) ); // New position if move
 		if (map->theScreenMap[tilePos.y][tilePos.x] == CMap::TILE_NONE ||
@@ -382,6 +384,7 @@ void CCharacter::MoveLeftRight(const bool mode, const float timeDiff, CMap *map)
 		{
 			pos.x = pos.x - (current_speed * timeDiff);
 			dir = false;
+			spriteSetToLeft();
 		}
 	}
 	else 
@@ -393,6 +396,7 @@ void CCharacter::MoveLeftRight(const bool mode, const float timeDiff, CMap *map)
 		{
 			pos.x = pos.x + (current_speed * timeDiff);
 			dir = true;
+			spriteSetToRight();
 		}
 	}
 }
@@ -527,4 +531,14 @@ CCharacter::CHARACTER_ANIMATION CCharacter::GetCurrentAnim()
 void CCharacter::SetSprite(SpriteAnimation *sprite)
 {
 	this->sprite = sprite;
+}
+
+void CCharacter::spriteSetToLeft(void)
+{
+	flipSprite = !defaultLook;
+}
+
+void CCharacter::spriteSetToRight(void)
+{
+	flipSprite = defaultLook;
 }

@@ -70,7 +70,7 @@ public:
 
 		NUM_ANIM,
 	};
-	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), CMap* map = NULL, float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
+	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), CMap* map = NULL, bool defaultLookingLeft, float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
 	virtual ~CCharacter(void);
 
 	virtual void Update(const double dt, CMap *m_cMap);
@@ -108,6 +108,8 @@ public:
 
 	void SetSprite(SpriteAnimation* sprite);
 
+	bool GetFlip(void);		// If true, flip the image
+
 protected:
 	Vector2 scale; // Within screen size
 	bool midAir_Up, midAir_Down;
@@ -118,11 +120,16 @@ protected:
 	Vector2 minBound, maxBound; // Bounds for AABB collision
 	bool fallingThrough;
 	float fallingThroughDist;
+	bool defaultLook;				// The default direction that the character is facing in the sprites; True == Left
+	bool flipSprite;				// Controls if the sprite should be flipped
 	
 	// Sprite animation
 	SpriteAnimation *sprite;
 	Animation* animationList[NUM_ANIM];
 	CHARACTER_ANIMATION currentAnim;
+
+	void spriteSetToLeft(void);
+	void spriteSetToRight(void);
 };
 
 #endif
