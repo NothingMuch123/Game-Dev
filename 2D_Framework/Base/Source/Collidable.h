@@ -6,7 +6,7 @@
 class Collidable
 {
 public:
-	Collidable(Vector2 pos = Vector2(0, 0), bool active = false, float tileSize = 0);
+	Collidable(Vector2 pos = Vector2(), Vector2 scale = Vector2(1, 1), bool active = false, float tileSize = 0);
 	virtual ~Collidable();
 
 	virtual void Init(Vector2 pos, float tileSize, bool active);
@@ -26,7 +26,7 @@ public:
 protected:
 	bool active;
 	int tileSize;
-	Vector2 pos, minBound, maxBound;
+	Vector2 pos, scale, minBound, maxBound;
 };
 
 #endif

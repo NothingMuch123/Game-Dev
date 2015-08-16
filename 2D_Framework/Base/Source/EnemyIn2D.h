@@ -1,12 +1,14 @@
 #ifndef ENEMY_IN_2D_H
 #define ENEMY_IN_2D_H
 
+#include "Collidable.h"
+#include "IOwnerID.h"
+
 #include "Strategy.h"
 
 #include "Mesh.h"
-#include "Collidable.h"
 
-class CEnemyIn2D : public Collidable
+class CEnemyIn2D : public Collidable, public IOwnerID
 {
 public:
 	CEnemyIn2D(void);

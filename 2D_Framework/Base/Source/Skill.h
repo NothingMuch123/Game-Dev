@@ -25,6 +25,22 @@ class Skill : Elemental
 		virtual bool Use();
 
 		bool IsSkillRead(void);
+
+		// Setters
+		void SetSpeed(float speed);
+		void SetScale(Vector3 scale);
+		void SetDamage(int damage);
+		void SetRange(float range);
+		void SetCoolDown(float cooldown);
+		void SetPiercing(bool pierce);
+
+		// Getters
+		float GetSpeed(void);
+		Vector3 GetScale(void);
+		int GetDamage(void);
+		float GetRange(void);
+		float GetCoolDown(void);
+		bool GetPiercing(void);
 };
 
 #endif

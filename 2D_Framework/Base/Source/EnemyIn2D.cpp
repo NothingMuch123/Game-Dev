@@ -3,6 +3,7 @@
 
 CEnemyIn2D::CEnemyIn2D(void) : theStrategy(NULL), Collidable()
 {
+	m_owner = IOwnerID::ENEMY_TYPE;
 }
 
 

@@ -1529,3 +1529,51 @@ void SceneText::RenderCharacter()
 		glEnable(GL_CULL_FACE);
 	}
 }
+
+void SceneText::characterAttack(Skill skill)
+{
+	// Create Projectile
+	SkillHitBox* hitbox = fetchSkillHitBox();
+	
+	if (hitbox != NULL)
+	{
+		//TODO: Calculate Velocity of skill
+		Vector2 velocity;
+
+		if (characterList[0]->GetDir())		// Right
+		{
+			velocity.Set(1.0f, 0.0f);	
+		}
+		else
+		{
+			velocity.Set(-1.0f, 0.0f);
+		}
+
+		velocity = velocity * skill.GetSpeed();
+
+		hitbox->Init(CProjectile::PROJ_BULLET, characterList[0]->GetPos(), velocity, m_cMap->GetTileSize(), characterList[0]->GetOwner(), true);
+	}
+}
+
+SkillHitBox * SceneText::fetchSkillHitBox(void)
+{
+	for (vector<Collidable*>::iterator it = collideList.begin(); it != collideList.end(); ++it)
+	{
+		SkillHitBox* hitbox = dynamic_cast<SkillHitBox*>(*it);
+
+		if (hitbox != NULL && !hitbox->GetActive())
+		{
+			return hitbox;
+		}
+	}
+
+	// Create
+	const int BATCH_MAKE = 5;
+	for (int i = 0; i < BATCH_MAKE; ++i)
+	{
+		SkillHitBox* hitbox = new SkillHitBox;
+		collideList.push_back(hitbox);
+	}
+
+	return dynamic_cast<SkillHitBox*>(collideList.back());
+}

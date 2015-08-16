@@ -43,3 +43,63 @@ bool Skill::IsSkillRead(void)
 {
 	return m_lastUsed > m_coolDown;
 }
+
+void Skill::SetSpeed(float speed)
+{
+	m_speed = speed;
+}
+
+void Skill::SetScale(Vector3 scale)
+{
+	m_scale.Set(scale.x, scale.y, scale.z);
+}
+
+void Skill::SetDamage(int damage)
+{
+	m_damage = damage;
+}
+
+void Skill::SetRange(float range)
+{
+	m_range = range;
+}
+
+void Skill::SetCoolDown(float cooldown)
+{
+	m_coolDown = cooldown;
+}
+
+void Skill::SetPiercing(bool pierce)
+{
+	m_piercing = pierce;
+}
+
+float Skill::GetSpeed(void)
+{
+	return m_speed;
+}
+
+Vector3 Skill::GetScale(void)
+{
+	return m_scale;
+}
+
+int Skill::GetDamage(void)
+{
+	return m_damage;
+}
+
+float Skill::GetRange(void)
+{
+	return m_range;
+}
+
+float Skill::GetCoolDown(void)
+{
+	return m_coolDown;
+}
+
+bool Skill::GetPiercing(void)
+{
+	return m_piercing;
+}
