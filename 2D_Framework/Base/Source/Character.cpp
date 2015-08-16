@@ -533,6 +533,11 @@ void CCharacter::SetSprite(SpriteAnimation *sprite)
 	this->sprite = sprite;
 }
 
+bool CCharacter::GetFlip(void) const
+{
+	return flipSprite;
+}
+
 void CCharacter::spriteSetToLeft(void)
 {
 	flipSprite = !defaultLook;

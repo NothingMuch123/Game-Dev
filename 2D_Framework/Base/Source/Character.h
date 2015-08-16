@@ -70,7 +70,7 @@ public:
 
 		NUM_ANIM,
 	};
-	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), CMap* map = NULL, bool defaultLookingLeft, float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
+	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), CMap* map = NULL, bool defaultLookingLeft = true, float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
 	virtual ~CCharacter(void);
 
 	virtual void Update(const double dt, CMap *m_cMap);
@@ -108,7 +108,7 @@ public:
 
 	void SetSprite(SpriteAnimation* sprite);
 
-	bool GetFlip(void);		// If true, flip the image
+	bool GetFlip(void) const;		// If true, flip the image
 
 protected:
 	Vector2 scale; // Within screen size
