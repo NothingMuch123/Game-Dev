@@ -163,7 +163,7 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 				current_speed = WALK_SPEED;
 				if (!midAir_Up)
 				{
-					CheckReset(ANIM_MOVE_RIGHT_SHOOT);
+					CheckReset(ANIM_MOVE_LEFT_SHOOT);
 				}
 			}
 			MoveLeftRight(false, dt, m_cMap);
