@@ -82,40 +82,40 @@ bool Application::GetKeyboardUpdate()
 {
 	if (IsKeyPressed('A'))
 	{
-		scene->UpdateCharacterStatus(CCharacter::CA_LEFT);
+		scene->UpdateCharacterStatus(CCharacter::CA_WALK_LEFT);
 	}
 	if (IsKeyPressed('D'))
 	{
-		scene->UpdateCharacterStatus(CCharacter::CA_RIGHT);
+		scene->UpdateCharacterStatus(CCharacter::CA_WALK_RIGHT);
 	}
-	if (IsKeyPressed('W'))
+	/*if (IsKeyPressed('W'))
 	{
 		scene->UpdateCharacterStatus(CCharacter::CA_LOOK_UP);
 	}
 	if (IsKeyPressed('S'))
 	{
 		scene->UpdateCharacterStatus(CCharacter::CA_LOOK_DOWN);
-	}
+	}*/
 	if (IsKeyPressed(' '))
 	{
 		scene->UpdateCharacterStatus(CCharacter::CA_JUMP);
 	}
 	if (IsKeyPressed('J'))
 	{
-		scene->UpdateCharacterStatus(CCharacter::CA_SHOOT);
+		scene->UpdateCharacterStatus(CCharacter::CA_ATTACK);
 	}
 	if (IsKeyPressed('K'))
 	{
-		scene->UpdateCharacterStatus(CCharacter::CA_LIE);
+		scene->UpdateCharacterStatus(CCharacter::CA_SKILL);
 	}
-	if (IsKeyPressed(VK_SHIFT))
+	/*if (IsKeyPressed(VK_SHIFT))
 	{
 		scene->UpdateCharacterStatus(CCharacter::CA_RUN);
 	}
 	else
 	{
 		scene->UpdateCharacterStatus(CCharacter::CA_RUN, false);
-	}
+	}*/
     return true;
 }
 

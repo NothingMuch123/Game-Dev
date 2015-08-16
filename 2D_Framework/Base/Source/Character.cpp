@@ -11,7 +11,7 @@ CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, bool defaultLookin
 					midAir_Up(midAir_Up),
 					midAir_Down(midAir_Down),
 					dir(dir),
-					currentAnim(ANIM_IDLE_RIGHT),
+					currentAnim(ANIM_IDLE),
 					current_speed(WALK_SPEED),
 					fallingThrough(false),
 					fallingThroughDist(0.f),
@@ -22,23 +22,20 @@ CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, bool defaultLookin
 	{
 		actions[i] = false;
 	}
-
-	for (int i = 0; i < NUM_ANIM; ++i)
-	{
-		animationList[i] = NULL;
-	}
-
 	m_owner = PLAYER_TYPE;
 }
 
 CCharacter::~CCharacter(void)
 {
-	for (int i = 0; i < NUM_ANIM; ++i)
+	for (int i = 0; i < NUM_ELEMENTS; ++i)
 	{
-		if (animationList[i])
+		for (int j = 0; j < NUM_ANIM; ++j)
 		{
-			delete animationList[i];
-			animationList[i] = NULL;
+			if (animationList[i][j])
+			{
+				delete animationList[i][j];
+				animationList[i][j] = NULL;
+			}
 		}
 	}
 }
@@ -46,8 +43,55 @@ CCharacter::~CCharacter(void)
 void CCharacter::Update(const double dt, CMap *m_cMap)
 {
 	current_speed = WALK_SPEED;
+	if (actions[CA_WALK_LEFT])
+	{
+		dir = false;
+		MoveLeftRight(true, dt, m_cMap);
+		spriteSetToLeft();
+		if (!midAir_Up && !midAir_Down)
+		{
+			CheckReset(ANIM_WALK);
+		}
+		actions[CA_WALK_LEFT] = false;
+	}
+	else if (actions[CA_WALK_RIGHT])
+	{
+		dir = true;
+		MoveLeftRight(false, dt, m_cMap);
+		spriteSetToRight();
+		if (!midAir_Up && !midAir_Down)
+		{
+			CheckReset(ANIM_WALK);
+		}
+		actions[CA_WALK_RIGHT] = false;
+	}
+	else
+	{
+		if (!midAir_Up && !midAir_Down && !actions[CA_SKILL])
+		{
+			CheckReset(ANIM_IDLE);
+		}
+	}
+	if (actions[CA_JUMP])
+	{
+		Jump();
+		CheckReset(ANIM_JUMP);
+		actions[CA_JUMP] = false;
+	}
+	if (actions[CA_ATTACK])
+	{
+		//Attack();
+		CheckReset(ANIM_ATTACK);
+		actions[CA_ATTACK] = false;
+	}
+	if (actions[CA_SKILL] && m_element != NORMAL_TYPE)
+	{
+		//Skill();
+		CheckReset(ANIM_SKILL);
+		actions[CA_SKILL] = false;
+	}
 	// Actions
-	if (midAir_Up || midAir_Down)
+	/*if (midAir_Up || midAir_Down)
 	{
 		actions[CA_LIE] = false;
 	}
@@ -215,10 +259,15 @@ void CCharacter::Update(const double dt, CMap *m_cMap)
 			}
 			actions[CA_LIE] = false;
 		}
+	}*/
+
+	for (int i = 0; i < NUM_CA; ++i)
+	{
+		actions[i] = false;
 	}
 
 	// Update animation
-	sprite->Update(dt);
+	spriteList[m_element]->Update(dt);
 
 	if (fallingThroughDist >= m_cMap->GetTileSize()  * scale.x)
 	{
@@ -343,28 +392,11 @@ void CCharacter::Jump()
 	{
 		midAir_Up = true;
 		jumpSpeed = 500.f;
-		if (dir)
-		{
-			CheckReset(ANIM_JUMP_RIGHT);
-		}
-		else
-		{
-			CheckReset(ANIM_JUMP_LEFT);
-		}
 	}
 }
 
 void CCharacter::MoveUpDown(const bool mode, const float timeDiff)
 {
-	static float current_speed;
-	if (actions[CA_RUN])
-	{
-		current_speed = RUN_SPEED;
-	}
-	else
-	{
-		current_speed = WALK_SPEED;
-	}
 	if (mode)
 	{ 
 		pos.y = pos.y + (current_speed * timeDiff);
@@ -494,23 +526,23 @@ void CCharacter::SetActions(const CHARACTER_ACTION action, const bool status)
 	actions[action] = status;
 }
 
-void CCharacter::SetAnimation(CHARACTER_ANIMATION type, Animation* a)
+void CCharacter::SetAnimation(ELEMENT_TYPE eType, CHARACTER_ANIMATION caType, Animation* a)
 {
-	animationList[type] = a;
+	animationList[eType][caType] = a;
 }
 
 SpriteAnimation* CCharacter::GetSprite()
 {
-	return sprite;
+	return spriteList[m_element];
 }
 
 void CCharacter::CheckReset(CHARACTER_ANIMATION type)
 {
-	if (currentAnim != type)
+	if (currentAnim != type || ((currentAnim == ANIM_ATTACK || currentAnim == ANIM_SKILL) && spriteList[m_element]->m_anim->ended))
 	{
 		currentAnim = type;
-		sprite->m_anim = animationList[currentAnim];
-		sprite->Reset();
+		spriteList[m_element]->m_anim = animationList[m_element][currentAnim];
+		spriteList[m_element]->Reset();
 	}
 }
 
@@ -530,9 +562,9 @@ CCharacter::CHARACTER_ANIMATION CCharacter::GetCurrentAnim()
 	return currentAnim;
 }
 
-void CCharacter::SetSprite(SpriteAnimation *sprite)
+void CCharacter::SetSprite(ELEMENT_TYPE type, SpriteAnimation *sprite)
 {
-	this->sprite = sprite;
+	this->spriteList[type] = sprite;
 }
 
 bool CCharacter::GetFlip(void) const

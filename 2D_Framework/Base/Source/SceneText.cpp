@@ -337,13 +337,124 @@ void SceneText::InitCharacter()
 	CCharacter *c = new CCharacter(Vector2(100,750), Vector2(2,2), levelMaps[level - 1]);
 	c->CalcBound();
 
-	SpriteAnimation *sa = MeshBuilder::GenerateSpriteAnimation("ANIM_FALL_LEFT", 7, 8);
-	sa->textureID = LoadTGA("Image//GDev_Assignment02//player1//player1_animations.tga");
-	c->SetSprite(sa);
+	// Normal type
+	SpriteAnimation *sa = MeshBuilder::GenerateSpriteAnimation("Normal element", 4, 4);
+	sa->textureID = LoadTGA("Image//Targa_Assets//C_D_SpriteSheet.tga");
+	c->SetSprite(Elemental::NORMAL_TYPE, sa);
 
 	Animation *a;
-	// ANIM_FALL_LEFT
+	//ANIM_IDLE
 	a = new Animation();
+	a->Set(0,1,0,0.2f);
+	c->SetAnimation(Elemental::NORMAL_TYPE, CCharacter::ANIM_IDLE, a);
+
+	// ANIM_WALK
+	a = new Animation();
+	a->Set(4,7,0,0.2f);
+	c->SetAnimation(Elemental::NORMAL_TYPE, CCharacter::ANIM_WALK, a);
+
+	// ANIM_JUMP
+	a = new Animation();
+	a->Set(8,11,1,0.5f);
+	c->SetAnimation(Elemental::NORMAL_TYPE, CCharacter::ANIM_JUMP, a);
+
+	// ANIM_ATTACK
+	a = new Animation();
+	a->Set(12,15,1,0.2f);
+	c->SetAnimation(Elemental::NORMAL_TYPE, CCharacter::ANIM_ATTACK, a);
+
+	// Fire type
+	sa = MeshBuilder::GenerateSpriteAnimation("Fire element", 5, 6);
+	sa->textureID = LoadTGA("Image//Targa_Assets//C_CC_SpriteSheet.tga");
+	c->SetSprite(Elemental::FIRE_TYPE, sa);
+
+	//ANIM_IDLE
+	a = new Animation();
+	a->Set(0,1,0,0.2f);
+	c->SetAnimation(Elemental::FIRE_TYPE, CCharacter::ANIM_IDLE, a);
+
+	// ANIM_WALK
+	a = new Animation();
+	a->Set(6,9,0,0.2f);
+	c->SetAnimation(Elemental::FIRE_TYPE, CCharacter::ANIM_WALK, a);
+
+	// ANIM_JUMP
+	a = new Animation();
+	a->Set(12,15,1,0.5f);
+	c->SetAnimation(Elemental::FIRE_TYPE, CCharacter::ANIM_JUMP, a);
+
+	// ANIM_ATTACK
+	a = new Animation();
+	a->Set(18,21,1,0.2f);
+	c->SetAnimation(Elemental::FIRE_TYPE, CCharacter::ANIM_ATTACK, a);
+
+	// ANIM_SKILL
+	a = new Animation();
+	a->Set(24,29,1,0.2f);
+	c->SetAnimation(Elemental::FIRE_TYPE, CCharacter::ANIM_SKILL, a);
+
+	// Water type
+	sa = MeshBuilder::GenerateSpriteAnimation("Water element", 7, 4);
+	sa->textureID = LoadTGA("Image//Targa_Assets//C_M_SpriteSheet.tga");
+	c->SetSprite(Elemental::WATER_TYPE, sa);
+
+	//ANIM_IDLE
+	a = new Animation();
+	a->Set(0,1,0,0.2f);
+	c->SetAnimation(Elemental::WATER_TYPE, CCharacter::ANIM_IDLE, a);
+
+	// ANIM_WALK
+	a = new Animation();
+	a->Set(4,7,0,0.2f);
+	c->SetAnimation(Elemental::WATER_TYPE, CCharacter::ANIM_WALK, a);
+
+	// ANIM_JUMP
+	a = new Animation();
+	a->Set(8,11,1,0.5f);
+	c->SetAnimation(Elemental::WATER_TYPE, CCharacter::ANIM_JUMP, a);
+
+	// ANIM_ATTACK
+	a = new Animation();
+	a->Set(12,13,1,0.2f);
+	c->SetAnimation(Elemental::WATER_TYPE, CCharacter::ANIM_ATTACK, a);
+
+	// ANIM_SKILL
+	a = new Animation();
+	a->Set(16,18,1,0.2f);
+	c->SetAnimation(Elemental::WATER_TYPE, CCharacter::ANIM_SKILL, a);
+
+	// Air type
+	sa = MeshBuilder::GenerateSpriteAnimation("Air element", 5, 5);
+	sa->textureID = LoadTGA("Image//Targa_Assets//C_A_SpriteSheet.tga");
+	c->SetSprite(Elemental::AIR_TYPE, sa);
+
+	//ANIM_IDLE
+	a = new Animation();
+	a->Set(0,1,0,0.2f);
+	c->SetAnimation(Elemental::AIR_TYPE, CCharacter::ANIM_IDLE, a);
+
+	// ANIM_WALK
+	a = new Animation();
+	a->Set(5,8,0,0.2f);
+	c->SetAnimation(Elemental::AIR_TYPE, CCharacter::ANIM_WALK, a);
+
+	// ANIM_JUMP
+	a = new Animation();
+	a->Set(10,13,1,0.5f);
+	c->SetAnimation(Elemental::AIR_TYPE, CCharacter::ANIM_JUMP, a);
+
+	// ANIM_ATTACK
+	a = new Animation();
+	a->Set(15,18,1,0.2f);
+	c->SetAnimation(Elemental::AIR_TYPE, CCharacter::ANIM_ATTACK, a);
+
+	// ANIM_SKILL
+	a = new Animation();
+	a->Set(20,24,1,0.5f);
+	c->SetAnimation(Elemental::AIR_TYPE, CCharacter::ANIM_SKILL, a);
+
+	// ANIM_FALL_LEFT
+	/*a = new Animation();
 	a->Set(0, 0, 0, 1);
 	c->SetAnimation(CCharacter::ANIM_FALL_LEFT, a);
 
@@ -441,7 +552,7 @@ void SceneText::InitCharacter()
 	//ANIM_MOVE_RIGHT_SHOOT_DOWN
 	a = new Animation();
 	a->Set(0,10,0,0.5f);
-	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT_DOWN, a);
+	c->SetAnimation(CCharacter::ANIM_MOVE_RIGHT_SHOOT_DOWN, a);*/
 
 	characterList.push_back(c);
 }
@@ -827,7 +938,7 @@ Update Character status
 ********************************************************************************/
 void SceneText::UpdateCharacterStatus(const CCharacter::CHARACTER_ACTION action, const bool status)
 {
-	if (action == CCharacter::CA_SHOOT) // Shoot
+	/*if (action == CCharacter::CA_SHOOT) // Shoot
 	{
 		if (shootTimer >= MAX_SHOOT_TIME)
 		{
@@ -922,10 +1033,10 @@ void SceneText::UpdateCharacterStatus(const CCharacter::CHARACTER_ACTION action,
 			shootTimer = 0.f;
 		}
 	}
-	else // Other actions
-	{
+	else // Other actions*/
+	//{
 		characterList[0]->SetActions(action, status);
-	}
+	//}
 }
 
 static const float SKYBOXSIZE = 1000.f;

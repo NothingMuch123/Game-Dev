@@ -18,61 +18,33 @@ public:
 	enum CHARACTER_ACTION
 	{
 		CA_NONE = 0,
-		CA_LOOK_UP,
-		CA_LOOK_DOWN,
-		CA_LEFT,
-		CA_RIGHT,
+		CA_WALK_LEFT,
+		CA_WALK_RIGHT,
 		CA_JUMP,
-		CA_RUN,
-		CA_LIE,
-		CA_SHOOT,
+		CA_ATTACK,
+		CA_SKILL,
 		NUM_CA,
 	};
 	enum CHARACTER_ANIMATION
 	{
 		// Idle
-		ANIM_IDLE_LEFT = 0,
-		ANIM_IDLE_RIGHT,
+		ANIM_IDLE = 0,
 
-		// Run
-		ANIM_RUN_LEFT,
-		ANIM_RUN_RIGHT,
-
-		// Move and shoot
-		ANIM_MOVE_LEFT_SHOOT,
-		ANIM_MOVE_RIGHT_SHOOT,
+		// Walk
+		ANIM_WALK,
 
 		// Jump
-		ANIM_JUMP_LEFT,
-		ANIM_JUMP_RIGHT,
+		ANIM_JUMP,
 
-		// Lie down
-		ANIM_LIE_LEFT,
-		ANIM_LIE_RIGHT,
+		// Attack
+		ANIM_ATTACK,
 
-		// Look up
-		ANIM_LOOK_UP_LEFT,
-		ANIM_LOOK_UP_RIGHT,
-
-		// Look down
-		ANIM_LOOK_DOWN_LEFT,
-		ANIM_LOOK_DOWN_RIGHT,
-
-		// Move left shoot diagonal
-		ANIM_MOVE_LEFT_SHOOT_TOP,
-		ANIM_MOVE_LEFT_SHOOT_DOWN,
-
-		// Move right shoot diagonal
-		ANIM_MOVE_RIGHT_SHOOT_TOP,
-		ANIM_MOVE_RIGHT_SHOOT_DOWN,
-
-		// Fall
-		ANIM_FALL_LEFT,
-		ANIM_FALL_RIGHT,
+		// Skill
+		ANIM_SKILL,
 
 		NUM_ANIM,
 	};
-	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), CMap* map = NULL, bool defaultLookingLeft = true, float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
+	CCharacter(Vector2 pos = Vector2(0,0), Vector2 scale = Vector2(1,1), CMap* map = NULL, bool defaultLookingLeft = false, float jumpSpeed = 0.f, bool midAir_Up = false, bool midAir_Down = false, bool dir = true);
 	virtual ~CCharacter(void);
 
 	virtual void Update(const double dt, CMap *m_cMap);
@@ -97,7 +69,7 @@ public:
 
 	void SetActions(const CHARACTER_ACTION action, const bool status);
 
-	void SetAnimation(CHARACTER_ANIMATION type, Animation* a);
+	void SetAnimation(ELEMENT_TYPE eType, CHARACTER_ANIMATION caType, Animation* a);
 	SpriteAnimation* GetSprite();
 
 	void CheckReset(CHARACTER_ANIMATION type);
@@ -108,7 +80,7 @@ public:
 
 	CHARACTER_ANIMATION GetCurrentAnim();
 
-	void SetSprite(SpriteAnimation* sprite);
+	void SetSprite(ELEMENT_TYPE type, SpriteAnimation* sprite);
 
 	bool GetFlip(void) const;		// If true, flip the image
 
@@ -129,8 +101,8 @@ protected:
 	bool flipSprite;				// Controls if the sprite should be flipped
 	
 	// Sprite animation
-	SpriteAnimation *sprite;
-	Animation* animationList[NUM_ANIM];
+	SpriteAnimation* spriteList[NUM_ELEMENTS];
+	Animation* animationList[NUM_ELEMENTS][NUM_ANIM];
 	CHARACTER_ANIMATION currentAnim;
 
 	void spriteSetToLeft(void);
