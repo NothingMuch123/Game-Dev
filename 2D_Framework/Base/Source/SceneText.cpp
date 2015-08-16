@@ -209,7 +209,7 @@ void SceneText::Init()
 	meshList[GEO_TILE_FLOATING] = MeshBuilder::GenerateMeshFromSheet("Tile floating", Color(1,1,1), 1, 5, 1, 5, 32.f);
 	meshList[GEO_TILE_FLOATING]->textureID = texture;
 
-	unsigned texture = LoadTGA("Image//Targa_Assets//E_SpriteSheet.tga");
+	texture = LoadTGA("Image//Targa_Assets//E_SpriteSheet.tga");
 	meshList[GEO_TILE_CONCRETE] = MeshBuilder::GenerateMeshFromSheet("Tile Concrete", Color(1,1,1), 1, 5, 1, 2, 32.f);
 	meshList[GEO_TILE_CONCRETE]->textureID = texture;
 
