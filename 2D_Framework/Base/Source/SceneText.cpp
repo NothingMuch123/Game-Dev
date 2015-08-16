@@ -179,7 +179,7 @@ void SceneText::Init()
 	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
 
 	meshList[GEO_BACKGROUND_MAIN] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
-	meshList[GEO_BACKGROUND_MAIN]->textureID = LoadTGA("Image//GDev_Assignment02//background_main.tga");
+	meshList[GEO_BACKGROUND_MAIN]->textureID = LoadTGA("Image//Targa_Assets//BG_Tile.tga");
 	meshList[GEO_BACKGROUND_MOUNTAIN] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
 	meshList[GEO_BACKGROUND_MOUNTAIN]->textureID = LoadTGA("Image//GDev_Assignment02//background_mountain.tga");
 	meshList[GEO_BACKGROUND_STARS] = MeshBuilder::Generate2DMesh("GEO_BACKGROUND", Color(1,1,1), 0.f, 0.f, 1024.f, 800.f);
