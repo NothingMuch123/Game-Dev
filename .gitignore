@@ -4,3 +4,8 @@
 2D_Framework/Common/Debug/
 2D_Framework/Base/Debug/
 2D_Framework/Debug/
+*.ipch
+*.obj
+*.manifest
+*.lastbuildstate
+*.idb
