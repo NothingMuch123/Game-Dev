@@ -1511,12 +1511,20 @@ void SceneText::RenderCharacter()
 	// Hero animation
 	CCharacter *c = characterList[0];
 
+	Vector3 translation;
 	Vector3 rotation;
 
 	if (c->GetFlip())
 	{
 		rotation.y = 180.0f;
+		translation.x = m_cMap->GetTileSize() * 2;
+		glDisable(GL_CULL_FACE);
 	}
 
-	Render2DMesh(c->GetSprite(), false, levelMaps[level - 1]->GetTileSize() * c->GetScale().x, c->GetPos().x, c->GetPos().y, rotation.y);
+	Render2DMesh(c->GetSprite(), false, levelMaps[level - 1]->GetTileSize() * c->GetScale().x, c->GetPos().x + translation.x, c->GetPos().y, rotation.y);
+
+	if (c->GetFlip())
+	{
+		glEnable(GL_CULL_FACE);
+	}
 }
