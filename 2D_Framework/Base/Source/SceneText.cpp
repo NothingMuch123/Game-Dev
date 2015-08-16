@@ -245,6 +245,9 @@ void SceneText::Init()
 		}
 	}
 
+	// Put into the collide list the Collidables
+	collideList = newMap->GetObjsToSpawn();
+
 	//m_cMap = new CMap();
 	//m_cMap->Init( 600, 800, 24, 32, 600, 1600 );
 	//m_cMap->LoadMap( "Image//MapDesign.csv" );
