@@ -18,6 +18,8 @@
 #include "EnemyIn2D.h"
 #include "Strategy_Patrol.h"
 #include "Collidable.h"
+#include "Skill.h"
+#include "SkillHitBox.h"
 
 class SceneText : public Scene
 {
@@ -218,6 +220,10 @@ private:
 	/*bool gameEnded;
 	float levelTime;*/
 	int lives;
+
+	// Attack
+	void characterAttack(Skill skill);
+	SkillHitBox* fetchSkillHitBox(void);
 };
 
 #endif

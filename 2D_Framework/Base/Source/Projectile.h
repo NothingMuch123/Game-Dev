@@ -26,6 +26,9 @@ public:
 	PROJ_TYPE GetType();
 	Vector2 GetVel();
 
+	// Collidable Override
+	virtual void CalcBound();
+
 private:
 	Vector2 vel;
 	PROJ_TYPE type;

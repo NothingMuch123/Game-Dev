@@ -50,3 +50,9 @@ Vector2 CProjectile::GetVel()
 {
 	return vel;
 }
+
+void CProjectile::CalcBound()
+{
+	minBound.Set(pos.x, pos.y);
+	maxBound.Set(pos.x + tileSize * 0.125f, pos.y + tileSize * 0.125f);
+}

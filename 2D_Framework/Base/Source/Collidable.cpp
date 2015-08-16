@@ -1,10 +1,10 @@
 #include "Collidable.h"
 
-Collidable::Collidable(Vector2 pos, bool active, float tileSize)
+Collidable::Collidable(Vector2 pos, Vector2 scale, bool active, float tileSize)
 	: pos(pos)
+	, scale(scale)
 	, active(active)
 {
-
 	this->tileSize = tileSize;
 }
 
@@ -27,7 +27,7 @@ void Collidable::Init(Vector2 pos, float tileSize, bool active)
 void Collidable::CalcBound()
 {
 	minBound.Set(pos.x, pos.y);
-	maxBound.Set(pos.x + tileSize * 0.125f, pos.y + tileSize * 0.125f);
+	maxBound.Set(pos.x + tileSize * scale.x, pos.y + tileSize * scale.y);
 }
 
 void Collidable::Reset()

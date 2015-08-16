@@ -27,6 +27,8 @@ CCharacter::CCharacter(Vector2 pos, Vector2 scale, CMap* map, bool defaultLookin
 	{
 		animationList[i] = NULL;
 	}
+
+	m_owner = PLAYER_TYPE;
 }
 
 CCharacter::~CCharacter(void)
@@ -546,4 +548,14 @@ void CCharacter::spriteSetToLeft(void)
 void CCharacter::spriteSetToRight(void)
 {
 	flipSprite = defaultLook;
+}
+
+Skill CCharacter::GetBasicSkill()
+{
+	return m_basicSkill;
+}
+
+Skill CCharacter::GetAdvancedSkill()
+{
+	return m_advancedSkill;
 }
